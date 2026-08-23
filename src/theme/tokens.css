@@ -1,0 +1,136 @@
+/**
+ * Design tokens as CSS custom properties.
+ *
+ * These are placeholder values, not a final visual identity — the goal
+ * is to give every component a single source of truth to read from
+ * (colors, type scale, spacing, radius, shadows) so that when the Stitch
+ * design arrives, this file's *values* can be swapped wholesale without
+ * hunting down hard-coded colors/pixel values scattered across
+ * components. Components should always reference var(--token-name),
+ * never a literal color or px value.
+ */
+
+:root {
+  /* ---- Color: neutral scale ---- */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f7f7f8;
+  --color-neutral-100: #eeeef0;
+  --color-neutral-200: #d9d9de;
+  --color-neutral-300: #b8b8c0;
+  --color-neutral-400: #8f8f9a;
+  --color-neutral-500: #6b6b76;
+  --color-neutral-600: #4d4d57;
+  --color-neutral-700: #35353d;
+  --color-neutral-800: #212126;
+  --color-neutral-900: #131316;
+
+  /* ---- Color: brand/accent (placeholder — Stitch will replace) ---- */
+  --color-accent-50: #eef3ff;
+  --color-accent-100: #dbe6ff;
+  --color-accent-300: #93aeff;
+  --color-accent-500: #4d6fee;
+  --color-accent-600: #3a58d1;
+  --color-accent-700: #2c44a3;
+
+  /* ---- Color: semantic ---- */
+  --color-success-500: #2f9e5c;
+  --color-success-100: #dff5e7;
+  --color-danger-500: #d64545;
+  --color-danger-100: #fbe4e4;
+  --color-warning-500: #c98a1e;
+  --color-warning-100: #faf0da;
+
+  /* ---- Color: semantic surface roles ---- */
+  --color-bg: var(--color-neutral-50);
+  --color-surface: var(--color-neutral-0);
+  --color-surface-raised: var(--color-neutral-0);
+  --color-border: var(--color-neutral-200);
+  --color-text-primary: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-inverse: var(--color-neutral-0);
+  --color-focus-ring: var(--color-accent-500);
+
+  /* ---- Typography ---- */
+  --font-family-base:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans',
+    'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+  --font-family-japanese: 'Hiragino Mincho ProN', 'Hiragino Sans', 'Noto Serif JP', serif;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.375rem;
+  --font-size-2xl: 1.75rem;
+  --font-size-3xl: 2.25rem;
+  /* Larger sizes for Japanese script legibility (kanji need more room than Latin text). */
+  --font-size-jp-md: 1.25rem;
+  --font-size-jp-lg: 1.75rem;
+  --font-size-jp-xl: 2.5rem;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* ---- Spacing scale (4px base unit) ---- */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* ---- Border radius ---- */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+  --radius-full: 999px;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 1px 2px rgba(19, 19, 22, 0.06);
+  --shadow-md: 0 4px 10px rgba(19, 19, 22, 0.08);
+  --shadow-lg: 0 10px 24px rgba(19, 19, 22, 0.12);
+
+  /* ---- Touch targets (iOS Human Interface Guidelines minimum is 44px) ---- */
+  --touch-target-min: 44px;
+
+  /* ---- iOS safe areas (notch / home indicator / rounded corners) ---- */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+
+  /*
+   * ---- Breakpoints ----
+   * CSS custom properties cannot be used inside @media query conditions,
+   * so these are documented here as the canonical values and mirrored as
+   * plain numbers in theme/tokens.ts for any JS-side responsive logic
+   * (e.g. matchMedia). Keep the two in sync.
+   *   --breakpoint-sm: 480px   (large phones, landscape phones)
+   *   --breakpoint-md: 768px   (iPad portrait)
+   *   --breakpoint-lg: 1024px  (iPad landscape / small desktop)
+   *   --breakpoint-xl: 1280px  (desktop)
+   */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: var(--color-neutral-900);
+    --color-surface: var(--color-neutral-800);
+    --color-surface-raised: var(--color-neutral-700);
+    --color-border: var(--color-neutral-700);
+    --color-text-primary: var(--color-neutral-50);
+    --color-text-secondary: var(--color-neutral-300);
+    --color-text-inverse: var(--color-neutral-900);
+  }
+}

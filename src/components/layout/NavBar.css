@@ -1,0 +1,48 @@
+/*
+ * Placeholder nav styling only. Built mobile-first as a bottom tab bar
+ * (thumb-reachable on iPhone) that becomes a top bar on wider/desktop
+ * viewports — the kind of structural responsiveness the Stitch UI will
+ * need, without committing to Stitch's actual visual design.
+ */
+
+.nav-bar {
+  order: 2;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding-bottom: var(--safe-area-bottom);
+}
+
+.nav-bar__list {
+  list-style: none;
+  display: flex;
+  overflow-x: auto;
+}
+
+.nav-bar__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-target-min);
+  padding: var(--space-2) var(--space-4);
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.nav-bar__link--active {
+  color: var(--color-accent-600);
+  font-weight: var(--font-weight-medium);
+}
+
+@media (min-width: 768px) {
+  .nav-bar {
+    order: 0;
+    border-top: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav-bar__list {
+    justify-content: center;
+  }
+}
