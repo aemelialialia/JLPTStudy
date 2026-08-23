@@ -43,7 +43,8 @@ h2,
 h3,
 h4 {
   margin: 0 0 var(--space-3);
-  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
   color: var(--color-text-primary);
 }
@@ -88,4 +89,125 @@ svg {
 :focus-visible {
   outline: 2px solid var(--color-focus-ring);
   outline-offset: 2px;
+}
+
+/* ================= Stitch shared visual language ================= */
+
+/* Material Symbols: default to the outlined, unfilled weight everywhere;
+   components opt into a filled icon with data-fill="1". */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  user-select: none;
+}
+
+.material-symbols-outlined[data-fill='1'] {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+/* Subtle hemp-leaf texture used behind hero cards/flashcards per the
+   "never crowded, always textured at 5-10% opacity" brand guidance. */
+.pattern-asanoha {
+  background-image: var(--pattern-asanoha);
+}
+
+/* "Squish": the app's one tactile-feedback idiom. A card/button presses
+   down to 0.96 scale and springs back — used instead of drop-shadow
+   "lift" per the DESIGN.md elevation guidance. */
+.squish-btn {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.squish-btn:active {
+  transform: scale(0.96);
+}
+
+.spring-card {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@media (hover: hover) {
+  .spring-card:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Typography utility classes matching the Stitch named type scale. */
+.text-display-lg {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-display-lg);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.text-headline-lg {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-headline-lg-mobile);
+  font-weight: 700;
+  line-height: 1.3;
+}
+@media (min-width: 768px) {
+  .text-headline-lg {
+    font-size: var(--font-size-headline-lg);
+  }
+}
+.text-title-md {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-title-md);
+  font-weight: 600;
+  line-height: 1.4;
+}
+.text-body-lg {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-lg);
+  font-weight: 400;
+  line-height: 1.6;
+}
+.text-body-md {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-md);
+  font-weight: 400;
+  line-height: 1.6;
+}
+.text-label-sm {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-label-sm);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+/* Reduced-motion: keep state changes, drop the springy/bouncy transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .squish-btn,
+  .spring-card,
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

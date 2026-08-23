@@ -7,6 +7,8 @@ describe('IndexedDB initialization', () => {
     expect([...db.objectStoreNames].sort()).toEqual(
       [
         'dailyStudyState',
+        'grammarProgress',
+        'grammarQuizSessions',
         'mistakes',
         'quizAttempts',
         'settings',

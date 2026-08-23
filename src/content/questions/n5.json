@@ -1,1 +1,178 @@
-[]
+[
+  {
+    "id": "n5-q-0001",
+    "level": "N5",
+    "questionText": "明日は早く＿＿＿。",
+    "choices": ["起きなければなりません", "起きますなければなりません", "起きるなければなりません", "起きてなければなりません"],
+    "correctAnswer": "起きなければなりません",
+    "explanation": "Attach なければなりません to the nai-form stem of the verb (起き) to express obligation.",
+    "grammarPointId": "n5-nakereba",
+    "lessonSlideId": "n5-nakereba::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n5-q-0002",
+    "level": "N5",
+    "questionText": "テストがあるから、今晩＿＿＿。",
+    "choices": ["勉強しなければなりません", "勉強したいです", "勉強してください", "勉強しています"],
+    "correctAnswer": "勉強しなければなりません",
+    "explanation": "The context (an upcoming test) calls for an obligation, which なければなりません expresses.",
+    "grammarPointId": "n5-nakereba",
+    "lessonSlideId": "n5-nakereba::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n5-q-0003",
+    "level": "N5",
+    "questionText": "ここに名前を＿＿＿。",
+    "choices": ["書いてください", "書くください", "書きてください", "書ましてください"],
+    "correctAnswer": "書いてください",
+    "explanation": "てください attaches to the te-form of the verb: 書く → 書いて.",
+    "grammarPointId": "n5-tekudasai",
+    "lessonSlideId": "n5-tekudasai::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n5-q-0004",
+    "level": "N5",
+    "questionText": "すみません、もう一度＿＿＿。",
+    "choices": ["言ってください", "言うください", "言いたいです", "言っています"],
+    "correctAnswer": "言ってください",
+    "explanation": "A polite request for someone to repeat something uses 〜てください.",
+    "grammarPointId": "n5-tekudasai",
+    "lessonSlideId": "n5-tekudasai::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n5-q-0005",
+    "level": "N5",
+    "questionText": "彼はもう＿＿＿。",
+    "choices": ["結婚しています", "結婚します", "結婚しました", "結婚するです"],
+    "correctAnswer": "結婚しています",
+    "explanation": "結婚する describes a resulting state with ~ている, not a repeated action.",
+    "grammarPointId": "n5-teiru",
+    "lessonSlideId": "n5-teiru::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n5-q-0006",
+    "level": "N5",
+    "questionText": "今、田中さんはテレビを＿＿＿。",
+    "choices": ["見ています", "見ます", "見たいです", "見ました"],
+    "correctAnswer": "見ています",
+    "explanation": "An action happening right now uses ~ている.",
+    "grammarPointId": "n5-teiru",
+    "lessonSlideId": "n5-teiru::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n5-q-0007",
+    "level": "N5",
+    "questionText": "私は日本へ＿＿＿。",
+    "choices": ["行きたいです", "行くたいです", "行きたいます", "行きますたい"],
+    "correctAnswer": "行きたいです",
+    "explanation": "たい attaches to the ます-stem: 行き + たい.",
+    "grammarPointId": "n5-tai",
+    "lessonSlideId": "n5-tai::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n5-q-0008",
+    "level": "N5",
+    "questionText": "何か冷たい飲み物が＿＿＿。",
+    "choices": ["飲みたい", "飲むたい", "飲みますたい", "飲んでたい"],
+    "correctAnswer": "飲みたい",
+    "explanation": "The ます-stem 飲み + たい expresses the speaker's own desire.",
+    "grammarPointId": "n5-tai",
+    "lessonSlideId": "n5-tai::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n5-q-0009",
+    "level": "N5",
+    "questionText": "彼はもう＿＿＿かもしれない。",
+    "choices": ["帰った", "帰りました", "帰ります", "帰っている"],
+    "correctAnswer": "帰った",
+    "explanation": "かもしれない attaches to the plain form; 帰りました/帰ります are polite forms and don't attach directly.",
+    "grammarPointId": "n5-kamoshirenai",
+    "lessonSlideId": "n5-kamoshirenai::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n5-q-0010",
+    "level": "N5",
+    "questionText": "テストは＿＿＿かもしれません。",
+    "choices": ["難しい", "難しいです", "難しくて", "難しさ"],
+    "correctAnswer": "難しい",
+    "explanation": "An i-adjective attaches to かもしれない in its plain form (難しい), without です.",
+    "grammarPointId": "n5-kamoshirenai",
+    "lessonSlideId": "n5-kamoshirenai::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n5-q-0011",
+    "level": "N5",
+    "questionText": "電車が＿＿＿としている。",
+    "choices": ["出発しよう", "出発する", "出発して", "出発します"],
+    "correctAnswer": "出発しよう",
+    "explanation": "ようとする attaches to the volitional form of the verb: 出発する → 出発しよう.",
+    "grammarPointId": "n5-youtosuru",
+    "lessonSlideId": "n5-youtosuru::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n5-q-0012",
+    "level": "N5",
+    "questionText": "ドアを＿＿＿としたが、開かなかった。",
+    "choices": ["開けよう", "開ける", "開けて", "開けます"],
+    "correctAnswer": "開けよう",
+    "explanation": "The volitional form 開けよう + とした describes the attempted action.",
+    "grammarPointId": "n5-youtosuru",
+    "lessonSlideId": "n5-youtosuru::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n5-q-0013",
+    "level": "N5",
+    "questionText": "私は日本語を話す＿＿＿できます。",
+    "choices": ["ことが", "のが", "ことを", "のを"],
+    "correctAnswer": "ことが",
+    "explanation": "ことができる uses the particle が between こと and できる.",
+    "grammarPointId": "n5-kotogadekiru",
+    "lessonSlideId": "n5-kotogadekiru::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n5-q-0014",
+    "level": "N5",
+    "questionText": "ここで写真を撮る＿＿＿。",
+    "choices": ["ことができません", "ことをできません", "ことはできます", "ことでできません"],
+    "correctAnswer": "ことができません",
+    "explanation": "The negative of ことができる is ことができない/できません.",
+    "grammarPointId": "n5-kotogadekiru",
+    "lessonSlideId": "n5-kotogadekiru::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n5-q-0015",
+    "level": "N5",
+    "questionText": "＿＿＿前に、手を洗います。",
+    "choices": ["食べる", "食べた", "食べて", "食べます"],
+    "correctAnswer": "食べる",
+    "explanation": "前に always follows the plain, non-past form of the verb, even when the whole sentence is about a past event.",
+    "grammarPointId": "n5-maeni",
+    "lessonSlideId": "n5-maeni::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n5-q-0016",
+    "level": "N5",
+    "questionText": "寝る＿＿＿歯を磨きます。",
+    "choices": ["前に", "後で", "ながら", "たら"],
+    "correctAnswer": "前に",
+    "explanation": "前に marks \"before doing\" — the brushing happens before sleeping.",
+    "grammarPointId": "n5-maeni",
+    "lessonSlideId": "n5-maeni::usage",
+    "difficulty": "easy"
+  }
+]

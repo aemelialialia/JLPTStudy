@@ -7,13 +7,13 @@ const AMOUNTS: SessionSize[] = [10, 15, 20]
 export function DailyAmountSelector({ onSelect }: { onSelect: (count: SessionSize) => void }) {
   return (
     <div>
-      <p>How many words today?</p>
+      <p className="text-body-md">How many words today?</p>
       <div className="study-amount-row">
         {AMOUNTS.map((amount) => (
           <button
             key={amount}
             type="button"
-            className="study-amount-button"
+            className="study-amount-button squish-btn"
             onClick={() => onSelect(amount)}
           >
             {amount}

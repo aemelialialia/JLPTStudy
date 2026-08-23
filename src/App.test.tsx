@@ -6,11 +6,15 @@ describe('App shell', () => {
   it('renders the dashboard and primary navigation without crashing', async () => {
     render(<App />)
 
-    expect(await screen.findByRole('heading', { name: /JLPT Study — Dashboard/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /ready to study/i })).toBeInTheDocument()
 
-    const nav = screen.getByRole('navigation', { name: /primary/i })
-    for (const label of ['Dashboard', 'N5', 'N4', 'N3', 'N2', 'Mistake Book', 'Settings']) {
-      expect(within(nav).getByText(label)).toBeInTheDocument()
+    // Two <nav aria-label="Primary"> elements exist (mobile bottom dock +
+    // desktop top row, toggled by CSS media query, not by React) — assert
+    // against the first one, which is enough to prove the shell rendered.
+    const navs = screen.getAllByRole('navigation', { name: /primary/i })
+    expect(navs.length).toBeGreaterThan(0)
+    for (const label of ['Vocabulary', 'Dashboard', 'Grammar']) {
+      expect(within(navs[0]).getByText(label)).toBeInTheDocument()
     }
   })
 })

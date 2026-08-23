@@ -2,6 +2,7 @@ import type { JLPTLevel } from '../types/jlpt'
 import type { VocabularyItem } from '../types/vocabulary'
 import { vocabularyRepository } from '../data/repositories/vocabularyRepository'
 import { studyStateRepository } from '../data/repositories/studyStateRepository'
+import { todayISODate } from '../utils/date'
 
 export type SessionSize = 10 | 15 | 20
 
@@ -73,6 +74,19 @@ export const vocabularyLearningService = {
     const statusById = new Map(states.map((s) => [s.vocabularyId, s.status]))
     const memorizedWords = words.filter((w) => statusById.get(w.id) === 'memorized')
     await Promise.all(memorizedWords.map((w) => studyStateRepository.resetForReview(w.id)))
+  },
+
+  /**
+   * How many distinct vocabulary words (across every level) have been
+   * reviewed today, derived from each word's real `lastReviewed`
+   * timestamp rather than a separate counter that could drift out of
+   * sync — powers the Dashboard's "Daily Vocabulary Progress" ring
+   * (spec: "use real study data; never hard-code progress values").
+   */
+  async getTodayReviewedCount(): Promise<number> {
+    const states = await studyStateRepository.getAll()
+    const today = todayISODate()
+    return states.filter((s) => s.lastReviewed?.slice(0, 10) === today).length
   },
 
   /** Counts of new/learning/memorized words for a level — building block for a future dashboard. */

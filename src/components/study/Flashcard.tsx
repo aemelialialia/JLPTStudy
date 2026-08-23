@@ -7,21 +7,28 @@ function backFieldsFor(word: VocabularyItem): FlashcardField[] {
   // A plain array built from the current VocabularyItem — adding a future
   // field (e.g. an example sentence) to the model is just adding a line
   // here; FlashcardBack itself never needs to change (spec section 7).
+  // Meaning leads as the large "answer" headline (Stitch's back-face
+  // hierarchy), part of speech is a small badge above it, and vocab/
+  // reading repeat below for reference since the user may have flipped
+  // straight here without re-reading the front.
   return [
+    { label: 'Part of Speech', value: word.partOfSpeech, variant: 'badge' },
+    { label: 'Meaning', value: word.meaning, variant: 'headline' },
     { label: 'Vocab', value: word.vocab, japanese: true },
     { label: 'Reading', value: word.reading, japanese: true },
-    { label: 'Meaning', value: word.meaning },
-    { label: 'Part of Speech', value: word.partOfSpeech },
   ]
 }
 
 /**
- * The flashcard itself (spec section 6/7). Deliberately no 3D flip
- * animation — `flipped` just swaps which side renders. Flip state is
- * owned by the parent (the study session view), not this component,
- * because the parent also needs to know whether the card is flipped to
- * decide whether to show the Correct/Incorrect controls at all (spec
- * section 8: don't let the user answer before seeing the answer).
+ * The flashcard itself (spec sections 6/7/22): a real 3D flip, not a
+ * conditional swap — front and back are both always in the DOM, layered
+ * with `backface-visibility: hidden`, and `study-flashcard--flipped`
+ * rotates the shared inner wrapper 180deg (matching the Stitch
+ * `vocabulary_study` screen's flip animation). Flip state is owned by the
+ * parent (the study session view), not this component, because the
+ * parent also needs to know whether the card is flipped to decide
+ * whether to show the Correct/Incorrect controls at all (spec section 8:
+ * don't let the user answer before seeing the answer).
  */
 export function Flashcard({
   word,
@@ -33,30 +40,35 @@ export function Flashcard({
   onFlip: () => void
 }) {
   return (
-    <div>
-      <div
-        className="study-flashcard"
-        role="button"
-        tabIndex={0}
-        aria-pressed={flipped}
-        aria-label={flipped ? 'Flashcard, showing answer' : 'Flashcard, tap to reveal the answer'}
-        onClick={() => {
-          if (!flipped) onFlip()
-        }}
-        onKeyDown={(e) => {
-          if (!flipped && (e.key === 'Enter' || e.key === ' ')) {
-            e.preventDefault()
-            onFlip()
-          }
-        }}
-      >
-        {flipped ? <FlashcardBack fields={backFieldsFor(word)} /> : <FlashcardFront vocab={word.vocab} />}
+    <div
+      className={'study-flashcard squish-btn' + (flipped ? ' study-flashcard--flipped' : '')}
+      role="button"
+      tabIndex={0}
+      aria-pressed={flipped}
+      aria-label={flipped ? 'Flashcard, showing answer' : 'Flashcard, tap to reveal the answer'}
+      onClick={() => {
+        if (!flipped) onFlip()
+      }}
+      onKeyDown={(e) => {
+        if (!flipped && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault()
+          onFlip()
+        }
+      }}
+    >
+      <div className="study-flashcard__inner">
+        {/* Both faces are always mounted for the 3D flip (backface-visibility
+            hides the rotated-away one visually), but that alone leaves the
+            answer readable in the accessibility tree before the user flips
+            — aria-hidden on whichever face isn't showing keeps screen
+            readers from spoiling it early. */}
+        <div className="study-flashcard__face study-flashcard__face--front pattern-asanoha" aria-hidden={flipped}>
+          <FlashcardFront vocab={word.vocab} reading={word.reading} />
+        </div>
+        <div className="study-flashcard__face study-flashcard__face--back" aria-hidden={!flipped}>
+          <FlashcardBack fields={backFieldsFor(word)} />
+        </div>
       </div>
-      {!flipped && (
-        <button type="button" className="study-flip-button" onClick={onFlip}>
-          Flip
-        </button>
-      )}
     </div>
   )
 }

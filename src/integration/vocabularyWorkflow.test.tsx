@@ -27,12 +27,36 @@ function selectFile(file: File) {
   fireEvent.change(input, { target: { files: [file] } })
 }
 
-// The dashboard page also renders a per-level link (e.g. "N5") alongside
-// the primary nav bar's own "N5" link, so a plain getByRole('link', {name})
-// matches both. Scope navigation clicks to the nav bar specifically.
-function navLink(name: string): HTMLElement {
-  const nav = screen.getByRole('navigation', { name: 'Primary' })
-  return within(nav).getByRole('link', { name })
+// The app shell renders both a mobile bottom-nav and a desktop top-nav
+// simultaneously (CSS/media queries pick which is visible), and both
+// share aria-label="Primary" — scope to the first match; either
+// instance links to the same routes, so it doesn't matter which fires.
+function navLink(name: string | RegExp): HTMLElement {
+  const navs = screen.getAllByRole('navigation', { name: 'Primary' })
+  return within(navs[0]).getByRole('link', { name })
+}
+
+/**
+ * The primary nav only has Vocabulary/Dashboard/Grammar (spec section 1)
+ * — there's no longer a direct per-level nav link. Reaching a specific
+ * level's vocabulary management screen follows the real user path:
+ * Vocabulary tab -> pick the level -> a link back to `/level/:level` from
+ * whichever study screen that level lands on. A level with vocabulary
+ * already imported shows StudySetup ("Back to Vocabulary Management");
+ * a level with none shows EmptyVocabularyState ("Import {level}
+ * Vocabulary") instead — both link to the same place, just worded
+ * differently, so match either.
+ */
+async function goToLevelManagement(level: string) {
+  // The accessible name includes the icon glyph's own text content (e.g.
+  // "translateVocabulary" in jsdom, which has no real icon font), so
+  // match by substring rather than exact string.
+  fireEvent.click(navLink(/Vocabulary/))
+  await screen.findByRole('heading', { name: 'Vocabulary Study' })
+  fireEvent.click(screen.getByRole('link', { name: new RegExp(`^${level}`) }))
+  await screen.findByRole('heading', { name: new RegExp(`^${level} Vocabulary$`) })
+  fireEvent.click(screen.getByRole('link', { name: new RegExp(`Back to Vocabulary Management|Import ${level} Vocabulary`) }))
+  await screen.findByRole('heading', { name: new RegExp(`Vocabulary — ${level}`) })
 }
 
 describe('vocabulary import workflow (end-to-end through the UI)', () => {
@@ -40,8 +64,7 @@ describe('vocabulary import workflow (end-to-end through the UI)', () => {
     render(<App />)
 
     // 1. Navigate to N5 via the nav (as a user would).
-    fireEvent.click(navLink('N5'))
-    expect(await screen.findByRole('heading', { name: /Vocabulary — N5/i })).toBeInTheDocument()
+    await goToLevelManagement('N5')
 
     // 2/3. Select and parse an XLSX file.
     selectFile(
@@ -112,8 +135,7 @@ describe('vocabulary import workflow (end-to-end through the UI)', () => {
     fireEvent.click(screen.getByRole('button', { name: /^close$/i }))
 
     // 21/22. Import into N4 and confirm it does not leak into N5's list.
-    fireEvent.click(navLink('N4'))
-    expect(await screen.findByRole('heading', { name: /Vocabulary — N4/i })).toBeInTheDocument()
+    await goToLevelManagement('N4')
     // The list refetches asynchronously on level change, so the previous
     // level's rows may still be on screen for a moment — wait it out
     // rather than asserting on the pre-fetch render.
@@ -125,15 +147,14 @@ describe('vocabulary import workflow (end-to-end through the UI)', () => {
     fireEvent.click(screen.getByRole('button', { name: /done/i }))
     expect(await screen.findByText('大きい')).toBeInTheDocument()
 
-    fireEvent.click(navLink('N5'))
+    await goToLevelManagement('N5')
     await screen.findByText('学校')
     expect(screen.queryByText('大きい')).not.toBeInTheDocument() // 23. cross-level isolation confirmed
   })
 
   it('reports invalid rows in the preview instead of silently dropping or crashing on them', async () => {
     render(<App />)
-    fireEvent.click(navLink('N3'))
-    await screen.findByRole('heading', { name: /Vocabulary — N3/i })
+    await goToLevelManagement('N3')
 
     selectFile(
       buildXlsxFile([

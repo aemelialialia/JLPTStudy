@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react'
 import { exportImportService } from '../services/exportImportService'
+// Reuses study.css's generic .study-btn button styling rather than
+// building a parallel Settings-only button system.
+import '../components/study/study.css'
 
 /**
- * Placeholder Settings page. The export/import/clear actions are real
- * (they call the actual data layer) but deliberately unstyled — this is
- * about proving the local-data-portability architecture (section 18)
- * works, not about the final Settings UI.
+ * Data export/import/clear — reachable from the Profile page ("Manage
+ * study data"). The actions are the real local-data-portability pipeline
+ * (spec section 18); this page just gives them Stitch-consistent
+ * chrome instead of bare unstyled controls.
  */
 export function Settings() {
   const [status, setStatus] = useState<string | null>(null)
@@ -46,33 +49,35 @@ export function Settings() {
   }
 
   return (
-    <section>
-      <h1>Settings</h1>
-      <p>Placeholder settings page — verifies the local data export/import/clear pipeline.</p>
+    <section style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+      <div>
+        <h1 className="text-headline-lg">Settings</h1>
+        <p className="text-body-md" style={{ color: 'var(--color-text-secondary)', marginTop: 'var(--space-2)' }}>
+          All study data lives only in this browser's storage — there is no account and nothing is uploaded
+          anywhere. Use Export/Import to move data between your devices (e.g. via AirDrop or Files).
+        </p>
+      </div>
 
-      <h2>Study data</h2>
-      <p>
-        All study data lives only in this browser's IndexedDB — there is no account and nothing is
-        uploaded anywhere. Use Export/Import to move data between your iPhone and iPad (e.g. via AirDrop
-        or Files).
-      </p>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', alignItems: 'flex-start' }}>
-        <button type="button" onClick={handleExport}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', alignItems: 'flex-start' }}>
+        <button type="button" className="study-btn study-btn--primary" onClick={handleExport}>
           Export study data
         </button>
 
-        <label>
+        <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }} className="text-title-md">
           Import study data
           <input ref={fileInputRef} type="file" accept="application/json" onChange={handleImportChange} />
         </label>
 
-        <button type="button" onClick={handleClear}>
+        <button type="button" className="study-btn" onClick={handleClear}>
           Clear all study data
         </button>
       </div>
 
-      {status && <p role="status">{status}</p>}
+      {status && (
+        <p role="status" className="text-body-md" style={{ color: 'var(--color-primary)' }}>
+          {status}
+        </p>
+      )}
     </section>
   )
 }

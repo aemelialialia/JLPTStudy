@@ -8,6 +8,12 @@ export interface UserSettings {
   defaultSessionSize: 10 | 15 | 20
   /** Last JLPT level the user was studying, used to resume where they left off. */
   lastActiveLevel: string | null
+  /** The JLPT level the user is aiming to pass (drives the Dashboard/Profile target badges). Null = not set. */
+  targetLevel: string | null
+  /** ISO date (YYYY-MM-DD) of the user's target exam sitting, used for the countdown widget. Null = not set. */
+  examDate: string | null
+  /** Daily study goal in cards studied per day (vocabulary + grammar quiz questions combined), shown on Profile. */
+  dailyGoal: number
   /** Free-form bag for future preferences (theme choice, etc.) without a migration. */
   [key: string]: unknown
 }
@@ -15,6 +21,9 @@ export interface UserSettings {
 export const DEFAULT_SETTINGS: UserSettings = {
   defaultSessionSize: 10,
   lastActiveLevel: null,
+  targetLevel: null,
+  examDate: null,
+  dailyGoal: 50,
 }
 
 /**

@@ -19,5 +19,14 @@ export interface GrammarQuestion {
   explanation: string
   /** Foreign key -> GrammarEntry.id */
   grammarPointId: string
+  /**
+   * Optional foreign key -> GrammarSlide.id (see buildGrammarSlides in
+   * types/grammar.ts) for the exact slide within the grammar point's
+   * lesson that explains this question. When present, "Review this
+   * grammar" opens the lesson at this precise slide instead of its
+   * start (spec section 12: "never redirect the user to the generic
+   * Grammar homepage").
+   */
+  lessonSlideId?: string
   difficulty?: QuestionDifficulty
 }

@@ -1,0 +1,243 @@
+/* Profile page (spec section 10, Stitch `learner_profile` screen). */
+
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.profile-overview {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .profile-overview {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.profile-card {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-container-lowest);
+  box-shadow: var(--shadow-ambient);
+}
+
+.profile-user-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .profile-user-card {
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
+  }
+}
+
+.profile-user-card__avatar {
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  border: 4px solid var(--color-surface);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.profile-user-card__name {
+  margin: 0 0 var(--space-2);
+  color: var(--color-on-surface);
+}
+
+.profile-user-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .profile-user-card__badges {
+    justify-content: flex-start;
+  }
+}
+
+.profile-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-surface);
+  font-size: var(--font-size-label-sm);
+}
+
+.profile-badge--target {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+.profile-badge--streak {
+  background: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+.profile-user-card__blurb {
+  margin: 0;
+  color: var(--color-text-secondary);
+  max-width: 32ch;
+}
+
+.profile-goal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-1);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.profile-goal-card__value {
+  margin: var(--space-2) 0 0;
+}
+
+.profile-goal-card__label {
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.profile-section-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .profile-section-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.profile-section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-6);
+  color: var(--color-on-surface);
+}
+
+.profile-section-title__icon {
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+  display: inline-flex;
+}
+
+.profile-section-title__icon--vocab {
+  color: var(--color-primary);
+  background: var(--color-primary-container);
+}
+
+.profile-section-title__icon--grammar {
+  color: var(--color-secondary);
+  background: var(--color-secondary-container);
+}
+
+/* ---- Vocabulary mastery bars ---- */
+.profile-mastery-row + .profile-mastery-row {
+  margin-top: var(--space-5);
+}
+
+.profile-mastery-row__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.profile-mastery-row__label {
+  color: var(--color-on-surface);
+}
+
+.profile-mastery-row__value {
+  font-size: var(--font-size-label-sm);
+  color: var(--color-primary);
+}
+
+.profile-mastery-row__track {
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container);
+  overflow: hidden;
+}
+
+.profile-mastery-row__fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  transition: width 0.6s ease-out;
+}
+
+/* ---- Grammar bubble rows ---- */
+.profile-grammar-card {
+  background: var(--color-surface-container-low);
+}
+
+.profile-bubble-row + .profile-bubble-row {
+  margin-top: var(--space-4);
+}
+
+.profile-bubble-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.profile-bubble-row__level {
+  width: 40px;
+  flex-shrink: 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.profile-bubble-row__bubbles {
+  flex: 1;
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding: 2px;
+}
+
+.profile-bubble {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.profile-bubble--done {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.profile-bubble--todo {
+  background: var(--color-surface);
+  border: 1px dashed var(--color-outline-variant);
+  color: var(--color-outline-variant);
+}

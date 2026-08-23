@@ -14,8 +14,12 @@ export function VocabularyRow({ word, onSelect }: { word: VocabularyWithStatus; 
       onClick={() => onSelect(word.id)}
       tabIndex={0}
       role="button"
+      aria-label={`View details for ${word.vocab}`}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') onSelect(word.id)
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onSelect(word.id)
+        }
       }}
     >
       <td lang="ja">{word.vocab}</td>

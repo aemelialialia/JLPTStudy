@@ -1,1 +1,122 @@
-[]
+[
+  {
+    "id": "n5-nakereba",
+    "level": "N5",
+    "grammarPoint": "〜なければならない",
+    "meaning": "Must do / have to do — expresses strong necessity or obligation.",
+    "formation": "Verb (ない-form, drop い) + ければならない",
+    "usage": "Attaches to the negative (nai-form) stem of a verb to state that not doing the action would be unacceptable — a strong sense of duty or requirement.",
+    "examples": [
+      { "sentence": "明日は早く起きなければなりません。", "reading": "あしたははやくおきなければなりません。", "meaning": "I have to get up early tomorrow." },
+      { "sentence": "宿題をしなければならない。", "reading": "しゅくだいをしなければならない。", "meaning": "I have to do my homework." }
+    ],
+    "notes": "Casual speech often shortens ければ to きゃ, e.g. 行かなきゃ (have to go).",
+    "commonMistakes": "Learners often forget to conjugate the verb into its nai-form first, attaching ければならない directly to the dictionary form.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n5-tekudasai",
+    "level": "N5",
+    "grammarPoint": "〜てください",
+    "meaning": "Please do ~ — a polite request.",
+    "formation": "Verb te-form + ください",
+    "usage": "Used to politely ask or instruct someone to do something.",
+    "examples": [
+      { "sentence": "ここに名前を書いてください。", "reading": "ここになまえをかいてください。", "meaning": "Please write your name here." },
+      { "sentence": "ちょっと待ってください。", "reading": "ちょっとまってください。", "meaning": "Please wait a moment." }
+    ],
+    "notes": "Softer than a plain imperative; very common in everyday polite requests and instructions.",
+    "commonMistakes": "Learners often use the dictionary form instead of the te-form, e.g. incorrectly saying 書くください instead of 書いてください.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n5-teiru",
+    "level": "N5",
+    "grammarPoint": "〜ている",
+    "meaning": "Ongoing action or resulting state — like English \"-ing\", or a state that resulted from a past action.",
+    "formation": "Verb te-form + いる",
+    "usage": "Describes an action in progress right now, or a continuing state that resulted from a past action (e.g. wearing, living somewhere, being married).",
+    "examples": [
+      { "sentence": "今、テレビを見ています。", "reading": "いま、テレビをみています。", "meaning": "I am watching TV right now." },
+      { "sentence": "彼は結婚しています。", "reading": "かれはけっこんしています。", "meaning": "He is married." }
+    ],
+    "notes": "With motion/change verbs like 結婚する, 住む, 知る, ~ている usually describes a resulting STATE, not an action happening this instant.",
+    "commonMistakes": "Learners often translate 知っている literally as \"is knowing\" instead of the natural \"know\", overlooking the state meaning.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n5-tai",
+    "level": "N5",
+    "grammarPoint": "〜たい",
+    "meaning": "Want to do something.",
+    "formation": "Verb (ます-stem) + たい",
+    "usage": "Expresses the speaker's own desire to do an action. For a third person's desire, 〜たがっている is used instead.",
+    "examples": [
+      { "sentence": "日本へ行きたいです。", "reading": "にほんへいきたいです。", "meaning": "I want to go to Japan." },
+      { "sentence": "何か冷たいものが飲みたい。", "reading": "なにかつめたいものがのみたい。", "meaning": "I want to drink something cold." }
+    ],
+    "notes": "たい conjugates like an い-adjective: たくない (don't want to), たかった (wanted to).",
+    "commonMistakes": "Using 〜たいです to describe someone else's desire (a stranger, a third person) instead of 〜たがっている, which sounds unnatural in Japanese.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n5-kamoshirenai",
+    "level": "N5",
+    "grammarPoint": "〜かもしれない",
+    "meaning": "Might / may — expresses a guess with low-to-moderate confidence.",
+    "formation": "Plain form (verb / i-adjective / na-adjective without だ / noun) + かもしれない",
+    "usage": "Attaches to the plain form of verbs, i-adjectives, na-adjectives (drop だ), and nouns to hedge a statement as merely possible, not certain.",
+    "examples": [
+      { "sentence": "明日は雨かもしれません。", "reading": "あしたはあめかもしれません。", "meaning": "It might rain tomorrow." },
+      { "sentence": "彼はもう帰ったかもしれない。", "reading": "かれはもうかえったかもしれない。", "meaning": "He might have already gone home." }
+    ],
+    "notes": "Weaker in certainty than 〜でしょう or 〜と思う — use it when you genuinely aren't sure.",
+    "commonMistakes": "Attaching かもしれない to the ます-form instead of the plain form, e.g. incorrectly saying 行きますかもしれない instead of 行くかもしれない.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n5-youtosuru",
+    "level": "N5",
+    "grammarPoint": "〜ようとする",
+    "meaning": "Try to do / be about to do.",
+    "formation": "Verb volitional form + とする",
+    "usage": "Describes making an effort to do something, or an action that is just about to happen.",
+    "examples": [
+      { "sentence": "ドアを開けようとしたが、開かなかった。", "reading": "ドアをあけようとしたが、あかなかった。", "meaning": "I tried to open the door, but it wouldn't open." },
+      { "sentence": "電車が出発しようとしている。", "reading": "でんしゃがしゅっぱつしようとしている。", "meaning": "The train is about to depart." }
+    ],
+    "notes": "Combine with ている (〜ようとしている) to emphasize that the attempt or moment is happening right now.",
+    "commonMistakes": "Confusing this with 〜つもりだ (intend to) — ようとする emphasizes the active effort or the imminent moment, not a settled plan.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n5-kotogadekiru",
+    "level": "N5",
+    "grammarPoint": "〜ことができる",
+    "meaning": "Can do / to be able to do.",
+    "formation": "Verb dictionary form + ことができる",
+    "usage": "A more formal, explicit way to express ability than the potential form; common in written or polite Japanese.",
+    "examples": [
+      { "sentence": "日本語を話すことができます。", "reading": "にほんごをはなすことができます。", "meaning": "I can speak Japanese." },
+      { "sentence": "ここで写真を撮ることができません。", "reading": "ここでしゃしんをとることができません。", "meaning": "You cannot take photos here." }
+    ],
+    "notes": "Interchangeable in meaning with the potential form (話せます), but ことができる sounds slightly more formal or written.",
+    "commonMistakes": "Attaching ことができる to the ます-form or potential form instead of the plain dictionary form.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n5-maeni",
+    "level": "N5",
+    "grammarPoint": "〜前に",
+    "meaning": "Before doing ~.",
+    "formation": "Verb dictionary form + 前に (for nouns: Noun + の前に)",
+    "usage": "States that one action happens before another; the verb before 前に always stays in the plain, non-past form regardless of the overall sentence's tense.",
+    "examples": [
+      { "sentence": "寝る前に歯を磨きます。", "reading": "ねるまえにはをみがきます。", "meaning": "I brush my teeth before going to bed." },
+      { "sentence": "食事の前に手を洗ってください。", "reading": "しょくじのまえにてをあらってください。", "meaning": "Please wash your hands before the meal." }
+    ],
+    "notes": "Contrast with 〜てから (after doing ~, in order) and 〜後で (after doing ~).",
+    "commonMistakes": "Using the past tense (た-form) before 前に, e.g. incorrectly 寝た前に instead of 寝る前に — the verb before 前に is always non-past.",
+    "relatedGrammar": []
+  }
+]

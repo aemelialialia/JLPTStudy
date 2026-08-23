@@ -1,0 +1,320 @@
+/* Dashboard (spec section 6 + Stitch `dashboard` screen). Kept visually
+   simple per spec: a handful of cards, no statistics-heavy layout. */
+
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.dashboard-welcome p {
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-1);
+}
+
+.dashboard-welcome h1 {
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.dashboard-side-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ---- Daily Vocabulary Progress ---- */
+.dashboard-vocab-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-surface-variant);
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard-vocab-card__title {
+  width: 100%;
+  text-align: left;
+  margin: 0 0 var(--space-6);
+  color: var(--color-on-surface);
+}
+
+.dashboard-vocab-card__ring {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  margin-bottom: var(--space-6);
+}
+
+.dashboard-vocab-card__ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.dashboard-vocab-card__ring-track {
+  fill: none;
+  stroke: var(--color-surface-container-highest);
+  stroke-width: 8;
+}
+
+.dashboard-vocab-card__ring-value {
+  fill: none;
+  stroke: var(--color-primary-container);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-out;
+}
+
+.dashboard-vocab-card__ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-vocab-card__ring-count {
+  color: var(--color-primary);
+}
+
+.dashboard-vocab-card__ring-goal {
+  color: var(--color-text-secondary);
+  border-top: 1px solid var(--color-surface-variant);
+  padding-top: 2px;
+  margin-top: 2px;
+}
+
+.dashboard-vocab-card__cta {
+  width: 100%;
+  min-height: var(--touch-target-min);
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  border: none;
+  border-bottom: 4px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  font-family: var(--font-family-heading);
+  font-weight: 600;
+}
+
+.dashboard-vocab-card__cta:active {
+  border-bottom-width: 0;
+  transform: translateY(4px);
+}
+
+/* ---- Exam countdown ---- */
+.dashboard-countdown-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-secondary-container);
+  box-shadow: var(--shadow-secondary);
+  text-decoration: none;
+  color: inherit;
+}
+
+.dashboard-countdown-card__badge {
+  display: inline-block;
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  padding: 2px var(--space-3);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-2);
+}
+
+.dashboard-countdown-card__level {
+  color: var(--color-on-secondary-container);
+  margin: 0;
+}
+
+.dashboard-countdown-card__days {
+  flex-shrink: 0;
+  background: var(--color-surface-container-lowest);
+  border-radius: var(--radius-full);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid color-mix(in srgb, var(--color-secondary) 10%, transparent);
+}
+
+.dashboard-countdown-card__days-value {
+  color: var(--color-secondary);
+  line-height: 1;
+}
+
+.dashboard-countdown-card__days-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-secondary);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* ---- Daily Grammar Quiz ---- */
+.dashboard-grammar-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--color-tertiary-container);
+  box-shadow: var(--shadow-tertiary);
+  border: 1px solid color-mix(in srgb, var(--color-tertiary) 10%, transparent);
+}
+
+.dashboard-grammar-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard-grammar-card__title {
+  color: var(--color-on-tertiary-container);
+  margin: 0;
+}
+
+.dashboard-grammar-card__preview {
+  background: color-mix(in srgb, var(--color-surface-container-lowest) 80%, transparent);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--color-tertiary) 5%, transparent);
+}
+
+.dashboard-grammar-card__preview-point {
+  text-align: center;
+  color: var(--color-on-surface);
+  margin: 0 0 var(--space-2);
+  letter-spacing: 0.02em;
+}
+
+.dashboard-grammar-card__preview-meaning {
+  text-align: center;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.dashboard-grammar-card__cta {
+  width: 100%;
+  min-height: var(--touch-target-min);
+  background: var(--color-tertiary);
+  color: var(--color-on-tertiary);
+  border: none;
+  border-bottom: 4px solid color-mix(in srgb, var(--color-on-tertiary-fixed-variant) 50%, transparent);
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  font-family: var(--font-family-heading);
+  font-weight: 600;
+}
+
+.dashboard-grammar-card__cta:active {
+  border-bottom-width: 0;
+  transform: translateY(4px);
+}
+
+/* ---- Practice More ---- */
+.dashboard-practice-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  color: var(--color-on-surface);
+}
+
+.dashboard-practice-row {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.dashboard-practice-card {
+  flex-shrink: 0;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: var(--color-on-surface);
+  border: 1px solid transparent;
+}
+
+.dashboard-practice-card--vocab {
+  background: color-mix(in srgb, var(--color-primary-fixed-dim) 20%, var(--color-surface-container-lowest));
+  border-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+.dashboard-practice-card--vocab .dashboard-practice-card__icon {
+  color: var(--color-primary);
+}
+
+.dashboard-practice-card--grammar {
+  background: color-mix(in srgb, var(--color-tertiary-fixed-dim) 20%, var(--color-surface-container-lowest));
+  border-color: color-mix(in srgb, var(--color-tertiary) 10%, transparent);
+}
+.dashboard-practice-card--grammar .dashboard-practice-card__icon {
+  color: var(--color-tertiary);
+}
+
+.dashboard-practice-card--review {
+  background: color-mix(in srgb, var(--color-secondary-fixed-dim) 20%, var(--color-surface-container-lowest));
+  border-color: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+}
+.dashboard-practice-card--review .dashboard-practice-card__icon {
+  color: var(--color-secondary);
+}
+
+.dashboard-practice-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-lowest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-practice-card__label {
+  text-align: center;
+}

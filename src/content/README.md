@@ -28,9 +28,9 @@ content/
   contentLoader.ts                            — typed accessors
 ```
 
-Each file is currently an empty array (`[]`). **No JLPT curriculum has been
-authored as part of this foundation step** — that content will be curated
-separately. The schema below is what a populated entry looks like.
+Each level file is populated with real, curated content: 8 grammar points
+and 16 quiz questions per level (N5–N2 — 32 grammar points and 64 questions
+total), authored in Phase 4. The schema below is what an entry looks like.
 
 ## Grammar schema (`GrammarEntry`, see `src/types/grammar.ts`)
 
@@ -66,6 +66,7 @@ optional/may be empty but should stay present as `""` / `[]` for consistency.
   "correctAnswer": "座って",
   "explanation": "The te-form is required before ください to make a polite request.",
   "grammarPointId": "n5-te-form-01",
+  "lessonSlideId": "n5-te-form-01::usage",
   "difficulty": "easy"
 }
 ```
@@ -73,8 +74,13 @@ optional/may be empty but should stay present as `""` / `[]` for consistency.
 `grammarPointId` should match a `GrammarEntry.id` in the same level's grammar
 file — that link is what lets a quiz result deep-link back to the relevant
 explanation (see `contentLoader.ts`'s `getGrammarEntryForQuestion`).
+`lessonSlideId` is optional and, when present, points to one specific slide
+(`grammarSlideId()` in `src/types/grammar.ts` builds these ids as
+`${grammarPointId}::${slideType}`) so "Review this grammar" from a missed
+quiz question opens exactly the slide that explains it, not just the start
+of the lesson.
 
-## Adding real content later
+## Adding more content later
 
 Hand-edit the JSON files directly, or write a small offline script that
 generates them — either way, validate against the TypeScript types in

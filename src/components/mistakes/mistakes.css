@@ -1,0 +1,82 @@
+/* Mistake Book (spec: reachable from Dashboard's Practice More row). */
+
+.mistakes-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.mistakes-header p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-secondary);
+}
+
+.mistakes-level-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.mistakes-level-group__title {
+  margin: 0;
+  color: var(--color-on-surface);
+}
+
+.mistake-card {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-lowest);
+  box-shadow: var(--shadow-ambient);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.mistake-card__point {
+  margin: 0;
+  color: var(--color-secondary);
+}
+
+.mistake-card__question {
+  margin: 0;
+  color: var(--color-on-surface);
+}
+
+.mistake-card__answers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+}
+
+.mistake-card__answer--wrong {
+  color: var(--color-error);
+}
+
+.mistake-card__answer--correct {
+  color: var(--color-primary);
+}
+
+.mistake-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.mistake-card__mastered {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  font-size: var(--font-size-label-sm);
+}
+
+.mistakes-empty {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  color: var(--color-text-secondary);
+}

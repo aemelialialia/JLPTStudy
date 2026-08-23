@@ -1,5 +1,4 @@
 import type { StudySession } from '../../types/studySession'
-import '../vocabulary/vocabulary.css'
 import './study.css'
 
 /**
@@ -27,11 +26,11 @@ export function ResumeSessionPrompt({
         <br />
         {session.currentIndex} / {total} completed
       </p>
-      <div className="vocab-button-row" style={{ justifyContent: 'center' }}>
-        <button type="button" className="vocab-button vocab-button--primary" onClick={onContinue}>
+      <div className="study-btn-row">
+        <button type="button" className="study-btn study-btn--primary squish-btn" onClick={onContinue}>
           Continue
         </button>
-        <button type="button" className="vocab-button" onClick={onStartNew}>
+        <button type="button" className="study-btn squish-btn" onClick={onStartNew}>
           Start New Session
         </button>
       </div>

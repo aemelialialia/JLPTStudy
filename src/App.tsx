@@ -4,8 +4,16 @@ import { Dashboard } from './pages/Dashboard'
 import { LevelPage } from './pages/LevelPage'
 import { StudyIndexPage } from './pages/StudyIndexPage'
 import { StudyPage } from './pages/StudyPage'
+import { VocabQuizPage } from './pages/VocabQuizPage'
 import { MistakeBook } from './pages/MistakeBook'
 import { Settings } from './pages/Settings'
+import { GrammarIndexPage } from './pages/GrammarIndexPage'
+import { GrammarHubPage } from './pages/GrammarHubPage'
+import { GrammarLessonPage } from './pages/GrammarLessonPage'
+import { GrammarQuizPage } from './pages/GrammarQuizPage'
+import { ProfilePage } from './pages/ProfilePage'
+import { ResourcesPage } from './pages/ResourcesPage'
+import { LevelSelectionPage } from './pages/LevelSelectionPage'
 
 /**
  * HashRouter (not BrowserRouter) is used deliberately: GitHub Pages
@@ -24,7 +32,15 @@ export function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/level/:level" element={<LevelPage />} />
           <Route path="/study" element={<StudyIndexPage />} />
+          <Route path="/study/:level/quiz" element={<VocabQuizPage />} />
           <Route path="/study/:level" element={<StudyPage />} />
+          <Route path="/grammar" element={<GrammarIndexPage />} />
+          <Route path="/grammar/lesson/:grammarPointId" element={<GrammarLessonPage />} />
+          <Route path="/grammar/:level/quiz/:mode" element={<GrammarQuizPage />} />
+          <Route path="/grammar/:level" element={<GrammarHubPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/resources" element={<ResourcesPage />} />
+          <Route path="/levels" element={<LevelSelectionPage />} />
           <Route path="/mistakes" element={<MistakeBook />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/" replace />} />

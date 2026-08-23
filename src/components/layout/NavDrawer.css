@@ -1,0 +1,96 @@
+.nav-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(25, 28, 27, 0.2);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.nav-drawer-overlay--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 51;
+  width: 280px;
+  max-width: 82vw;
+  height: 100%;
+  background: var(--color-surface);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-stack-gap);
+  padding: var(--layout-safe-margin);
+  padding-top: calc(var(--safe-area-top) + 48px);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav-drawer--open {
+  transform: translateX(0);
+}
+
+.nav-drawer__close {
+  position: absolute;
+  top: calc(var(--safe-area-top) + var(--space-3));
+  right: var(--space-3);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: var(--color-surface-container);
+  color: var(--color-on-surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-drawer__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.nav-drawer__name {
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.nav-drawer__level {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-secondary);
+}
+
+.nav-drawer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.nav-drawer__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  min-height: var(--touch-target-min);
+  transition: background-color 0.15s ease;
+}
+
+.nav-drawer__link:hover,
+.nav-drawer__link:focus-visible {
+  background: var(--color-surface-variant);
+  color: var(--color-primary);
+}

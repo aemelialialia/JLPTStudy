@@ -1,4 +1,4 @@
-# JLPT Study
+# JLPT Study — Study Buddy
 
 A personal, local-first Japanese JLPT (N5–N2) study tool. Static site, no
 backend, no account — all study data lives in your browser's IndexedDB.
@@ -6,15 +6,22 @@ Deployable for free on GitHub Pages.
 
 **Phase 1** built the technical foundation (routing, data layer, content
 layer, design tokens). **Phase 2** added a real, working vocabulary import
-and database system — XLSX import, IndexedDB storage, search/filter, and
-study-state tracking. **Phase 3** (this step) adds the vocabulary study /
-flashcard system on top of that same data: daily session setup, flip
-flashcards, correct/incorrect grading, new → learning → memorized
-progression, session persistence/resume, level completion, and review
-cycles. Every screen across all three phases is deliberately barebone —
-functional, not final. The real Stitch-designed UI has not been
-implemented yet; these screens exist only to prove the underlying data
-layer and study engine work end to end.
+and database system. **Phase 3** added the vocabulary study/flashcard
+system. **Phase 4** (this step) is the production frontend: a full grammar
+system (curated N5–N2 content, slide-based lessons, multiple-choice
+quizzes with a "review the grammar, then return to your quiz" loop), a
+real Dashboard/Profile/JLPT-Level-Selection/Resources set of screens, and
+a visual rebuild of every earlier screen to match an approved Stitch
+design ("Komorebi Study System") as closely as practical — bottom tab bar
+(Vocabulary / Dashboard / Grammar) plus a slide-out drawer (JLPT Levels /
+Profile / Resources). Two screens remain deliberately un-restyled: the
+vocabulary import/management screen (`/level/:level`) and the data
+export/import/reset actions inside Settings — both are real, working
+utility surfaces with no corresponding Stitch mockup, reachable from
+Study's "Back to Vocabulary Management" link and Profile's "Manage study
+data" link respectively. Every number shown anywhere in the app (daily
+progress, streaks, per-level mastery, exam countdown) is computed from
+real IndexedDB state — nothing is ever hard-coded or fabricated.
 
 ## Stack
 
@@ -30,15 +37,15 @@ No state management library, CSS framework, or backend framework was added — s
 
 ```
 src/
-  types/           Domain models (VocabularyItem, StudyState, StudySession, vocabularyImport types, GrammarEntry, GrammarQuestion, Quiz, Settings)
-  content/         Curated static content (grammar + questions), bundled JSON, per JLPT level. Read-only.
-  data/            IndexedDB layer: db.ts (schema) + repositories/ (all reads/writes — the only files that touch IndexedDB, including studySessionRepository)
-  services/        Framework-agnostic business logic (XLSX import/validation, vocab learning, studySessionService — the flashcard engine, quiz, export/import)
-  hooks/           Thin React bindings from services/repositories to components (useVocabularyList, useVocabularyImport, useVocabularyDetail, useVocabularyStudy, ...)
-  theme/           Design tokens (tokens.css + tokens.ts) — not final visual identity
-  components/      Presentational components (layout shell, nav, generic StatCard, vocabulary/ — Phase 2's import/list/detail UI, study/ — Phase 3's flashcard/session UI)
-  pages/           Routed pages (Dashboard, LevelPage — vocabulary manager, StudyIndexPage/StudyPage — the flashcard flow, MistakeBook, Settings)
-  integration/     End-to-end tests that drive the real rendered UI through the full import/study workflows (vocabularyWorkflow.test.tsx, studyWorkflow.test.tsx)
+  types/           Domain models (VocabularyItem, StudyState, StudySession, GrammarEntry/GrammarSlide/GrammarProgress, GrammarQuestion, GrammarQuizSession, Quiz, Settings)
+  content/         Curated static content, bundled JSON per JLPT level: grammar/n5..n2.json (grammar points) and questions/n5..n2.json (quiz questions). Read-only at runtime, loaded via contentLoader.ts.
+  data/            IndexedDB layer: db.ts (schema) + repositories/ (the only files that touch IndexedDB directly)
+  services/        Framework-agnostic business logic — vocabularyLearningService/studySessionService (flashcards), vocabularyQuizService (vocab MC quiz), grammarLessonService/grammarQuizSessionService (grammar lessons + quizzes), quizService (grammar quiz attempts/mistakes), progressService (cross-cutting streak/daily-activity stats), exportImportService, xlsxImportService
+  hooks/           Thin React bindings from services/repositories to components — one hook per screen's data needs (useVocabularyStudy, useVocabularyQuiz, useGrammarLesson, useGrammarQuiz, useProfileData, useLevelOverview, useDailyVocabularyProgress, useDailyGrammarQuizPreview, ...)
+  theme/           Design tokens ported from the Stitch "Komorebi Study System" (tokens.css + tokens.ts) — colors, typography, radius, shadows, spacing; every component consumes these via CSS custom properties, never hard-coded values
+  components/      Presentational components, one folder per feature area: layout/ (app shell, top bar, nav drawer, bottom nav, loading screen), vocabulary/ (import/manage), study/ (flashcards + vocab quiz, shared study.css), grammar/ (hub, lesson slides, quiz), dashboard/, profile/, levels/, resources/, mistakes/, common/ (StatCard)
+  pages/           Routed pages — Dashboard, LevelPage (vocab manager), StudyIndexPage/StudyPage/VocabQuizPage, GrammarIndexPage/GrammarHubPage/GrammarLessonPage/GrammarQuizPage, ProfilePage, LevelSelectionPage, ResourcesPage, MistakeBook, Settings
+  integration/     End-to-end tests driving the real rendered UI through full workflows (vocabularyWorkflow.test.tsx, studyWorkflow.test.tsx)
   App.tsx          Route table
   main.tsx         Entry point
 ```
@@ -127,9 +134,13 @@ level instead of always surfacing the same handful of words. A session's
 word list is fixed the moment it's created; refreshing or navigating away
 never silently swaps it out.
 
-**Flashcard & grading:** the front shows the Vocab only; flipping (via the
-Flip button or by tapping/clicking the card itself) reveals the Reading
-(used exactly as imported), Meaning, and Part of Speech. Correct/Incorrect
+**Flashcard & grading:** a real 3D flip (not a conditional swap — both
+faces are always mounted, `backface-visibility: hidden` shows only one at
+a time, and the face not currently showing is `aria-hidden` so it isn't
+readable to assistive tech before the user actually flips). The front
+shows the Vocab and Reading; flipping (via the "Reveal Answer" button or
+by tapping/clicking the card itself) reveals the Reading again plus
+Meaning and Part of Speech on the back. "Again"/"Know It!" grading
 controls only appear after the flip, so a word can never be graded unseen.
 Every answer immediately records `Times Seen +1`, plus `Times Correct +1` or
 `Times Incorrect +1`, sets `Last Reviewed = now`, and updates status —
@@ -170,10 +181,49 @@ unfinished session and offers **Continue** or **Start New Session**
 restarted). The same engine and store serve N5/N4/N3/N2 identically, keyed
 only by `level` — there is no per-level code duplication.
 
+## Grammar system
+
+`/#/grammar`, `/#/grammar/:level`, `/#/grammar/lesson/:grammarPointId`, and
+`/#/grammar/:level/quiz/:mode` — a full second study track alongside
+vocabulary, built on curated content rather than user-imported data.
+
+**Content:** 8 grammar points and 16 quiz questions per level (N5–N2, 32
+points / 64 questions total), authored as flat JSON in `src/content/grammar/`
+and `src/content/questions/` — see `src/content/README.md` for the schema.
+Each grammar point deterministically expands into lesson slides
+(`buildGrammarSlides` in `src/types/grammar.ts`); a sparse entry naturally
+produces fewer slides rather than padding with empty ones.
+
+**Hub:** the level hub (`GrammarHubPage`) shows real "quick tips" for
+un-studied points, a "Current Lessons" list prioritizing what hasn't been
+opened yet, the full browsable point list, and a quiz entry — all driven by
+`grammarLessonService.getLevelProgress`, never a hard-coded count.
+
+**Lessons & quizzes:** opening a lesson records real "studied" progress
+(once per point, on first open — never just for appearing in a list).
+Quiz sessions persist to IndexedDB (`GrammarQuizSession`, unlike the
+in-memory-only vocabulary quiz) specifically so the **quiz → grammar
+reference → return to quiz** loop survives navigation: missing a question
+offers "Review this grammar", which deep-links to the exact lesson slide
+that explains it (`GrammarQuestion.lessonSlideId`) with `?returnLevel=` /
+`?returnMode=` query params that restore the in-progress quiz exactly
+where it left off, rather than restarting it.
+
+**Mistake Book** (`/#/mistakes`, reached from Dashboard's Practice More
+row) collects every grammar question answered incorrectly, grouped by
+level, each with the same "review this grammar" deep link.
+
+## Dashboard, Profile, JLPT Levels & Resources
+
+- **Dashboard** (`/`) — Daily Vocabulary Progress (a real ring gauge against `settings.dailyGoal`), the JLPT exam countdown (real `targetLevel`/`examDate`, or a prompt to set one), a Daily Grammar preview, and a Practice More row linking only to features that actually exist (vocabulary quiz, grammar quiz, mistake review).
+- **Profile** (`/#/profile`) — per-level vocabulary mastery bars and grammar "bubble row" progress, a real day-based study streak (`progressService.getCurrentStreak`, derived from existing `lastReviewed`/`QuizAttempt` timestamps, not a separately-maintained counter that could drift), and today's combined cards-studied count against the daily goal.
+- **JLPT Level Selection** (`/#/levels`) — pick a target level and exam date (writes to `UserSettings`), shown alongside each level's real vocabulary/grammar progress so the choice is informed.
+- **Resources** (`/#/resources`) — links to the real Vocabulary and Grammar collections plus the official JLPT website. The Stitch mockup for this screen also included "Verb Conjugation Table" and "Noun/Adjective Tables" cards; neither is a real feature in this app, so — consistent with the no-dead-end-links principle used throughout (e.g. Dashboard's Practice More row) — they were omitted rather than linking to a page that doesn't exist.
+
 ## Data & content
 
-- **IndexedDB** (`src/data/`) holds everything the user generates: imported vocabulary, memorization/study state, quiz attempts, mistakes, settings.
-- **`src/content/`** holds curated, bundled JSON (grammar notes + grammar questions), organized per level. It ships empty in this step — see `src/content/README.md` for the schema and how to add real content later.
+- **IndexedDB** (`src/data/`) holds everything the user generates: imported vocabulary, memorization/study state, grammar progress, grammar quiz sessions, quiz attempts, mistakes, settings.
+- **`src/content/`** holds curated, bundled JSON (grammar notes + grammar questions), organized per level — see `src/content/README.md` for the schema.
 
 ## Requirements
 

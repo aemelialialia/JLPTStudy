@@ -1,1 +1,178 @@
-[]
+[
+  {
+    "id": "n4-q-0001",
+    "level": "N4",
+    "questionText": "友達に本を＿＿＿。",
+    "choices": ["貸してあげました", "貸してもらいました", "貸してくれました", "貸しました"],
+    "correctAnswer": "貸してあげました",
+    "explanation": "I did the favor of lending FOR my friend, so てあげる is used.",
+    "grammarPointId": "n4-tageru",
+    "lessonSlideId": "n4-tageru::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n4-q-0002",
+    "level": "N4",
+    "questionText": "私は先生に作文を＿＿＿。",
+    "choices": ["直してもらいました", "直してあげました", "直させました", "直しました"],
+    "correctAnswer": "直してもらいました",
+    "explanation": "\"I\" am the subject receiving the favor, marked by 私は…先生に…てもらう.",
+    "grammarPointId": "n4-tageru",
+    "lessonSlideId": "n4-tageru::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n4-q-0003",
+    "level": "N4",
+    "questionText": "音楽を＿＿＿勉強します。",
+    "choices": ["聞きながら", "聞くながら", "聞いてながら", "聞きますながら"],
+    "correctAnswer": "聞きながら",
+    "explanation": "ながら attaches to the ます-stem: 聞き + ながら.",
+    "grammarPointId": "n4-nagara",
+    "lessonSlideId": "n4-nagara::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n4-q-0004",
+    "level": "N4",
+    "questionText": "テレビを見＿＿＿ご飯を食べます。",
+    "choices": ["ながら", "ので", "のに", "たら"],
+    "correctAnswer": "ながら",
+    "explanation": "ながら connects two simultaneous actions performed by the same person.",
+    "grammarPointId": "n4-nagara",
+    "lessonSlideId": "n4-nagara::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n4-q-0005",
+    "level": "N4",
+    "questionText": "このケーキは＿＿＿。",
+    "choices": ["おいしそうです", "おいしいそうです", "おいしくそうです", "おいしさそうです"],
+    "correctAnswer": "おいしそうです",
+    "explanation": "For i-adjectives, drop the final い before adding そうです: おいし(い) → おいしそう.",
+    "grammarPointId": "n4-sou",
+    "lessonSlideId": "n4-sou::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n4-q-0006",
+    "level": "N4",
+    "questionText": "空を見て、雨が＿＿＿。",
+    "choices": ["降りそうです", "降るそうです", "降ってそうです", "降りますそうです"],
+    "correctAnswer": "降りそうです",
+    "explanation": "Appearance-based そうです attaches to the ます-stem: 降り + そう.",
+    "grammarPointId": "n4-sou",
+    "lessonSlideId": "n4-sou::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n4-q-0007",
+    "level": "N4",
+    "questionText": "彼は＿＿＿ようです。",
+    "choices": ["忙しい", "忙しいだ", "忙しさ", "忙しくて"],
+    "correctAnswer": "忙しい",
+    "explanation": "An i-adjective attaches to ようです in its plain form.",
+    "grammarPointId": "n4-you",
+    "lessonSlideId": "n4-you::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n4-q-0008",
+    "level": "N4",
+    "questionText": "外は＿＿＿ね。",
+    "choices": ["寒いようです", "寒いそうらしいです", "寒くようです", "寒いのようです"],
+    "correctAnswer": "寒いようです",
+    "explanation": "ようです expresses an impression based on indirect evidence, such as seeing people bundled up outside.",
+    "grammarPointId": "n4-you",
+    "lessonSlideId": "n4-you::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n4-q-0009",
+    "level": "N4",
+    "questionText": "雨が＿＿＿、行きません。",
+    "choices": ["降ったら", "降ると", "降るなら", "降っている"],
+    "correctAnswer": "降ったら",
+    "explanation": "たら is the natural choice when the result clause is a decision like 行きません.",
+    "grammarPointId": "n4-tara",
+    "lessonSlideId": "n4-tara::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n4-q-0010",
+    "level": "N4",
+    "questionText": "家に＿＿＿、電話します。",
+    "choices": ["着いたら", "着くと", "着いて", "着きます"],
+    "correctAnswer": "着いたら",
+    "explanation": "着いたら + result describes what will happen once the condition (arriving home) is met.",
+    "grammarPointId": "n4-tara",
+    "lessonSlideId": "n4-tara::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n4-q-0011",
+    "level": "N4",
+    "questionText": "一生懸命勉強した＿＿＿、試験に落ちました。",
+    "choices": ["のに", "ので", "から", "し"],
+    "correctAnswer": "のに",
+    "explanation": "のに signals an unexpected, disappointing result contrary to the effort described.",
+    "grammarPointId": "n4-noni",
+    "lessonSlideId": "n4-noni::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n4-q-0012",
+    "level": "N4",
+    "questionText": "お金がある＿＿＿、彼はけちだ。",
+    "choices": ["のに", "ので", "なら", "と"],
+    "correctAnswer": "のに",
+    "explanation": "のに contrasts having money with the unexpected trait of being stingy.",
+    "grammarPointId": "n4-noni",
+    "lessonSlideId": "n4-noni::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n4-q-0013",
+    "level": "N4",
+    "questionText": "昨日、＿＿＿。",
+    "choices": ["食べすぎました", "食べるすぎました", "食べますすぎました", "食べたすぎました"],
+    "correctAnswer": "食べすぎました",
+    "explanation": "すぎる attaches to the ます-stem: 食べ + すぎる.",
+    "grammarPointId": "n4-sugiru",
+    "lessonSlideId": "n4-sugiru::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n4-q-0014",
+    "level": "N4",
+    "questionText": "この問題は＿＿＿。",
+    "choices": ["難しすぎる", "難しいすぎる", "難しくすぎる", "難しさすぎる"],
+    "correctAnswer": "難しすぎる",
+    "explanation": "For i-adjectives, drop the final い before adding すぎる: 難し(い) → 難しすぎる.",
+    "grammarPointId": "n4-sugiru",
+    "lessonSlideId": "n4-sugiru::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n4-q-0015",
+    "level": "N4",
+    "questionText": "先生は学生に本を＿＿＿。",
+    "choices": ["読ませました", "読みました", "読まれました", "読めました"],
+    "correctAnswer": "読ませました",
+    "explanation": "The causative of 読む (u-verb) is formed by changing む to ま + せる: 読ませる.",
+    "grammarPointId": "n4-saseru",
+    "lessonSlideId": "n4-saseru::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n4-q-0016",
+    "level": "N4",
+    "questionText": "母は子供を公園で＿＿＿。",
+    "choices": ["遊ばせた", "遊んだ", "遊べた", "遊ばれた"],
+    "correctAnswer": "遊ばせた",
+    "explanation": "The causative of 遊ぶ is 遊ばせる (let/make play).",
+    "grammarPointId": "n4-saseru",
+    "lessonSlideId": "n4-saseru::usage",
+    "difficulty": "medium"
+  }
+]

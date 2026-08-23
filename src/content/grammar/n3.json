@@ -1,1 +1,118 @@
-[]
+[
+  {
+    "id": "n3-saserareru",
+    "level": "N3",
+    "grammarPoint": "〜させられる（使役受身形）",
+    "meaning": "Made to do something (causative-passive) — done against one's will.",
+    "formation": "Causative stem (see 〜させる) + られる, e.g. 読ませる → 読ませられる (う-verbs often contract to e.g. 話される).",
+    "usage": "Expresses that the subject was forced by someone else to do something they didn't want to do.",
+    "examples": [
+      { "sentence": "部長に残業させられました。", "reading": "ぶちょうにざんぎょうさせられました。", "meaning": "I was made to work overtime by my manager." },
+      { "sentence": "子供のとき、嫌いな野菜を食べさせられた。", "reading": "こどものとき、きらいなやさいをたべさせられた。", "meaning": "As a child, I was made to eat vegetables I hated." }
+    ],
+    "notes": "う-verbs often contract させられる (e.g. 待たせられる → 待たされる), while る-verbs keep the full させられる form.",
+    "commonMistakes": "Forgetting the contraction rule for う-verbs and always using the long させられる form, which sounds unnatural for some verbs.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n3-bayokatta",
+    "level": "N3",
+    "grammarPoint": "〜ばよかった",
+    "meaning": "Should have done ~ — expresses regret.",
+    "formation": "Verb ば-form + よかった",
+    "usage": "Expresses regret about something you did not do (or did) in the past — \"I wish I had...\".",
+    "examples": [
+      { "sentence": "もっと早く出発すればよかった。", "reading": "もっとはやくしゅっぱつすればよかった。", "meaning": "I should have left earlier." },
+      { "sentence": "あんなことを言わなければよかった。", "reading": "あんなことをいわなければよかった。", "meaning": "I shouldn't have said that." }
+    ],
+    "notes": "To regret NOT doing something, negate the verb first: 言わなければよかった (should not have said).",
+    "commonMistakes": "Using the plain past tense instead of the ば-form, e.g. incorrectly 出発したよかった instead of 出発すればよかった.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n3-okagede",
+    "level": "N3",
+    "grammarPoint": "〜おかげで",
+    "meaning": "Thanks to ~ — a positive result caused by someone or something.",
+    "formation": "Verb / adjective plain form, or Noun + の + おかげで",
+    "usage": "States that a positive outcome happened because of someone or something's help or influence — inherently grateful in nuance.",
+    "examples": [
+      { "sentence": "先生のおかげで試験に合格しました。", "reading": "せんせいのおかげでしけんにごうかくしました。", "meaning": "Thanks to my teacher, I passed the exam." }
+    ],
+    "notes": "Can be used sarcastically for a bad outcome, but its default nuance is gratitude — contrast with せいで.",
+    "commonMistakes": "Using おかげで for a clearly negative result without ironic intent, where せいで is the naturally expected word.",
+    "relatedGrammar": ["n3-seide"]
+  },
+  {
+    "id": "n3-seide",
+    "level": "N3",
+    "grammarPoint": "〜せいで",
+    "meaning": "Because of ~ — a negative result, with a nuance of blame.",
+    "formation": "Verb / adjective plain form, or Noun + の + せいで",
+    "usage": "States that a bad outcome happened because of someone or something — carries a nuance of blame or fault.",
+    "examples": [
+      { "sentence": "渋滞のせいで遅刻しました。", "reading": "じゅうたいのせいでちこくしました。", "meaning": "Because of the traffic jam, I was late." }
+    ],
+    "notes": "Mirrors おかげで in structure but is opposite in nuance — swap them to flip a sentence from grateful to blaming.",
+    "commonMistakes": "Using せいで when the result is actually good — that reads as sarcastic or simply wrong unless irony is clearly intended.",
+    "relatedGrammar": ["n3-okagede"]
+  },
+  {
+    "id": "n3-wakedehanai",
+    "level": "N3",
+    "grammarPoint": "〜わけではない",
+    "meaning": "It's not that ~ / doesn't necessarily mean that ~.",
+    "formation": "Plain form + わけではない",
+    "usage": "Softens or partially denies a conclusion someone might draw — used to clarify that a general statement doesn't apply fully or in every case.",
+    "examples": [
+      { "sentence": "嫌いなわけではないが、あまり食べたくない。", "reading": "きらいなわけではないが、あまりたべたくない。", "meaning": "It's not that I dislike it, but I don't really want to eat it." }
+    ],
+    "notes": "Different from 〜ない (simple negation) — わけではない specifically pushes back against an assumption the listener might have.",
+    "commonMistakes": "Treating わけではない as a plain negative (\"is not\") rather than its real meaning of partially correcting a misconception.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n3-tsumorida",
+    "level": "N3",
+    "grammarPoint": "〜つもりだ",
+    "meaning": "Intend to / plan to do ~.",
+    "formation": "Verb dictionary form (or ない-form for negative intent) + つもりだ",
+    "usage": "States a firm personal intention or plan, generally used for the speaker's own decisions (or, in questions, for the listener's).",
+    "examples": [
+      { "sentence": "来年、日本へ留学するつもりです。", "reading": "らいねん、にほんへりゅうがくするつもりです。", "meaning": "I intend to study abroad in Japan next year." },
+      { "sentence": "今日はもう食べないつもりです。", "reading": "きょうはもうたべないつもりです。", "meaning": "I don't intend to eat anything else today." }
+    ],
+    "notes": "Stronger and more deliberate than 〜たいと思う; typically not used to describe a third party's plans without a reporting phrase.",
+    "commonMistakes": "Using つもりだ to state someone else's plan directly, instead of adding a reporting structure like 〜そうです or 〜と言っていた.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n3-kotoninatteiru",
+    "level": "N3",
+    "grammarPoint": "〜ことになっている",
+    "meaning": "It is decided / arranged that ~ / it's the rule that ~.",
+    "formation": "Verb plain form + ことになっている",
+    "usage": "Describes an established rule, custom, or prior arrangement — something decided (often by convention or someone else) rather than the speaker's own plan.",
+    "examples": [
+      { "sentence": "会議は9時に始まることになっている。", "reading": "かいぎはくじにはじまることになっている。", "meaning": "It's arranged that the meeting starts at 9." },
+      { "sentence": "この学校では、制服を着ることになっている。", "reading": "このがっこうでは、せいふくをきることになっている。", "meaning": "At this school, it's the rule to wear a uniform." }
+    ],
+    "notes": "Contrast with 〜ことにする (a decision the speaker actively made).",
+    "commonMistakes": "Confusing ことになっている (an existing rule/arrangement) with ことにしている (a personal habit the speaker has decided on).",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n3-tatotanni",
+    "level": "N3",
+    "grammarPoint": "〜たとたん（に）",
+    "meaning": "The moment that ~ / just as soon as ~.",
+    "formation": "Verb た-form + とたん（に）",
+    "usage": "Describes something that happens immediately after another action, often with a sense of surprise at how quickly it followed.",
+    "examples": [
+      { "sentence": "家を出たとたんに、雨が降り出した。", "reading": "いえをでたとたんに、あめがふりだした。", "meaning": "The moment I left the house, it started raining." }
+    ],
+    "notes": "The second clause is usually something unexpected or uncontrollable — it doesn't pair well with a planned, intentional second action.",
+    "commonMistakes": "Using とたんに with a deliberate, planned second action, where と or たら fits more naturally.",
+    "relatedGrammar": []
+  }
+]

@@ -1,1 +1,120 @@
-[]
+[
+  {
+    "id": "n4-tageru",
+    "level": "N4",
+    "grammarPoint": "〜てあげる / てもらう",
+    "meaning": "Giving and receiving the favor of an action — doing something FOR someone, or having someone do something for you.",
+    "formation": "Verb te-form + あげる／もらう／くれる",
+    "usage": "てあげる: I do a favor for someone else. てもらう: I receive the favor of someone doing an action for me. てくれる: someone does a favor for me or my in-group, described from my perspective.",
+    "examples": [
+      { "sentence": "友達に本を貸してあげました。", "reading": "ともだちにほんをかしてあげました。", "meaning": "I lent my friend a book (as a favor)." },
+      { "sentence": "先生に作文を直してもらいました。", "reading": "せんせいにさくぶんをなおしてもらいました。", "meaning": "I had my teacher correct my essay." }
+    ],
+    "notes": "てあげる can sound slightly boastful toward superiors — use it carefully with people of higher status.",
+    "commonMistakes": "Mixing up the direction of the favor: てあげる is \"I do it for someone\", while てもらう is \"someone does it for me\".",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n4-nagara",
+    "level": "N4",
+    "grammarPoint": "〜ながら",
+    "meaning": "While doing ~ (two actions at the same time, by the same person).",
+    "formation": "Verb ます-stem + ながら",
+    "usage": "Connects two actions performed simultaneously by the same subject; the main action is the second verb.",
+    "examples": [
+      { "sentence": "音楽を聞きながら勉強します。", "reading": "おんがくをききながらべんきょうします。", "meaning": "I study while listening to music." }
+    ],
+    "notes": "Both actions must share the same subject — you cannot use ながら when two different people are doing the two actions.",
+    "commonMistakes": "Using ながら with two different subjects, which is ungrammatical in standard Japanese.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n4-sou",
+    "level": "N4",
+    "grammarPoint": "〜そうです（様態）",
+    "meaning": "Looks like / seems — based on visual appearance.",
+    "formation": "Verb ます-stem / i-adjective (drop い) / na-adjective stem + そうです",
+    "usage": "Expresses a guess based on what you can see right now — an appearance-based inference, not something you were told by someone else.",
+    "examples": [
+      { "sentence": "このケーキはおいしそうです。", "reading": "このケーキはおいしそうです。", "meaning": "This cake looks delicious." },
+      { "sentence": "雨が降りそうです。", "reading": "あめがふりそうです。", "meaning": "It looks like it's going to rain." }
+    ],
+    "notes": "Irregular: いい becomes よさそう, and ない becomes なさそう.",
+    "commonMistakes": "Confusing appearance-based そうです (drop い / plain stem) with hearsay そうです (plain form + そうです, meaning \"I heard that...\") — the two use different conjugation patterns and have different meanings.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n4-you",
+    "level": "N4",
+    "grammarPoint": "〜ようです",
+    "meaning": "It seems / appears that ~ — based on indirect evidence or comparison.",
+    "formation": "Plain form + ようです (na-adjective / noun + の + ようです)",
+    "usage": "A softer, more indirect way to state a conclusion drawn from indirect evidence, comparison, or a subjective impression.",
+    "examples": [
+      { "sentence": "彼は忙しいようです。", "reading": "かれはいそがしいようです。", "meaning": "He seems to be busy." },
+      { "sentence": "外は寒いようですね。", "reading": "そとはさむいようですね。", "meaning": "It seems cold outside, doesn't it?" }
+    ],
+    "notes": "Also used to make comparisons, e.g. まるで夢のようだ (it's just like a dream).",
+    "commonMistakes": "Overusing ようです when a plainer, more direct そうです or らしい would fit better — ようです often signals the speaker's own subjective, softened impression.",
+    "relatedGrammar": ["n4-sou"]
+  },
+  {
+    "id": "n4-tara",
+    "level": "N4",
+    "grammarPoint": "〜たら",
+    "meaning": "If / when — a flexible conditional.",
+    "formation": "Verb / adjective た-form + ら",
+    "usage": "Describes what happens once a condition is met, often for one-time or sequential events.",
+    "examples": [
+      { "sentence": "雨が降ったら、行きません。", "reading": "あめがふったら、いきません。", "meaning": "If it rains, I won't go." },
+      { "sentence": "家に着いたら、電話します。", "reading": "いえについたら、でんわします。", "meaning": "When I get home, I'll call you." }
+    ],
+    "notes": "Unlike と and ば, たら can be followed by requests, invitations, and commands.",
+    "commonMistakes": "Trying to use と in a sentence with a command or invitation in the result clause, where たら is grammatically required instead.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n4-noni",
+    "level": "N4",
+    "grammarPoint": "〜のに",
+    "meaning": "Even though / despite — contrary to expectation.",
+    "formation": "Plain form + のに",
+    "usage": "Connects two clauses where the second is unexpected or disappointing given the first — often carries a nuance of surprise, frustration, or regret.",
+    "examples": [
+      { "sentence": "一生懸命勉強したのに、試験に落ちました。", "reading": "いっしょうけんめいべんきょうしたのに、しけんにおちました。", "meaning": "Even though I studied hard, I failed the exam." }
+    ],
+    "notes": "Different from から/ので (which state a plain reason) — のに always implies the outcome goes against expectation.",
+    "commonMistakes": "Confusing のに (contrary to expectation) with ので (because), which have opposite logical relationships between the two clauses.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n4-sugiru",
+    "level": "N4",
+    "grammarPoint": "〜すぎる",
+    "meaning": "Too much / excessively.",
+    "formation": "Verb ます-stem / i-adjective (drop い) / na-adjective stem + すぎる",
+    "usage": "Attaches to a verb or adjective to say the degree of that action or quality is excessive, often implying a negative result.",
+    "examples": [
+      { "sentence": "昨日、食べすぎました。", "reading": "きのう、たべすぎました。", "meaning": "I ate too much yesterday." },
+      { "sentence": "この問題は難しすぎる。", "reading": "このもんだいはむずかしすぎる。", "meaning": "This problem is too difficult." }
+    ],
+    "notes": "すぎる itself conjugates as a regular る-verb: すぎない, すぎた, etc.",
+    "commonMistakes": "Attaching すぎる to the full dictionary form of a verb instead of the ます-stem, e.g. incorrectly 食べるすぎる instead of 食べすぎる.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n4-saseru",
+    "level": "N4",
+    "grammarPoint": "〜させる（使役形）",
+    "meaning": "Make / let someone do something — the causative form.",
+    "formation": "For る-verbs: drop る + させる. For う-verbs: change the final -u to -a + せる.",
+    "usage": "Expresses that a subject makes or allows another person to perform an action — used for both compulsion (make) and permission (let), disambiguated by context.",
+    "examples": [
+      { "sentence": "先生は学生に本を読ませました。", "reading": "せんせいはがくせいにほんをよませました。", "meaning": "The teacher made the students read the book." },
+      { "sentence": "子供を公園で遊ばせた。", "reading": "こどもをこうえんであそばせた。", "meaning": "I let my child play at the park." }
+    ],
+    "notes": "This is the base form that N3's causative-passive (〜させられる) builds on.",
+    "commonMistakes": "Mixing up the causative-marking particle: use に for the person being made to act when they retain some agency, and を when the verb is intransitive or the person has no choice.",
+    "relatedGrammar": []
+  }
+]

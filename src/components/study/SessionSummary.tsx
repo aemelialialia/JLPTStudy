@@ -2,7 +2,6 @@ import type { StudySession } from '../../types/studySession'
 import type { LevelProgressSummary } from '../../services/studySessionService'
 import { sessionStats, incorrectVocabularyIds } from '../../types/studySession'
 import { StatCard } from '../common/StatCard'
-import '../vocabulary/vocabulary.css'
 import './study.css'
 
 /**
@@ -26,8 +25,11 @@ export function SessionSummary({
 
   return (
     <div className="study-banner">
+      <span className="material-symbols-outlined" data-fill="1" style={{ fontSize: 40, color: 'var(--color-primary)' }}>
+        emoji_events
+      </span>
       <h2>Study Session Complete!</h2>
-      <p>
+      <p style={{ margin: 0 }}>
         {stats.studied} word{stats.studied === 1 ? '' : 's'} studied
       </p>
 
@@ -36,18 +38,20 @@ export function SessionSummary({
         <StatCard label="Incorrect" value={stats.incorrect} />
       </div>
 
-      <h3>{session.level} Progress</h3>
-      <p>
-        Memorized: {progress.memorized} / {progress.total}
-      </p>
+      <div>
+        <h3 style={{ margin: '0 0 var(--space-1)' }}>{session.level} Progress</h3>
+        <p style={{ margin: 0, color: 'var(--color-text-secondary)' }}>
+          Memorized: {progress.memorized} / {progress.total}
+        </p>
+      </div>
 
-      <div className="vocab-button-row" style={{ justifyContent: 'center' }}>
+      <div className="study-btn-row">
         {hasIncorrect && (
-          <button type="button" className="vocab-button" onClick={onReviewIncorrect}>
+          <button type="button" className="study-btn squish-btn" onClick={onReviewIncorrect}>
             Review Incorrect Words
           </button>
         )}
-        <button type="button" className="vocab-button vocab-button--primary" onClick={onBackToLevel}>
+        <button type="button" className="study-btn study-btn--primary squish-btn" onClick={onBackToLevel}>
           Back to {session.level}
         </button>
       </div>

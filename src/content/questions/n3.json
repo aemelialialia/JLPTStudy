@@ -1,1 +1,178 @@
-[]
+[
+  {
+    "id": "n3-q-0001",
+    "level": "N3",
+    "questionText": "部長に＿＿＿。",
+    "choices": ["残業させられました", "残業しました", "残業させました", "残業されました"],
+    "correctAnswer": "残業させられました",
+    "explanation": "The causative-passive させられる shows the speaker was forced into overtime by someone else.",
+    "grammarPointId": "n3-saserareru",
+    "lessonSlideId": "n3-saserareru::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n3-q-0002",
+    "level": "N3",
+    "questionText": "子供のとき、嫌いな野菜を＿＿＿。",
+    "choices": ["食べさせられた", "食べさせた", "食べられた", "食べた"],
+    "correctAnswer": "食べさせられた",
+    "explanation": "させられる marks that the speaker was made to eat something against their will.",
+    "grammarPointId": "n3-saserareru",
+    "lessonSlideId": "n3-saserareru::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n3-q-0003",
+    "level": "N3",
+    "questionText": "もっと早く＿＿＿。",
+    "choices": ["出発すればよかった", "出発したらよかった", "出発するとよかった", "出発してよかった"],
+    "correctAnswer": "出発すればよかった",
+    "explanation": "Regret about the past uses the ば-form + よかった.",
+    "grammarPointId": "n3-bayokatta",
+    "lessonSlideId": "n3-bayokatta::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n3-q-0004",
+    "level": "N3",
+    "questionText": "あんなことを＿＿＿。",
+    "choices": ["言わなければよかった", "言えばよかった", "言ったらよかった", "言うすればよかった"],
+    "correctAnswer": "言わなければよかった",
+    "explanation": "To regret having said something, negate the verb first: 言わない + ければよかった.",
+    "grammarPointId": "n3-bayokatta",
+    "lessonSlideId": "n3-bayokatta::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n3-q-0005",
+    "level": "N3",
+    "questionText": "先生の＿＿＿試験に合格しました。",
+    "choices": ["おかげで", "せいで", "ように", "わりに"],
+    "correctAnswer": "おかげで",
+    "explanation": "おかげで credits a positive outcome (passing) to someone's help.",
+    "grammarPointId": "n3-okagede",
+    "lessonSlideId": "n3-okagede::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n3-q-0006",
+    "level": "N3",
+    "questionText": "あなたの助けの＿＿＿、無事に終わりました。",
+    "choices": ["おかげで", "せいで", "ばかりに", "くせに"],
+    "correctAnswer": "おかげで",
+    "explanation": "A grateful, positive result calls for おかげで, not せいで.",
+    "grammarPointId": "n3-okagede",
+    "lessonSlideId": "n3-okagede::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n3-q-0007",
+    "level": "N3",
+    "questionText": "渋滞の＿＿＿遅刻しました。",
+    "choices": ["せいで", "おかげで", "かわりに", "わりに"],
+    "correctAnswer": "せいで",
+    "explanation": "A negative result (being late) blamed on the traffic jam calls for せいで.",
+    "grammarPointId": "n3-seide",
+    "lessonSlideId": "n3-seide::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n3-q-0008",
+    "level": "N3",
+    "questionText": "彼のミスの＿＿＿、会議が中止になった。",
+    "choices": ["せいで", "おかげで", "ために", "につれて"],
+    "correctAnswer": "せいで",
+    "explanation": "せいで attributes a negative result (the meeting's cancellation) to someone's fault.",
+    "grammarPointId": "n3-seide",
+    "lessonSlideId": "n3-seide::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n3-q-0009",
+    "level": "N3",
+    "questionText": "嫌いな＿＿＿が、あまり食べたくない。",
+    "choices": ["わけではない", "わけがない", "わけにはいかない", "わけだ"],
+    "correctAnswer": "わけではない",
+    "explanation": "わけではない softens a negative assumption (\"it's not that I dislike it\").",
+    "grammarPointId": "n3-wakedehanai",
+    "lessonSlideId": "n3-wakedehanai::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n3-q-0010",
+    "level": "N3",
+    "questionText": "お金がない＿＿＿、行きたくないんです。",
+    "choices": ["わけではなく", "わけがなく", "わけにはいかず", "わけだから"],
+    "correctAnswer": "わけではなく",
+    "explanation": "わけではなく continues the sentence while denying the assumption that money is the reason.",
+    "grammarPointId": "n3-wakedehanai",
+    "lessonSlideId": "n3-wakedehanai::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n3-q-0011",
+    "level": "N3",
+    "questionText": "来年、日本へ＿＿＿つもりです。",
+    "choices": ["留学する", "留学します", "留学した", "留学して"],
+    "correctAnswer": "留学する",
+    "explanation": "つもりだ attaches to the plain dictionary form of the verb.",
+    "grammarPointId": "n3-tsumorida",
+    "lessonSlideId": "n3-tsumorida::usage",
+    "difficulty": "easy"
+  },
+  {
+    "id": "n3-q-0012",
+    "level": "N3",
+    "questionText": "今日はもう＿＿＿つもりです。",
+    "choices": ["食べない", "食べません", "食べなくて", "食べず"],
+    "correctAnswer": "食べない",
+    "explanation": "Negative intent uses the plain ない-form before つもりだ.",
+    "grammarPointId": "n3-tsumorida",
+    "lessonSlideId": "n3-tsumorida::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n3-q-0013",
+    "level": "N3",
+    "questionText": "会議は9時に＿＿＿ことになっている。",
+    "choices": ["始まる", "始まった", "始まって", "始まります"],
+    "correctAnswer": "始まる",
+    "explanation": "ことになっている attaches to the plain, non-past form describing an existing arrangement.",
+    "grammarPointId": "n3-kotoninatteiru",
+    "lessonSlideId": "n3-kotoninatteiru::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n3-q-0014",
+    "level": "N3",
+    "questionText": "この学校では、制服を＿＿＿ことになっている。",
+    "choices": ["着る", "着た", "着て", "着ます"],
+    "correctAnswer": "着る",
+    "explanation": "A school rule is described with the plain form + ことになっている.",
+    "grammarPointId": "n3-kotoninatteiru",
+    "lessonSlideId": "n3-kotoninatteiru::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n3-q-0015",
+    "level": "N3",
+    "questionText": "家を＿＿＿とたんに、雨が降り出した。",
+    "choices": ["出た", "出る", "出て", "出ます"],
+    "correctAnswer": "出た",
+    "explanation": "とたんに attaches to the past (た-form) of the verb.",
+    "grammarPointId": "n3-tatotanni",
+    "lessonSlideId": "n3-tatotanni::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n3-q-0016",
+    "level": "N3",
+    "questionText": "彼の顔を＿＿＿とたん、彼女は泣き出した。",
+    "choices": ["見た", "見る", "見て", "見ます"],
+    "correctAnswer": "見た",
+    "explanation": "とたん always follows the た-form to mark the instant one action triggers the next.",
+    "grammarPointId": "n3-tatotanni",
+    "lessonSlideId": "n3-tatotanni::usage",
+    "difficulty": "medium"
+  }
+]

@@ -34,7 +34,10 @@ function ActiveCard({
       {flipped ? (
         <AnswerControls onIncorrect={() => onAnswer('incorrect')} onCorrect={() => onAnswer('correct')} />
       ) : (
-        <p className="study-answer-hint">Flip the card to answer.</p>
+        <button type="button" className="study-flip-button squish-btn" onClick={() => setFlipped(true)}>
+          Reveal Answer
+          <span className="material-symbols-outlined">visibility</span>
+        </button>
       )}
     </div>
   )

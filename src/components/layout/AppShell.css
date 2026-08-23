@@ -2,14 +2,19 @@
   display: flex;
   flex-direction: column;
   min-height: 100svh;
+  background: var(--color-bg);
 }
 
 .app-shell__content {
   flex: 1;
-  order: 1;
   width: 100%;
-  max-width: 720px; /* desktop is secondary; keep content phone/tablet-width even there */
+  max-width: 800px;
   margin: 0 auto;
-  padding: var(--space-4);
-  padding-bottom: var(--space-8);
+  padding: var(--space-6) var(--layout-safe-margin) calc(120px + var(--safe-area-bottom));
+}
+
+@media (min-width: 768px) {
+  .app-shell__content {
+    padding-bottom: var(--space-12);
+  }
 }

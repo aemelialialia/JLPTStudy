@@ -8,18 +8,15 @@ import { ResumeSessionPrompt } from '../components/study/ResumeSessionPrompt'
 import { StudySetup } from '../components/study/StudySetup'
 import { StudySessionView } from '../components/study/StudySessionView'
 import { SessionSummary } from '../components/study/SessionSummary'
-import '../components/vocabulary/vocabulary.css'
 import '../components/study/study.css'
 
 /**
- * /study/:level — the whole Phase 3 flashcard workflow for one level,
+ * /study/:level — the whole Phase 4 flashcard workflow for one level,
  * driven entirely by useVocabularyStudy's phase state machine. This page
- * only picks which barebone component to render for the current phase;
- * every piece of business logic (selection, scoring, persistence,
- * completion detection) lives beneath it in studySessionService. This is
- * the disposable temporary UI (spec "IMPORTANT UI REQUIREMENT") — the
- * Stitch design later replaces this file and everything under
- * src/components/study/ without touching the hook or service layer.
+ * only picks which Stitch-styled component to render for the current
+ * phase; every piece of business logic (selection, scoring, persistence,
+ * completion detection) lives beneath it in studySessionService, unchanged
+ * by the Phase 4 visual pass.
  */
 export function StudyPage() {
   const { level: levelParam } = useParams<{ level: string }>()
@@ -52,7 +49,9 @@ export function StudyPage() {
 
       {state.phase === 'resume-prompt' && (
         <>
-          <h1>{level} Vocabulary</h1>
+          <h1 className="text-headline-lg" style={{ textAlign: 'center', color: 'var(--color-primary)' }}>
+            {level} Vocabulary
+          </h1>
           <ResumeSessionPrompt
             session={state.session}
             onContinue={resume}
@@ -81,8 +80,8 @@ export function StudyPage() {
 
       {state.phase === 'error' && (
         <div className="study-banner" role="alert">
-          <p>{state.message}</p>
-          <button type="button" className="vocab-button" onClick={backToSetup}>
+          <p style={{ margin: 0 }}>{state.message}</p>
+          <button type="button" className="study-btn study-btn--primary squish-btn" onClick={backToSetup}>
             Try again
           </button>
         </div>

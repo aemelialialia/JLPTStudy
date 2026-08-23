@@ -1,61 +1,139 @@
 /**
  * Design tokens as CSS custom properties.
  *
- * These are placeholder values, not a final visual identity — the goal
- * is to give every component a single source of truth to read from
- * (colors, type scale, spacing, radius, shadows) so that when the Stitch
- * design arrives, this file's *values* can be swapped wholesale without
- * hunting down hard-coded colors/pixel values scattered across
- * components. Components should always reference var(--token-name),
- * never a literal color or px value.
+ * Phase 4: these are the REAL values from the approved Stitch prototype
+ * ("Komorebi Study System" — see the design source in the project's
+ * Stitch export, komorebi_study_system/DESIGN.md), not placeholders.
+ * Components should always reference var(--token-name), never a literal
+ * color or px value, so the whole app stays visually consistent and any
+ * future palette tweak only touches this file.
+ *
+ * Two families of names live here on purpose:
+ *   1. Semantic roles carried over from Phase 1-3 (--color-bg,
+ *      --color-text-primary, --radius-sm, --space-4, ...) so every
+ *      existing barebone component automatically picks up the real
+ *      palette/spacing without a rewrite.
+ *   2. Stitch's own M3-style token names (--color-primary-container,
+ *      --color-tertiary, --font-size-display-lg, ...) for new Phase 4
+ *      components built directly against the prototype's vocabulary.
+ * Both point at the same underlying values — pick whichever reads more
+ * clearly at the call site.
  */
 
 :root {
-  /* ---- Color: neutral scale ---- */
+  /* ================= Stitch color tokens (M3-style) ================= */
+  --color-primary: #3a6757;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #b8e8d4;
+  --color-on-primary-container: #3d6a5a;
+  --color-primary-fixed: #bdedd9;
+  --color-primary-fixed-dim: #a1d1bd;
+  --color-on-primary-fixed: #002117;
+  --color-on-primary-fixed-variant: #224f40;
+  --color-inverse-primary: #a1d1bd;
+
+  --color-secondary: #765749;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fed4c1;
+  --color-on-secondary-container: #795a4b;
+  --color-secondary-fixed: #ffdbcb;
+  --color-secondary-fixed-dim: #e6beac;
+  --color-on-secondary-fixed: #2c160b;
+  --color-on-secondary-fixed-variant: #5c4033;
+
+  --color-tertiary: #5e5b7a;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #ded9fe;
+  --color-on-tertiary-container: #615e7c;
+  --color-tertiary-fixed: #e4dfff;
+  --color-tertiary-fixed-dim: #c7c2e6;
+  --color-on-tertiary-fixed: #1b1833;
+  --color-on-tertiary-fixed-variant: #464361;
+
+  --color-surface: #f8faf8;
+  --color-on-surface: #191c1b;
+  --color-surface-variant: #e1e3e1;
+  --color-on-surface-variant: #414945;
+  --color-surface-dim: #d8dad9;
+  --color-surface-bright: #f8faf8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f2;
+  --color-surface-container: #eceeec;
+  --color-surface-container-high: #e6e9e7;
+  --color-surface-container-highest: #e1e3e1;
+  --color-surface-tint: #3a6757;
+
+  --color-background: #f8faf8;
+  --color-on-background: #191c1b;
+
+  --color-outline: #717974;
+  --color-outline-variant: #c0c8c3;
+  --color-inverse-surface: #2e3130;
+  --color-inverse-on-surface: #eff1ef;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* ================= Legacy semantic roles (Phase 1-3 names) =================
+   * Re-pointed at the real palette above so every existing component
+   * (vocabulary.css, study.css, StatCard, etc.) picks up Phase 4's real
+   * visual identity without a rewrite. */
   --color-neutral-0: #ffffff;
-  --color-neutral-50: #f7f7f8;
-  --color-neutral-100: #eeeef0;
-  --color-neutral-200: #d9d9de;
-  --color-neutral-300: #b8b8c0;
-  --color-neutral-400: #8f8f9a;
-  --color-neutral-500: #6b6b76;
-  --color-neutral-600: #4d4d57;
-  --color-neutral-700: #35353d;
-  --color-neutral-800: #212126;
-  --color-neutral-900: #131316;
+  --color-neutral-50: #f8faf8;
+  --color-neutral-100: #eceeec;
+  --color-neutral-200: #e1e3e1;
+  --color-neutral-300: #c0c8c3;
+  --color-neutral-400: #717974;
+  --color-neutral-500: #414945;
+  --color-neutral-600: #414945;
+  --color-neutral-700: #2e3130;
+  --color-neutral-800: #191c1b;
+  --color-neutral-900: #191c1b;
 
-  /* ---- Color: brand/accent (placeholder — Stitch will replace) ---- */
-  --color-accent-50: #eef3ff;
-  --color-accent-100: #dbe6ff;
-  --color-accent-300: #93aeff;
-  --color-accent-500: #4d6fee;
-  --color-accent-600: #3a58d1;
-  --color-accent-700: #2c44a3;
+  --color-accent-50: #bdedd9;
+  --color-accent-100: #b8e8d4;
+  --color-accent-300: #a1d1bd;
+  --color-accent-500: #3a6757;
+  --color-accent-600: #224f40;
+  --color-accent-700: #002117;
 
-  /* ---- Color: semantic ---- */
-  --color-success-500: #2f9e5c;
-  --color-success-100: #dff5e7;
-  --color-danger-500: #d64545;
-  --color-danger-100: #fbe4e4;
-  --color-warning-500: #c98a1e;
-  --color-warning-100: #faf0da;
+  --color-success-500: #3a6757;
+  --color-success-100: #b8e8d4;
+  --color-danger-500: #ba1a1a;
+  --color-danger-100: #ffdad6;
+  --color-warning-500: #795a4b;
+  --color-warning-100: #fed4c1;
 
-  /* ---- Color: semantic surface roles ---- */
-  --color-bg: var(--color-neutral-50);
-  --color-surface: var(--color-neutral-0);
-  --color-surface-raised: var(--color-neutral-0);
-  --color-border: var(--color-neutral-200);
-  --color-text-primary: var(--color-neutral-900);
-  --color-text-secondary: var(--color-neutral-600);
-  --color-text-inverse: var(--color-neutral-0);
-  --color-focus-ring: var(--color-accent-500);
+  --color-bg: var(--color-surface);
+  --color-surface-raised: var(--color-surface-container-lowest);
+  --color-border: var(--color-surface-variant);
+  --color-text-primary: var(--color-on-surface);
+  --color-text-secondary: var(--color-on-surface-variant);
+  --color-text-inverse: var(--color-on-primary);
+  --color-focus-ring: var(--color-tertiary);
 
-  /* ---- Typography ---- */
-  --font-family-base:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans',
+  /* ================= Typography ================= */
+  --font-family-heading:
+    'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-body:
+    'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans',
     'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
-  --font-family-japanese: 'Hiragino Mincho ProN', 'Hiragino Sans', 'Noto Serif JP', serif;
+  --font-family-base: var(--font-family-body);
+  --font-family-japanese:
+    'Be Vietnam Pro', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
 
+  /* Stitch named type scale */
+  --font-size-display-lg: 40px;
+  --font-size-headline-lg: 32px;
+  --font-size-headline-lg-mobile: 28px;
+  --font-size-title-md: 20px;
+  --font-size-body-lg: 18px;
+  --font-size-body-md: 16px;
+  --font-size-label-sm: 13px;
+
+  /* Legacy numeric scale, kept for older components */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;
@@ -63,20 +141,19 @@
   --font-size-xl: 1.375rem;
   --font-size-2xl: 1.75rem;
   --font-size-3xl: 2.25rem;
-  /* Larger sizes for Japanese script legibility (kanji need more room than Latin text). */
   --font-size-jp-md: 1.25rem;
   --font-size-jp-lg: 1.75rem;
   --font-size-jp-xl: 2.5rem;
 
   --font-weight-regular: 400;
-  --font-weight-medium: 500;
+  --font-weight-medium: 600;
   --font-weight-bold: 700;
 
   --line-height-tight: 1.2;
-  --line-height-normal: 1.5;
+  --line-height-normal: 1.6;
   --line-height-relaxed: 1.75;
 
-  /* ---- Spacing scale (4px base unit) ---- */
+  /* ================= Spacing scale (4px base unit) ================= */
   --space-0: 0;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -89,22 +166,37 @@
   --space-12: 3rem;
   --space-16: 4rem;
 
-  /* ---- Border radius ---- */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.875rem;
-  --radius-xl: 1.25rem;
-  --radius-full: 999px;
+  /* Stitch-named layout spacing */
+  --layout-safe-margin: 24px;
+  --layout-gutter: 16px;
+  --layout-stack-gap: 12px;
 
-  /* ---- Shadows ---- */
-  --shadow-sm: 0 1px 2px rgba(19, 19, 22, 0.06);
-  --shadow-md: 0 4px 10px rgba(19, 19, 22, 0.08);
-  --shadow-lg: 0 10px 24px rgba(19, 19, 22, 0.12);
+  /* ================= Border radius ("Extreme Radii") ================= */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-2xl: 48px;
+  --radius-full: 9999px;
+  --radius-outer: 32px;
+  --radius-inner: 16px;
 
-  /* ---- Touch targets (iOS Human Interface Guidelines minimum is 44px) ---- */
+  /* ================= Shadows ("Object-to-Surface", tinted, soft) ================= */
+  --shadow-sm: 0 4px 20px -8px rgba(25, 28, 27, 0.06);
+  --shadow-md: 0 12px 32px -10px rgba(58, 103, 87, 0.08);
+  --shadow-lg: 0 20px 50px -12px rgba(58, 103, 87, 0.12);
+  --shadow-ambient: 0 20px 40px -10px rgba(58, 103, 87, 0.08);
+  --shadow-primary: 0 8px 30px rgba(58, 103, 87, 0.06);
+  --shadow-secondary: 0 8px 30px rgba(118, 87, 73, 0.06);
+  --shadow-tertiary: 0 8px 30px rgba(94, 91, 122, 0.06);
+
+  /* ================= Patterns ================= */
+  --pattern-asanoha: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 34.64-20 34.64L0 34.64 20 0z' fill-rule='evenodd' stroke='%233a6757' stroke-width='0.5' fill='none' opacity='0.05'/%3E%3C/svg%3E");
+
+  /* ================= Touch targets (iOS HIG minimum) ================= */
   --touch-target-min: 44px;
 
-  /* ---- iOS safe areas (notch / home indicator / rounded corners) ---- */
+  /* ================= iOS safe areas ================= */
   --safe-area-top: env(safe-area-inset-top, 0px);
   --safe-area-right: env(safe-area-inset-right, 0px);
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
@@ -114,8 +206,7 @@
    * ---- Breakpoints ----
    * CSS custom properties cannot be used inside @media query conditions,
    * so these are documented here as the canonical values and mirrored as
-   * plain numbers in theme/tokens.ts for any JS-side responsive logic
-   * (e.g. matchMedia). Keep the two in sync.
+   * plain numbers in theme/tokens.ts for any JS-side responsive logic.
    *   --breakpoint-sm: 480px   (large phones, landscape phones)
    *   --breakpoint-md: 768px   (iPad portrait)
    *   --breakpoint-lg: 1024px  (iPad landscape / small desktop)
@@ -123,14 +214,9 @@
    */
 }
 
-@media (prefers-color-scheme: dark) {
+/* Desktop/tablet gets more breathing room per the "Floating Container" spec. */
+@media (min-width: 768px) {
   :root {
-    --color-bg: var(--color-neutral-900);
-    --color-surface: var(--color-neutral-800);
-    --color-surface-raised: var(--color-neutral-700);
-    --color-border: var(--color-neutral-700);
-    --color-text-primary: var(--color-neutral-50);
-    --color-text-secondary: var(--color-neutral-300);
-    --color-text-inverse: var(--color-neutral-900);
+    --layout-safe-margin: 48px;
   }
 }

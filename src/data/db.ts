@@ -4,6 +4,8 @@ import type { VocabularyStudyState } from '../types/studyState'
 import type { QuizAttempt, MistakeRecord } from '../types/quiz'
 import type { UserSettings, DailyStudyState } from '../types/settings'
 import type { StudySession } from '../types/studySession'
+import type { GrammarProgress } from '../types/grammar'
+import type { GrammarQuizSession } from '../types/grammarQuizSession'
 
 /**
  * Single source of truth for the IndexedDB schema. Nothing outside
@@ -50,15 +52,27 @@ export interface JLPTStudyDB extends DBSchema {
     value: StudySession
     indexes: { 'by-level': string }
   }
+  grammarProgress: {
+    key: string // GrammarProgress.grammarPointId
+    value: GrammarProgress
+    indexes: { 'by-level': string }
+  }
+  grammarQuizSessions: {
+    key: string // GrammarQuizSession.id
+    value: GrammarQuizSession
+    indexes: { 'by-level': string }
+  }
 }
 
 export const DB_NAME = 'jlpt-study-db'
-// Bumped 1 -> 2 in Phase 3 to add the `studySessions` store. `openDB`'s
-// upgrade callback only runs when the requested version is higher than
-// what's already stored, so this bump (not just the `if (!contains)`
-// guard below) is what makes the new store actually get created for
-// anyone who already has a version-1 database in their browser.
-export const DB_VERSION = 2
+// Bumped 1 -> 2 in Phase 3 (added `studySessions`), 2 -> 3 in Phase 4
+// (added `grammarProgress` + `grammarQuizSessions` for the grammar
+// lesson/quiz system). `openDB`'s upgrade callback only runs when the
+// requested version is higher than what's already stored, so this bump
+// (not just the `if (!contains)` guard below) is what makes the new
+// stores actually get created for anyone with an older database already
+// in their browser.
+export const DB_VERSION = 3
 
 let dbPromise: Promise<IDBPDatabase<JLPTStudyDB>> | null = null
 
@@ -97,6 +111,14 @@ export function getDB(): Promise<IDBPDatabase<JLPTStudyDB>> {
         }
         if (!db.objectStoreNames.contains('studySessions')) {
           const store = db.createObjectStore('studySessions', { keyPath: 'id' })
+          store.createIndex('by-level', 'level')
+        }
+        if (!db.objectStoreNames.contains('grammarProgress')) {
+          const store = db.createObjectStore('grammarProgress', { keyPath: 'grammarPointId' })
+          store.createIndex('by-level', 'level')
+        }
+        if (!db.objectStoreNames.contains('grammarQuizSessions')) {
+          const store = db.createObjectStore('grammarQuizSessions', { keyPath: 'id' })
           store.createIndex('by-level', 'level')
         }
       },

@@ -15,11 +15,11 @@ export function AnswerControls({
 }) {
   return (
     <div className="study-answer-row">
-      <button type="button" className="study-answer-button study-answer-button--incorrect" onClick={onIncorrect}>
-        Incorrect
+      <button type="button" className="study-answer-button study-answer-button--incorrect squish-btn" onClick={onIncorrect}>
+        Again
       </button>
-      <button type="button" className="study-answer-button study-answer-button--correct" onClick={onCorrect}>
-        Correct
+      <button type="button" className="study-answer-button study-answer-button--correct squish-btn" onClick={onCorrect}>
+        Know It!
       </button>
     </div>
   )

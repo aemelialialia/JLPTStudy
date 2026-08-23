@@ -15,10 +15,12 @@ describe('contentLoader', () => {
     }
   })
 
-  it('starts with no curated content bundled (populated separately, not invented here)', () => {
+  it('has curated grammar points and questions bundled for every level (Phase 4 content)', () => {
     for (const level of JLPT_LEVELS) {
-      expect(getGrammarForLevel(level)).toEqual([])
-      expect(getQuestionsForLevel(level)).toEqual([])
+      expect(getGrammarForLevel(level).length).toBeGreaterThan(0)
+      expect(getQuestionsForLevel(level).length).toBeGreaterThan(0)
+      for (const entry of getGrammarForLevel(level)) expect(entry.level).toBe(level)
+      for (const question of getQuestionsForLevel(level)) expect(question.level).toBe(level)
     }
   })
 
@@ -36,9 +38,12 @@ describe('contentLoader', () => {
       explanation: '...',
       grammarPointId: 'not-yet-authored',
     }
-    // With an empty content bank this correctly resolves to undefined —
-    // once grammar content is authored with matching ids, this same call
-    // returns the linked GrammarEntry with no code changes required.
+    // A question referencing an id that doesn't exist in the content bank
+    // correctly resolves to undefined rather than throwing.
     expect(getGrammarEntryForQuestion(fakeQuestion)).toBeUndefined()
+
+    // Real bundled questions, though, resolve to their actual grammar entry.
+    const realQuestion = getQuestionsForLevel('N5')[0]
+    expect(getGrammarEntryForQuestion(realQuestion)?.id).toBe(realQuestion.grammarPointId)
   })
 })

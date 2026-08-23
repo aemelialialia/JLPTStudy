@@ -3,7 +3,6 @@ import type { LevelProgressSummary } from '../../services/studySessionService'
 import type { SessionSize } from '../../services/studySessionService'
 import { StatCard } from '../common/StatCard'
 import { DailyAmountSelector } from './DailyAmountSelector'
-import '../vocabulary/vocabulary.css'
 import './study.css'
 
 /**
@@ -20,8 +19,8 @@ export function StudySetup({
   onSelectAmount: (count: SessionSize) => void
 }) {
   return (
-    <div>
-      <h2>{progress.level} Vocabulary</h2>
+    <div className="study-setup">
+      <h2 className="text-headline-lg">{progress.level} Vocabulary</h2>
       <div className="study-stat-grid">
         <StatCard label="Total" value={progress.total} />
         <StatCard label="Memorized" value={progress.memorized} />
@@ -31,7 +30,22 @@ export function StudySetup({
 
       <DailyAmountSelector onSelect={onSelectAmount} />
 
-      <Link to={`/level/${progress.level}`} className="vocab-button">
+      <Link to={`/study/${progress.level}/quiz`} className="study-quiz-entry squish-btn">
+        <span className="study-quiz-entry__left">
+          <span className="study-quiz-entry__icon">
+            <span className="material-symbols-outlined">quiz</span>
+          </span>
+          <span>
+            <h4 className="study-quiz-entry__title text-title-md">Vocabulary Quiz</h4>
+            <p className="study-quiz-entry__desc">Test your recent learnings.</p>
+          </span>
+        </span>
+        <span className="study-quiz-entry__arrow">
+          <span className="material-symbols-outlined">arrow_forward</span>
+        </span>
+      </Link>
+
+      <Link to={`/level/${progress.level}`} className="study-btn">
         Back to Vocabulary Management
       </Link>
     </div>

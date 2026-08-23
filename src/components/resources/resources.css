@@ -1,0 +1,124 @@
+/* Resources page (spec section 11, Stitch `study_resources` screen). */
+
+.resources-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.resources-header p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-secondary);
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .resources-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.resource-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+}
+
+.resource-card--vocab {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+.resource-card--grammar {
+  background: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+.resource-card__icon {
+  position: relative;
+  z-index: 1;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-surface-container-lowest), transparent 50%);
+}
+
+.resource-card__icon .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.resource-card__title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+.resource-card__desc {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.resources-external-card {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--color-outline-variant);
+  background: var(--color-surface-container-low);
+  text-decoration: none;
+  color: inherit;
+}
+
+.resources-external-card__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.resources-external-card__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-primary), transparent 90%);
+  color: var(--color-primary);
+}
+
+.resources-external-card__title {
+  margin: 0;
+  color: var(--color-on-surface);
+}
+
+.resources-external-card__desc {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.resources-external-card__arrow {
+  flex-shrink: 0;
+  color: var(--color-outline);
+}

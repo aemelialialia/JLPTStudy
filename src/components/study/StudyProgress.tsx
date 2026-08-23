@@ -1,7 +1,14 @@
 import type { JLPTLevel } from '../../types/jlpt'
 import './study.css'
 
-/** "7 / 15" + a bar (spec section 11). `completed`/`total` come straight from the session — never fabricated. */
+/**
+ * The study screen header (spec section 11), matching the Stitch
+ * `vocabulary_study` screen: a level pill, "Daily Review", and how many
+ * cards remain — plus a visually-hidden but screen-reader-visible
+ * progress bar so the numeric progress (never fabricated, straight from
+ * the session) stays accessible without a visible bar cluttering the
+ * simpler Stitch header.
+ */
 export function StudyProgress({
   level,
   completed,
@@ -11,25 +18,23 @@ export function StudyProgress({
   completed: number
   total: number
 }) {
-  const pct = total === 0 ? 0 : Math.round((completed / total) * 100)
+  const remaining = Math.max(total - completed, 0)
   return (
     <div className="study-progress">
-      <h2>{level} Vocabulary</h2>
-      <div className="study-progress__label">
-        <span>
-          {completed} / {total}
-        </span>
-        <span>{pct}%</span>
-      </div>
+      <span className="study-progress__badge text-label-sm">{`JLPT ${level}`}</span>
+      <h2 className="text-title-md">Daily Review</h2>
+      <p className="study-progress__remaining">
+        {remaining} card{remaining === 1 ? '' : 's'} remaining
+      </p>
       <div
-        className="study-progress__track"
+        className="study-progress__bar"
         role="progressbar"
         aria-valuenow={completed}
         aria-valuemin={0}
         aria-valuemax={total}
         aria-label={`${level} study session progress`}
       >
-        <div className="study-progress__fill" style={{ width: `${pct}%` }} />
+        {completed} / {total}
       </div>
     </div>
   )

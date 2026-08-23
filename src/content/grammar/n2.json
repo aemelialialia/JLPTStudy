@@ -1,1 +1,115 @@
-[]
+[
+  {
+    "id": "n2-tabakari",
+    "level": "N2",
+    "grammarPoint": "〜たばかり",
+    "meaning": "Just did ~ — subjectively recent.",
+    "formation": "Verb た-form + ばかり",
+    "usage": "Emphasizes that, from the speaker's subjective feeling, very little time has passed since the action — the focus is the speaker's sense of recency, not the objective clock.",
+    "examples": [
+      { "sentence": "日本語を習い始めたばかりです。", "reading": "にほんごをならいはじめたばかりです。", "meaning": "I just started learning Japanese (recently, from my point of view)." }
+    ],
+    "notes": "Can be used even for events that were, strictly speaking, a while ago, if it still feels recent to the speaker.",
+    "commonMistakes": "Assuming たばかり always means \"seconds/minutes ago\" — it measures subjective, not objective, recency, which is the key contrast with たところ.",
+    "relatedGrammar": ["n2-tatokoro"]
+  },
+  {
+    "id": "n2-tatokoro",
+    "level": "N2",
+    "grammarPoint": "〜たところ",
+    "meaning": "Just did ~ — right at that moment, objectively.",
+    "formation": "Verb た-form + ところ",
+    "usage": "States that an action has just finished at this exact moment — a tighter, more objective sense of \"just now\" than たばかり.",
+    "examples": [
+      { "sentence": "ちょうど今、家に着いたところです。", "reading": "ちょうどいま、いえについたところです。", "meaning": "I just this moment arrived home." }
+    ],
+    "notes": "Often paired with ちょうど (exactly / just) to emphasize the precise timing.",
+    "commonMistakes": "Using たところ for something that happened a while ago but still feels recent — that's exactly the job of たばかり instead.",
+    "relatedGrammar": ["n2-tabakari"]
+  },
+  {
+    "id": "n2-nimokakawarazu",
+    "level": "N2",
+    "grammarPoint": "〜にもかかわらず",
+    "meaning": "In spite of / despite ~.",
+    "formation": "Plain form / Noun + にもかかわらず",
+    "usage": "A formal way to connect a situation with an unexpected or contrasting result, similar to のに but more formal and often written.",
+    "examples": [
+      { "sentence": "雨が降っているにもかかわらず、試合は行われた。", "reading": "あめがふっているにもかかわらず、しあいはおこなわれた。", "meaning": "Despite the rain, the match was held." }
+    ],
+    "notes": "More formal or written in register than のに; common in news reports, essays, and business writing.",
+    "commonMistakes": "Using にもかかわらず in casual spoken conversation where のに would sound far more natural.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n2-warini",
+    "level": "N2",
+    "grammarPoint": "〜わりに（は）",
+    "meaning": "Considering ~ / (unexpectedly) for ~.",
+    "formation": "Plain form / Noun + の + わりに（は）",
+    "usage": "Compares a result to what would normally be expected given some condition, highlighting that the actual result doesn't match that expectation.",
+    "examples": [
+      { "sentence": "このレストランは値段が高いわりに、あまりおいしくない。", "reading": "このレストランはねだんがたかいわりに、あまりおいしくない。", "meaning": "Considering how expensive this restaurant is, it's not that delicious." }
+    ],
+    "notes": "Always implies a mismatch between an expectation set by the first clause and the actual outcome in the second.",
+    "commonMistakes": "Confusing わりに with のに — わりに specifically sets up an expectation-based comparison, while のに is a broader \"even though\".",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n2-karatoitte",
+    "level": "N2",
+    "grammarPoint": "〜からといって",
+    "meaning": "Just because ~ doesn't mean ~.",
+    "formation": "Plain form + からといって",
+    "usage": "Rejects a conclusion that might seem to logically follow from a stated reason — often paired with a negative statement in the second clause.",
+    "examples": [
+      { "sentence": "お金があるからといって、幸せだとは限らない。", "reading": "おかねがあるからといって、しあわせだとはかぎらない。", "meaning": "Just because you have money doesn't mean you're happy." }
+    ],
+    "notes": "Frequently pairs with 〜とは限らない (isn't necessarily the case) in the second clause.",
+    "commonMistakes": "Using からといって as if it simply means \"because\", when it actually exists to reject an inference drawn from that reason.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n2-zaruoenai",
+    "level": "N2",
+    "grammarPoint": "〜ざるを得ない",
+    "meaning": "Cannot help but ~ / have no choice but to ~.",
+    "formation": "Verb ない-form (drop ない) + ざるを得ない (irregular: する → せざるを得ない)",
+    "usage": "Expresses that, given the circumstances, the speaker has no real choice but to do something, often reluctantly.",
+    "examples": [
+      { "sentence": "台風のため、旅行を中止せざるを得ない。", "reading": "たいふうのため、りょこうをちゅうしせざるをえない。", "meaning": "Because of the typhoon, we have no choice but to cancel the trip." }
+    ],
+    "notes": "A fairly formal, written-register expression; in casual speech, 〜しかない is more common.",
+    "commonMistakes": "Forgetting the irregular する → せざるを得ない conjugation and writing しざるを得ない instead.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n2-ageku",
+    "level": "N2",
+    "grammarPoint": "〜あげく（に）",
+    "meaning": "After all that ~... — usually leading to a bad outcome.",
+    "formation": "Verb た-form / Noun + の + あげく（に）",
+    "usage": "Describes a negative or exhausting result that comes after a long process of trying, worrying, or arguing.",
+    "examples": [
+      { "sentence": "何時間も悩んだあげく、結局買わなかった。", "reading": "なんじかんもなやんだあげく、けっきょくかわなかった。", "meaning": "After agonizing for hours, in the end I didn't buy it." }
+    ],
+    "notes": "Almost always followed by a disappointing, ironic, or exhausting conclusion — rarely used for a happy outcome.",
+    "commonMistakes": "Using あげく for a straightforwardly positive result, which clashes with its inherently negative or ironic nuance.",
+    "relatedGrammar": []
+  },
+  {
+    "id": "n2-nichigainai",
+    "level": "N2",
+    "grammarPoint": "〜に違いない",
+    "meaning": "Must be ~ / I'm certain that ~.",
+    "formation": "Plain form (na-adjective / noun without だ) + に違いない",
+    "usage": "A strong, confident assertion that something must be true, based on available evidence — stronger in certainty than かもしれない or でしょう.",
+    "examples": [
+      { "sentence": "あの人は日本人に違いない。", "reading": "あのひとはにほんじんにちがいない。", "meaning": "That person must be Japanese." },
+      { "sentence": "これは彼のミスに違いない。", "reading": "これはかれのミスにちがいない。", "meaning": "This must be his mistake." }
+    ],
+    "notes": "Ranks among the strongest inference expressions in Japanese, well above かもしれない (might) and 〜だろう (probably).",
+    "commonMistakes": "Treating に違いない as equivalent in strength to かもしれない — the two sit at opposite ends of the certainty scale.",
+    "relatedGrammar": []
+  }
+]

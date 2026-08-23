@@ -1,1 +1,178 @@
-[]
+[
+  {
+    "id": "n2-q-0001",
+    "level": "N2",
+    "questionText": "日本語を＿＿＿ばかりです。",
+    "choices": ["習い始めた", "習い始める", "習い始めて", "習い始めます"],
+    "correctAnswer": "習い始めた",
+    "explanation": "たばかり attaches to the past (た-form) of the verb.",
+    "grammarPointId": "n2-tabakari",
+    "lessonSlideId": "n2-tabakari::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n2-q-0002",
+    "level": "N2",
+    "questionText": "彼は先月、会社に＿＿＿ばかりだ。",
+    "choices": ["入った", "入る", "入って", "入ります"],
+    "correctAnswer": "入った",
+    "explanation": "たばかり describes something that, subjectively, still feels recent — here, joining the company last month.",
+    "grammarPointId": "n2-tabakari",
+    "lessonSlideId": "n2-tabakari::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n2-q-0003",
+    "level": "N2",
+    "questionText": "ちょうど今、家に＿＿＿ところです。",
+    "choices": ["着いた", "着く", "着いて", "着きます"],
+    "correctAnswer": "着いた",
+    "explanation": "たところ marks an action that has just this moment finished.",
+    "grammarPointId": "n2-tatokoro",
+    "lessonSlideId": "n2-tatokoro::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n2-q-0004",
+    "level": "N2",
+    "questionText": "今、ご飯を食べ＿＿＿ところです。",
+    "choices": ["終わった", "終わる", "終わって", "終わります"],
+    "correctAnswer": "終わった",
+    "explanation": "たところ attaches to the た-form to mark the precise moment an action concluded.",
+    "grammarPointId": "n2-tatokoro",
+    "lessonSlideId": "n2-tatokoro::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n2-q-0005",
+    "level": "N2",
+    "questionText": "雨が降っている＿＿＿、試合は行われた。",
+    "choices": ["にもかかわらず", "にとって", "において", "にかわって"],
+    "correctAnswer": "にもかかわらず",
+    "explanation": "にもかかわらず formally connects a situation with a contrasting, unexpected result.",
+    "grammarPointId": "n2-nimokakawarazu",
+    "lessonSlideId": "n2-nimokakawarazu::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n2-q-0006",
+    "level": "N2",
+    "questionText": "彼は若い＿＿＿、とても落ち着いている。",
+    "choices": ["にもかかわらず", "にかけては", "にしたがって", "をきっかけに"],
+    "correctAnswer": "にもかかわらず",
+    "explanation": "Despite being young (contrary to what you might expect), he is very composed.",
+    "grammarPointId": "n2-nimokakawarazu",
+    "lessonSlideId": "n2-nimokakawarazu::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n2-q-0007",
+    "level": "N2",
+    "questionText": "このレストランは値段が高い＿＿＿、あまりおいしくない。",
+    "choices": ["わりに", "のに", "ために", "として"],
+    "correctAnswer": "わりに",
+    "explanation": "わりに compares the actual quality against what the high price would lead you to expect.",
+    "grammarPointId": "n2-warini",
+    "lessonSlideId": "n2-warini::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n2-q-0008",
+    "level": "N2",
+    "questionText": "彼は練習した＿＿＿、あまり上手じゃない。",
+    "choices": ["わりに", "せいで", "おかげで", "ものの"],
+    "correctAnswer": "わりに",
+    "explanation": "わりに highlights a mismatch between the practice put in and the resulting skill level.",
+    "grammarPointId": "n2-warini",
+    "lessonSlideId": "n2-warini::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n2-q-0009",
+    "level": "N2",
+    "questionText": "お金がある＿＿＿、幸せだとは限らない。",
+    "choices": ["からといって", "といっても", "としたら", "にしては"],
+    "correctAnswer": "からといって",
+    "explanation": "からといって rejects the assumption that having money automatically leads to the stated conclusion.",
+    "grammarPointId": "n2-karatoitte",
+    "lessonSlideId": "n2-karatoitte::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n2-q-0010",
+    "level": "N2",
+    "questionText": "若い＿＿＿、無理をしてはいけない。",
+    "choices": ["からといって", "としても", "にしても", "といえば"],
+    "correctAnswer": "からといって",
+    "explanation": "Just because someone is young doesn't mean they should overdo it — からといって rejects that inference.",
+    "grammarPointId": "n2-karatoitte",
+    "lessonSlideId": "n2-karatoitte::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n2-q-0011",
+    "level": "N2",
+    "questionText": "台風のため、旅行を＿＿＿。",
+    "choices": ["中止せざるを得ない", "中止しざるを得ない", "中止するを得ない", "中止しなければ得ない"],
+    "correctAnswer": "中止せざるを得ない",
+    "explanation": "する is irregular: its ざるを得ない form is せざるを得ない, not しざるを得ない.",
+    "grammarPointId": "n2-zaruoenai",
+    "lessonSlideId": "n2-zaruoenai::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n2-q-0012",
+    "level": "N2",
+    "questionText": "規則だから、みんなこのルールに＿＿＿。",
+    "choices": ["従わざるを得ない", "従いざるを得ない", "従うざるを得ない", "従ってざるを得ない"],
+    "correctAnswer": "従わざるを得ない",
+    "explanation": "ざるを得ない attaches to the ない-form stem: 従わ(ない) → 従わざるを得ない.",
+    "grammarPointId": "n2-zaruoenai",
+    "lessonSlideId": "n2-zaruoenai::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n2-q-0013",
+    "level": "N2",
+    "questionText": "何時間も悩んだ＿＿＿、結局買わなかった。",
+    "choices": ["あげく", "おかげ", "ばかり", "とたん"],
+    "correctAnswer": "あげく",
+    "explanation": "あげく marks a long process (hours of agonizing) ending in an often disappointing conclusion.",
+    "grammarPointId": "n2-ageku",
+    "lessonSlideId": "n2-ageku::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n2-q-0014",
+    "level": "N2",
+    "questionText": "長い議論の＿＿＿、結論は出なかった。",
+    "choices": ["あげく", "かわりに", "うえで", "につけ"],
+    "correctAnswer": "あげく",
+    "explanation": "あげく (Noun + の + あげく) shows that after a long discussion, no resolution was reached.",
+    "grammarPointId": "n2-ageku",
+    "lessonSlideId": "n2-ageku::usage",
+    "difficulty": "hard"
+  },
+  {
+    "id": "n2-q-0015",
+    "level": "N2",
+    "questionText": "あの人は＿＿＿に違いない。",
+    "choices": ["日本人", "日本人だ", "日本人な", "日本人の"],
+    "correctAnswer": "日本人",
+    "explanation": "A noun attaches directly to に違いない without だ.",
+    "grammarPointId": "n2-nichigainai",
+    "lessonSlideId": "n2-nichigainai::usage",
+    "difficulty": "medium"
+  },
+  {
+    "id": "n2-q-0016",
+    "level": "N2",
+    "questionText": "この字は彼が＿＿＿に違いない。",
+    "choices": ["書いた", "書く", "書いて", "書きます"],
+    "correctAnswer": "書いた",
+    "explanation": "に違いない can follow the plain past form of a verb to assert confident certainty about a past event.",
+    "grammarPointId": "n2-nichigainai",
+    "lessonSlideId": "n2-nichigainai::usage",
+    "difficulty": "medium"
+  }
+]
