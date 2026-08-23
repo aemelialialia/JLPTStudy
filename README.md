@@ -7,21 +7,31 @@ Deployable for free on GitHub Pages.
 **Phase 1** built the technical foundation (routing, data layer, content
 layer, design tokens). **Phase 2** added a real, working vocabulary import
 and database system. **Phase 3** added the vocabulary study/flashcard
-system. **Phase 4** (this step) is the production frontend: a full grammar
-system (curated N5–N2 content, slide-based lessons, multiple-choice
-quizzes with a "review the grammar, then return to your quiz" loop), a
-real Dashboard/Profile/JLPT-Level-Selection/Resources set of screens, and
-a visual rebuild of every earlier screen to match an approved Stitch
-design ("Komorebi Study System") as closely as practical — bottom tab bar
+system. **Phase 4** was the production frontend: a full grammar system
+(curated N5–N2 content, slide-based lessons, multiple-choice quizzes with
+a "review the grammar, then return to your quiz" loop), a real
+Dashboard/Profile/JLPT-Level-Selection/Resources set of screens, and a
+visual rebuild of every earlier screen to match an approved Stitch design
+("Komorebi Study System") as closely as practical — bottom tab bar
 (Vocabulary / Dashboard / Grammar) plus a slide-out drawer (JLPT Levels /
 Profile / Resources). Two screens remain deliberately un-restyled: the
 vocabulary import/management screen (`/level/:level`) and the data
 export/import/reset actions inside Settings — both are real, working
 utility surfaces with no corresponding Stitch mockup, reachable from
 Study's "Back to Vocabulary Management" link and Profile's "Manage study
-data" link respectively. Every number shown anywhere in the app (daily
-progress, streaks, per-level mastery, exam countdown) is computed from
-real IndexedDB state — nothing is ever hard-coded or fabricated.
+data" link respectively. **Phase 5** (this step) extends the existing UI
+rather than replacing any of it: automatic Mistake Book mastery tracking
+(3-in-a-row-since-the-last-miss, full history always preserved), a
+Mistake Practice quiz mode that reuses the same quiz engine as every
+other quiz, client-side Grammar XLSX import (mirroring the Phase 2
+vocabulary import UX exactly), an honest, empty-by-design Grammar
+Resources/Reference Tables architecture (no fabricated conjugation
+content), a reordered Dashboard (JLPT goal card first), removal of the
+redundant "Study N5" button from vocabulary management, and a tighter,
+no-scroll-to-reach-Next Grammar Study interaction on small screens. Every
+number shown anywhere in the app (daily progress, streaks, per-level
+mastery, exam countdown, mistake counts) is computed from real IndexedDB
+state — nothing is ever hard-coded or fabricated.
 
 ## Stack
 
@@ -37,14 +47,14 @@ No state management library, CSS framework, or backend framework was added — s
 
 ```
 src/
-  types/           Domain models (VocabularyItem, StudyState, StudySession, GrammarEntry/GrammarSlide/GrammarProgress, GrammarQuestion, GrammarQuizSession, Quiz, Settings)
-  content/         Curated static content, bundled JSON per JLPT level: grammar/n5..n2.json (grammar points) and questions/n5..n2.json (quiz questions). Read-only at runtime, loaded via contentLoader.ts.
-  data/            IndexedDB layer: db.ts (schema) + repositories/ (the only files that touch IndexedDB directly)
-  services/        Framework-agnostic business logic — vocabularyLearningService/studySessionService (flashcards), vocabularyQuizService (vocab MC quiz), grammarLessonService/grammarQuizSessionService (grammar lessons + quizzes), quizService (grammar quiz attempts/mistakes), progressService (cross-cutting streak/daily-activity stats), exportImportService, xlsxImportService
-  hooks/           Thin React bindings from services/repositories to components — one hook per screen's data needs (useVocabularyStudy, useVocabularyQuiz, useGrammarLesson, useGrammarQuiz, useProfileData, useLevelOverview, useDailyVocabularyProgress, useDailyGrammarQuizPreview, ...)
+  types/           Domain models (VocabularyItem, StudyState, StudySession, GrammarEntry/GrammarSlide/GrammarProgress, GrammarQuestion, GrammarQuizSession, Quiz/MistakeRecord, ConjugationTable, GrammarImport*, Settings)
+  content/         Curated static content, bundled JSON per JLPT level: grammar/n5..n2.json (grammar points) and questions/n5..n2.json (quiz questions), plus conjugation/ (reference-table architecture, intentionally empty — see "Grammar Resources" below). Read-only at runtime, loaded via contentLoader.ts. importedGrammarCache.ts is the one exception: an in-memory cache that merges this bundled content with user-imported grammar (see "Grammar XLSX import" below).
+  data/            IndexedDB layer: db.ts (schema) + repositories/ (the only files that touch IndexedDB directly), including grammarImportRepository.ts (userGrammarEntries store)
+  services/        Framework-agnostic business logic — vocabularyLearningService/studySessionService (flashcards), vocabularyQuizService (vocab MC quiz), grammarLessonService/grammarQuizSessionService (grammar lessons + quizzes, incl. Mistake Practice sessions), quizService (grammar quiz attempts + Mistake Book mastery state machine), conjugationService (reference tables), progressService (cross-cutting streak/daily-activity stats), exportImportService, xlsxImportService (vocabulary), grammarXlsxImportService (grammar)
+  hooks/           Thin React bindings from services/repositories to components — one hook per screen's data needs (useVocabularyStudy, useVocabularyQuiz, useGrammarLesson, useGrammarQuiz, useGrammarImport, useImportedGrammarReady, useProfileData, useLevelOverview, useDailyVocabularyProgress, useDailyGrammarQuizPreview, ...)
   theme/           Design tokens ported from the Stitch "Komorebi Study System" (tokens.css + tokens.ts) — colors, typography, radius, shadows, spacing; every component consumes these via CSS custom properties, never hard-coded values
-  components/      Presentational components, one folder per feature area: layout/ (app shell, top bar, nav drawer, bottom nav, loading screen), vocabulary/ (import/manage), study/ (flashcards + vocab quiz, shared study.css), grammar/ (hub, lesson slides, quiz), dashboard/, profile/, levels/, resources/, mistakes/, common/ (StatCard)
-  pages/           Routed pages — Dashboard, LevelPage (vocab manager), StudyIndexPage/StudyPage/VocabQuizPage, GrammarIndexPage/GrammarHubPage/GrammarLessonPage/GrammarQuizPage, ProfilePage, LevelSelectionPage, ResourcesPage, MistakeBook, Settings
+  components/      Presentational components, one folder per feature area: layout/ (app shell, top bar, nav drawer, bottom nav, loading screen), vocabulary/ (import/manage), study/ (flashcards + vocab quiz, shared study.css), grammar/ (hub, lesson slides, quiz, grammar XLSX importer), dashboard/, profile/, levels/, resources/ (incl. conjugation reference tables), mistakes/ (Mistake Book cards + filters), common/ (StatCard)
+  pages/           Routed pages — Dashboard, LevelPage (vocab manager), StudyIndexPage/StudyPage/VocabQuizPage, GrammarIndexPage/GrammarHubPage/GrammarLessonPage/GrammarQuizPage, ConjugationIndexPage/ConjugationCategoryPage, ProfilePage, LevelSelectionPage, ResourcesPage, MistakeBook, Settings
   integration/     End-to-end tests driving the real rendered UI through full workflows (vocabularyWorkflow.test.tsx, studyWorkflow.test.tsx)
   App.tsx          Route table
   main.tsx         Entry point
@@ -211,19 +221,119 @@ where it left off, rather than restarting it.
 
 **Mistake Book** (`/#/mistakes`, reached from Dashboard's Practice More
 row) collects every grammar question answered incorrectly, grouped by
-level, each with the same "review this grammar" deep link.
+level, each with the same "review this grammar" deep link, plus the
+mastery tracking and Mistake Practice mode described below.
+
+## Mistake Book mastery & Mistake Practice (Phase 5)
+
+Every wrong answer, across every quiz mode, updates the **same**
+`MistakeRecord` for that question — keyed by `questionId`, so answering
+the same question wrong twice never creates a duplicate entry. The record
+carries full history that is never deleted, even once a question is
+Mastered: `timesWrong`, `lastWrongAt`, `timesCorrect`, `lastCorrectAt`,
+and `consecutiveCorrect`.
+
+**Mastery rule** (deliberately simple — no spaced-repetition scheduling
+in this phase): a mistake starts **Active**. Each correct answer after
+the *most recent* wrong answer increments `consecutiveCorrect`; reaching
+3 in a row (`MASTERY_STREAK_TARGET` in `src/types/quiz.ts`) flips it to
+**Mastered**. Any subsequent wrong answer on that question immediately
+resets it to Active and resets the streak to 0 — but `timesWrong` /
+`timesCorrect` / all historical timestamps are preserved, never zeroed.
+This entire state machine lives in one place, `quizService.submitAnswer`,
+so it applies identically whether the question was answered inside a
+level quiz, the Daily Grammar Quiz, or Mistake Practice itself.
+
+**Mistake Practice** (`/#/grammar/:level/quiz/mistakes`, launched from
+the Mistake Book's per-level "Practice Mistakes" button, shown only when
+that level has at least one Active mistake) builds a quiz session from
+exactly that level's Active mistakes, shuffled, no duplicates within the
+session — using the **same shared quiz engine** (`grammarQuizSessionService`
+/ `useGrammarQuiz`) as every other quiz mode, not a separate
+implementation. Answering correctly 3 times in a row during a practice
+session can master a question mid-session, same as anywhere else.
+
+The Mistake Book screen itself (`/#/mistakes`) adds All/Active/Mastered
+filter tabs and a grammar-point filter, and each card shows the
+Active/Mastered status plus the wrong/correct counts and "N/3 in a row to
+master" progress described above.
+
+## Grammar XLSX import (Phase 5)
+
+Grammar knowledge points can be imported client-side from `.xlsx` files,
+deliberately mirroring the Phase 2 vocabulary import UX step for step:
+**pick a JLPT level → pick an `.xlsx` file → parse & validate entirely in
+the browser (nothing is ever uploaded anywhere) → preview (level,
+filename, row counts, invalid rows with reasons, in-file duplicates, a
+sample of entries) → Confirm → write to IndexedDB.** Nothing is written
+until Confirm is clicked. It's reached from a collapsible "Import
+Grammar" section at the bottom of each level's Grammar Hub
+(`GrammarHubPage`).
+
+Required columns: `Grammar Point`, `Meaning`, `Formation`, `Usage`.
+Optional: `Example Sentence` (+ `Example Meaning`), `Notes`, `Common
+Mistakes`, `Related Grammar` (comma-separated grammar-point names,
+resolved to ids against the rest of the same import — unmatched names are
+silently dropped rather than erroring). **The spreadsheet never has, or
+needs, a Level column** — the level is always the one explicitly picked
+in the UI before the file is selected, same as vocabulary import.
+
+**Stable ids & re-import:** each imported point gets a deterministic id,
+`import-<level>-<hash of the grammar point text>` (`importedGrammarId` in
+`src/types/grammarImport.ts`), which doubles as both its IndexedDB key and
+its identity/dedup key. Re-importing the same (level, grammar point) pair
+always resolves to the same record — updating its fields in place if
+they changed, or reporting "unchanged" if they didn't — and never creates
+a duplicate. Quiz questions reference grammar points only by
+`grammarPointId`, imported or bundled alike, never by display text.
+
+**Merging with bundled content:** the curated N5–N2 JSON in
+`src/content/grammar/` stays completely untouched and still loads exactly
+as it did in Phase 4 — `contentLoader.ts`'s read-only, synchronous
+contract is unchanged. Imported grammar lives separately, in IndexedDB's
+`userGrammarEntries` store. A new in-memory merge cache
+(`src/content/importedGrammarCache.ts`), warmed asynchronously in the
+background and read synchronously via `getImportedGrammarSync()`, is what
+lets `grammarLessonService` present bundled and imported grammar as one
+seamless list everywhere (hub, lessons, progress) without turning every
+grammar-reading component into an async one.
+
+## Grammar Resources / Reference Tables (Phase 5)
+
+`/#/resources/conjugation` adds the **architecture** for a verb/adjective/
+noun conjugation and plain-vs-polite reference section — category
+navigation, table-rendering UI, and a `ConjugationTable`/`conjugationService`
+content-loading layer that mirrors the grammar content layer's shape. **No
+conjugation tables are populated.** `src/content/conjugation/contentLoader.ts`
+intentionally ships an empty table array with a comment explaining why —
+no reference data was invented for this phase. Both the category index and
+each category page show an honest "these tables haven't been added yet"
+message instead of a broken or misleadingly-empty grid. Real
+verb/adjective/noun conjugation and plain/polite reference tables should
+be provided by you before this section is populated; once supplied, they
+drop straight into `CONJUGATION_TABLES` in that same file with no further
+architectural changes needed.
 
 ## Dashboard, Profile, JLPT Levels & Resources
 
-- **Dashboard** (`/`) — Daily Vocabulary Progress (a real ring gauge against `settings.dailyGoal`), the JLPT exam countdown (real `targetLevel`/`examDate`, or a prompt to set one), a Daily Grammar preview, and a Practice More row linking only to features that actually exist (vocabulary quiz, grammar quiz, mistake review).
+- **Dashboard** (`/`) — the JLPT exam countdown card (real `targetLevel`/`examDate` from `/#/levels`, or a prompt to set one) is now the first content section, above the daily study cards, per the Phase 5 requirement that the JLPT goal lead the page. Below it: Daily Vocabulary Progress (a real ring gauge against `settings.dailyGoal`) and a Daily Grammar preview side by side, then a Practice More row linking only to features that actually exist (vocabulary quiz, grammar quiz, mistake review).
 - **Profile** (`/#/profile`) — per-level vocabulary mastery bars and grammar "bubble row" progress, a real day-based study streak (`progressService.getCurrentStreak`, derived from existing `lastReviewed`/`QuizAttempt` timestamps, not a separately-maintained counter that could drift), and today's combined cards-studied count against the daily goal.
-- **JLPT Level Selection** (`/#/levels`) — pick a target level and exam date (writes to `UserSettings`), shown alongside each level's real vocabulary/grammar progress so the choice is informed.
-- **Resources** (`/#/resources`) — links to the real Vocabulary and Grammar collections plus the official JLPT website. The Stitch mockup for this screen also included "Verb Conjugation Table" and "Noun/Adjective Tables" cards; neither is a real feature in this app, so — consistent with the no-dead-end-links principle used throughout (e.g. Dashboard's Practice More row) — they were omitted rather than linking to a page that doesn't exist.
+- **JLPT Level Selection** (`/#/levels`) — pick a target level and exam date (writes to `UserSettings`), shown alongside each level's real vocabulary/grammar progress so the choice is informed. The Dashboard's goal card reuses this same page and the same `settings` fields rather than duplicating the concept.
+- **Resources** (`/#/resources`) — links to the real Vocabulary and Grammar collections, the new Reference Tables (conjugation) section above, and the official JLPT website.
+
+## Vocabulary management
+
+The per-level vocabulary management screen (`/#/level/:level`) no longer
+has a "Study N5" (or any level-specific "Study") button — that entry
+point was redundant with the dedicated Study flow reachable from the
+bottom nav / Dashboard, and having two paths into flashcard study from
+the management screen was confusing. This was a pure removal; no other
+vocabulary-management functionality changed.
 
 ## Data & content
 
-- **IndexedDB** (`src/data/`) holds everything the user generates: imported vocabulary, memorization/study state, grammar progress, grammar quiz sessions, quiz attempts, mistakes, settings.
-- **`src/content/`** holds curated, bundled JSON (grammar notes + grammar questions), organized per level — see `src/content/README.md` for the schema.
+- **IndexedDB** (`src/data/`) holds everything the user generates: imported vocabulary, memorization/study state, grammar progress, grammar quiz sessions, quiz attempts, mistakes (with mastery state), imported grammar entries, settings.
+- **`src/content/`** holds curated, bundled JSON (grammar notes + grammar questions) and the (intentionally empty) conjugation reference-table architecture, organized per level — see `src/content/README.md` for the schema.
 
 ## Requirements
 

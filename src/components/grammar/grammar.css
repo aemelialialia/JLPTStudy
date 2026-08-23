@@ -542,18 +542,34 @@
   transform: translateY(4px);
 }
 
-/* ================= Quiz ================= */
+/* ================= Quiz =================
+   Phase 5 spec: "generous spacing around the app, efficient spacing
+   inside an active study interaction." Every rule below (.grammar-quiz
+   and its descendants) governs ONLY the live question-answering screen —
+   the lesson viewer above and every other page keep their original,
+   generous spacing untouched. The goal is fitting Question -> choices ->
+   feedback -> Next entirely within an iPhone viewport with no scrolling,
+   which the pre-Phase-5 var(--space-6)/var(--space-8) rhythm did not. */
 .grammar-quiz {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-2);
+  /* The persistent bottom nav (fixed, ~80px incl. safe area) reserves
+     generous clearance below every OTHER page's content, which is the
+     right default for browsing screens. The active quiz screen already
+     has its own explicit exit (the close button in its own header) and
+     isn't meant to be navigated away from via the bottom tabs mid
+     question, so it reclaims part of that reserved clearance here —
+     scoped to this page only via a negative margin, never touching the
+     shared app-shell padding every other page still gets in full. */
+  margin-bottom: calc(-1 * var(--space-10));
 }
 
 .grammar-quiz__progress-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-4);
+  padding: var(--space-2);
   border-radius: var(--radius-lg);
   background: var(--color-surface-container-lowest);
   box-shadow: var(--shadow-sm);
@@ -588,8 +604,8 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  padding: var(--space-8);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-2xl);
   background: var(--color-surface-container-lowest);
   border: 1px solid var(--color-surface-container-low);
@@ -606,7 +622,7 @@
 
 .grammar-quiz__question {
   color: var(--color-on-surface);
-  line-height: 1.75;
+  line-height: 1.3;
   margin: 0;
 }
 
@@ -622,7 +638,7 @@
 .grammar-quiz__options {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-4);
+  gap: var(--space-1);
 }
 
 @media (min-width: 600px) {
@@ -633,10 +649,13 @@
 
 .grammar-quiz__option {
   text-align: left;
-  padding: var(--space-4);
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-lg);
   background: var(--color-surface-container);
   border: 2px solid transparent;
+  /* Touch target floor (44px, iOS HIG) is kept exactly — "efficient
+     spacing" trims the padding around each choice, never the tappable
+     area itself. */
   min-height: var(--touch-target-min);
   color: var(--color-on-surface);
   font-family: var(--font-family-body);
@@ -674,9 +693,9 @@
 .grammar-quiz__feedback {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-1);
   align-items: flex-start;
-  padding: var(--space-4);
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-lg);
 }
 
@@ -729,9 +748,24 @@
 }
 
 .grammar-quiz__feedback-explanation {
-  margin: var(--space-1) 0 0;
+  margin: 2px 0 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+  line-height: 1.35;
+}
+
+.grammar-quiz__feedback-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-label-sm);
+  color: var(--color-on-error-container);
+}
+
+.grammar-quiz__feedback-note--mastered {
+  color: var(--color-primary);
+  font-weight: 600;
 }
 
 /* The "Review this grammar" reference: visually SUBORDINATE to the
@@ -755,7 +789,7 @@
 .grammar-quiz__continue {
   align-self: flex-end;
   min-height: var(--touch-target-min);
-  padding: var(--space-4) var(--space-8);
+  padding: var(--space-2) var(--space-5);
   border-radius: var(--radius-full);
   background: var(--color-primary);
   color: var(--color-on-primary);
@@ -763,6 +797,11 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  /* Never wraps to two lines regardless of label length — a wrapped
+     primary CTA roughly doubles this button's height, which is exactly
+     the kind of scroll-inducing growth the compact quiz layout is
+     trying to avoid. */
+  white-space: nowrap;
   font-family: var(--font-family-heading);
   font-size: var(--font-size-title-md);
   font-weight: 600;

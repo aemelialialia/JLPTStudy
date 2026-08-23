@@ -47,15 +47,42 @@ describe('quizService', () => {
     expect(allMistakes[0].selectedAnswer).toBe('座る')
   })
 
-  it('marks a mistake mastered after a correct review answer', async () => {
-    await quizService.submitAnswer(question, '座り')
+  it('leaves a mistake Active after fewer than 3 consecutive correct answers', async () => {
+    await quizService.submitAnswer(question, '座り') // wrong -> creates the mistake
+    await quizService.submitAnswer(question, '座って') // correct #1
+    await quizService.submitAnswer(question, '座って') // correct #2
+
     const [mistake] = await quizRepository.getMistakes()
+    expect(mistake.mastered).toBe(false)
+    expect(mistake.consecutiveCorrect).toBe(2)
+    expect(mistake.timesCorrect).toBe(2)
+    expect(mistake.timesWrong).toBe(1)
+  })
 
-    await quizService.markMistakeMastered(mistake.id)
+  it('marks a mistake Mastered after 3 consecutive correct answers', async () => {
+    await quizService.submitAnswer(question, '座り') // wrong -> creates the mistake
+    await quizService.submitAnswer(question, '座って')
+    await quizService.submitAnswer(question, '座って')
+    await quizService.submitAnswer(question, '座って') // 3rd in a row -> Mastered
 
-    const [updated] = await quizRepository.getMistakes()
-    expect(updated.mastered).toBe(true)
-    expect(updated.reviewCount).toBe(1)
+    const [mistake] = await quizRepository.getMistakes()
+    expect(mistake.mastered).toBe(true)
+    expect(mistake.consecutiveCorrect).toBe(3)
+  })
+
+  it('resets Mastered back to Active (and the streak) on a subsequent wrong answer, without losing history', async () => {
+    await quizService.submitAnswer(question, '座り')
+    await quizService.submitAnswer(question, '座って')
+    await quizService.submitAnswer(question, '座って')
+    await quizService.submitAnswer(question, '座って') // Mastered
+    await quizService.submitAnswer(question, '座り') // wrong again -> back to Active
+
+    const [mistake] = await quizRepository.getMistakes()
+    expect(mistake.mastered).toBe(false)
+    expect(mistake.consecutiveCorrect).toBe(0)
+    // History is never erased by a reset.
+    expect(mistake.timesWrong).toBe(2)
+    expect(mistake.timesCorrect).toBe(3)
   })
 
   it('builds a quiz session from the static (currently empty) N5 question bank', () => {

@@ -3,6 +3,7 @@ import { isJLPTLevel } from '../types/jlpt'
 import { useGrammarQuiz, PRACTICE_DEFAULT_COUNT } from '../hooks/useGrammarQuiz'
 import type { GrammarQuizMode } from '../hooks/useGrammarQuiz'
 import { DAILY_QUESTION_COUNT } from '../services/grammarQuizSessionService'
+import { useMistakes } from '../hooks/useMistakes'
 import { GrammarQuizOption } from '../components/grammar/GrammarQuizOption'
 import type { GrammarQuizOptionStatus } from '../components/grammar/GrammarQuizOption'
 import { GrammarQuizFeedback } from '../components/grammar/GrammarQuizFeedback'
@@ -10,7 +11,13 @@ import { GrammarQuizSummary } from '../components/grammar/GrammarQuizSummary'
 import '../components/grammar/grammar.css'
 
 function isGrammarQuizMode(value: unknown): value is GrammarQuizMode {
-  return value === 'daily' || value === 'practice'
+  return value === 'daily' || value === 'practice' || value === 'mistakes'
+}
+
+function quizTitle(mode: GrammarQuizMode): string {
+  if (mode === 'daily') return 'Daily Grammar Quiz'
+  if (mode === 'mistakes') return 'Mistake Practice'
+  return 'Grammar Quiz'
 }
 
 /**
@@ -69,6 +76,12 @@ export function GrammarQuizPage() {
   const mode = isValidMode ? modeParam : 'practice'
 
   const { state, start, answer, continueToNext } = useGrammarQuiz(level, mode)
+  // Only needed for the mistake-practice "ready" screen's question count
+  // (the exact pool size isn't known until start() builds the session) —
+  // harmless to fetch unconditionally since useMistakes is cheap and
+  // already used elsewhere (Mistake Book) for the same data.
+  const { data: mistakesForLevel } = useMistakes(level)
+  const activeMistakeCount = (mistakesForLevel ?? []).filter((m) => !m.mastered).length
 
   if (!isValidLevel || !isValidMode) {
     return (
@@ -94,7 +107,7 @@ export function GrammarQuizPage() {
           <span className="material-symbols-outlined">close</span>
         </Link>
         <h1 className="text-headline-lg-mobile" style={{ color: 'var(--color-primary)', margin: 0 }}>
-          {mode === 'daily' ? 'Daily Grammar Quiz' : 'Grammar Quiz'}
+          {quizTitle(mode)}
         </h1>
         <span style={{ width: 44 }} aria-hidden="true" />
       </div>
@@ -115,14 +128,27 @@ export function GrammarQuizPage() {
           <span className="material-symbols-outlined" data-fill="1" style={{ fontSize: 40, color: 'var(--color-primary)' }}>
             quiz
           </span>
-          <h2 className="text-headline-lg">{mode === 'daily' ? "Today's Daily Grammar Quiz" : `${level} Practice Quiz`}</h2>
+          <h2 className="text-headline-lg">
+            {mode === 'daily' ? "Today's Daily Grammar Quiz" : mode === 'mistakes' ? 'Practice Your Mistakes' : `${level} Practice Quiz`}
+          </h2>
           <p style={{ color: 'var(--color-text-secondary)' }}>
-            {level} / {mode === 'daily' ? DAILY_QUESTION_COUNT : PRACTICE_DEFAULT_COUNT} Questions
+            {level} /{' '}
+            {mode === 'daily' ? DAILY_QUESTION_COUNT : mode === 'mistakes' ? activeMistakeCount : PRACTICE_DEFAULT_COUNT} Questions
           </p>
-          <button type="button" className="grammar-quiz__continue squish-btn" onClick={() => void start()}>
+          <button
+            type="button"
+            className="grammar-quiz__continue squish-btn"
+            onClick={() => void start()}
+            disabled={mode === 'mistakes' && activeMistakeCount === 0}
+          >
             Start Quiz
             <span className="material-symbols-outlined">arrow_forward</span>
           </button>
+          {mode === 'mistakes' && activeMistakeCount === 0 && (
+            <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)' }}>
+              No active mistakes for {level} right now — nice work!
+            </p>
+          )}
         </div>
       )}
 
@@ -153,7 +179,7 @@ export function GrammarQuizPage() {
             <span className="grammar-quiz__level-tag text-label-sm">{`JLPT ${state.question.level}`}</span>
 
             <div>
-              <p className="text-body-md" style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-2)' }}>
+              <p className="text-body-md" style={{ color: 'var(--color-text-secondary)', margin: '0 0 var(--space-1)' }}>
                 Fill in the blank:
               </p>
               <h2 className="grammar-quiz__question text-title-md">
@@ -166,7 +192,13 @@ export function GrammarQuizPage() {
             </div>
 
             {state.phase === 'feedback' && (
-              <GrammarQuizFeedback isCorrect={state.result.isCorrect} explanation={state.result.explanation} reviewHref={reviewHref} />
+              <GrammarQuizFeedback
+                isCorrect={state.result.isCorrect}
+                explanation={state.result.explanation}
+                reviewHref={reviewHref}
+                mistakeRecorded={state.result.mistakeRecorded}
+                mistakeMastered={state.result.mistakeMastered}
+              />
             )}
 
             <div className="grammar-quiz__options">

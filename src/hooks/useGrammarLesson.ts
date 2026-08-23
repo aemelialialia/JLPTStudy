@@ -1,16 +1,30 @@
 import { useEffect, useMemo, useState } from 'react'
 import { grammarLessonService } from '../services/grammarLessonService'
+import { useImportedGrammarReady } from './useImportedGrammarReady'
 
 /**
- * Drives one grammar point's slide-based lesson (spec sections 5-6).
- * Slide content itself is synchronous (derived from bundled JSON, see
- * buildGrammarSlides), so the only async part is recording "studied"
- * progress — fired once per mount, which is exactly the "opened this
- * lesson" interaction spec section 15 wants tracked.
+ * Drives one grammar point's slide-based lesson (spec sections 5-6). A
+ * lesson may resolve to a bundled OR a user-imported grammar point
+ * (Phase 5) — grammarLessonService.getGrammarPoint already merges both,
+ * synchronously; useImportedGrammarReady just forces a re-render once
+ * the imported side of that merge has actually warmed, so opening a
+ * lesson for a just-imported point works even on the very first mount
+ * after the cache was still cold. Slide content itself is otherwise
+ * synchronous (derived from the resolved entry, see buildGrammarSlides),
+ * so the only genuinely async part is recording "studied" progress —
+ * fired once per mount, which is exactly the "opened this lesson"
+ * interaction spec section 15 wants tracked.
  */
 export function useGrammarLesson(grammarPointId: string, initialSlideId?: string) {
-  const entry = useMemo(() => grammarLessonService.getGrammarPoint(grammarPointId), [grammarPointId])
-  const slides = useMemo(() => grammarLessonService.getSlides(grammarPointId), [grammarPointId])
+  const importedReady = useImportedGrammarReady()
+  // importedReady isn't read inside either factory below — it's a pure
+  // "recompute now" signal for the imported-grammar cache warming
+  // asynchronously outside this hook (see useImportedGrammarReady) —
+  // hence the lint suppressions rather than restructuring around it.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const entry = useMemo(() => grammarLessonService.getGrammarPoint(grammarPointId), [grammarPointId, importedReady])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const slides = useMemo(() => grammarLessonService.getSlides(grammarPointId), [grammarPointId, importedReady])
 
   const initialIndex = useMemo(() => {
     if (!initialSlideId) return 0

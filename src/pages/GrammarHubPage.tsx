@@ -1,12 +1,15 @@
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { isJLPTLevel } from '../types/jlpt'
 import { grammarLessonService } from '../services/grammarLessonService'
 import { useGrammarLevelProgress } from '../hooks/useGrammarLevelProgress'
+import { useImportedGrammarReady } from '../hooks/useImportedGrammarReady'
 import { GrammarLevelSwitcher } from '../components/grammar/GrammarLevelSwitcher'
 import { QuickTips } from '../components/grammar/QuickTips'
 import { GrammarHeroCard, GrammarSecondaryCard } from '../components/grammar/GrammarPointCard'
 import { GrammarPointList } from '../components/grammar/GrammarPointList'
 import { GrammarQuizCTA } from '../components/grammar/GrammarQuizCTA'
+import { GrammarImportSection } from '../components/grammar/GrammarImportSection'
 import '../components/grammar/grammar.css'
 
 /**
@@ -20,6 +23,12 @@ export function GrammarHubPage() {
   const isValidLevel = isJLPTLevel(levelParam)
   const level = isValidLevel ? levelParam : 'N5'
 
+  useImportedGrammarReady()
+  // Re-renders after a successful import so `points` (a plain synchronous
+  // read of grammarLessonService's merged cache, not memoized) picks up
+  // the newly-imported entries immediately — see GrammarImportSection's
+  // onImported.
+  const [, setImportVersion] = useState(0)
   const points = grammarLessonService.getGrammarPoints(level)
   const { data: progress } = useGrammarLevelProgress(level)
   const studiedIds = new Set(progress?.studiedIds ?? [])
@@ -43,8 +52,9 @@ export function GrammarHubPage() {
             <br />
             <span className="grammar-hero__accent">Bunpō</span>
           </h1>
-          <p>No {level} grammar points yet — check back after more content is added.</p>
+          <p>No {level} grammar points yet — check back after more content is added, or import your own below.</p>
         </div>
+        <GrammarImportSection level={level} onImported={() => setImportVersion((v) => v + 1)} />
       </section>
     )
   }
@@ -112,6 +122,8 @@ export function GrammarHubPage() {
           to={`/grammar/${level}/quiz/practice`}
         />
       </section>
+
+      <GrammarImportSection level={level} onImported={() => setImportVersion((v) => v + 1)} />
     </section>
   )
 }

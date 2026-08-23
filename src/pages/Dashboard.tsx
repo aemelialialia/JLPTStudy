@@ -12,8 +12,14 @@ import '../components/dashboard/dashboard.css'
  * / — the Dashboard (spec section 6, Stitch `dashboard` screen). The
  * "current studying level" driving the vocabulary/grammar cards is the
  * user's exam target level (settings.targetLevel), falling back to N5
- * until they set one via Settings/JLPT Level Selection (task #48) — the
- * countdown card itself doubles as that prompt when no target is set.
+ * until they set one via Settings/JLPT Level Selection (task #48).
+ *
+ * Phase 5 spec section 17: the JLPT goal is the FIRST major content
+ * section on the Dashboard, ahead of Daily Vocabulary/Grammar — so
+ * ExamCountdownCard (which already doubles as the "set your goal" prompt
+ * when no target is set yet, reusing the existing /levels page rather
+ * than any new goal-setting UI) renders as its own full-width section
+ * right after the welcome greeting, before the vocab/grammar grid.
  * Deliberately kept to a handful of cards, not a statistics screen.
  */
 export function Dashboard() {
@@ -31,6 +37,8 @@ export function Dashboard() {
         <h1 className="text-display-lg">Ready to study?</h1>
       </div>
 
+      <ExamCountdownCard targetLevel={settings?.targetLevel ?? null} examDate={settings?.examDate ?? null} />
+
       <div className="dashboard-grid">
         {vocabLoading ? (
           <p>Loading…</p>
@@ -38,12 +46,9 @@ export function Dashboard() {
           <DailyVocabularyCard count={vocabCount ?? 0} goal={dailyGoal} level={level} />
         )}
 
-        <div className="dashboard-side-stack">
-          <ExamCountdownCard targetLevel={settings?.targetLevel ?? null} examDate={settings?.examDate ?? null} />
-          {!grammarLoading && grammarPreview && (
-            <DailyGrammarQuizCard level={level} session={grammarPreview.session} previewQuestion={grammarPreview.previewQuestion} />
-          )}
-        </div>
+        {!grammarLoading && grammarPreview && (
+          <DailyGrammarQuizCard level={level} session={grammarPreview.session} previewQuestion={grammarPreview.previewQuestion} />
+        )}
       </div>
 
       <PracticeMoreRow level={level} />

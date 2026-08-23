@@ -4,7 +4,9 @@ Everything under `src/content/` is **curated, bundled application content** —
 not user data. It ships with the app, is read-only at runtime, and is never
 written to from the UI or from IndexedDB. This is deliberately separate from
 `src/data/` (the IndexedDB layer), which holds the user's own mutable study
-data (imported vocabulary, progress, quiz history, mistakes).
+data (imported vocabulary, progress, quiz history, mistakes, and — since
+Phase 5 — imported grammar entries; see "Imported grammar is not in this
+directory" below).
 
 ## Why JSON files instead of a database
 
@@ -26,6 +28,9 @@ content/
   questions/
     n5.json   n4.json   n3.json   n2.json     — GrammarQuestion[]
   contentLoader.ts                            — typed accessors
+  conjugation/
+    contentLoader.ts                          — ConjugationTable[] (intentionally empty — see below)
+  importedGrammarCache.ts                     — in-memory merge cache (see below; not bundled content itself)
 ```
 
 Each level file is populated with real, curated content: 8 grammar points
@@ -86,3 +91,32 @@ Hand-edit the JSON files directly, or write a small offline script that
 generates them — either way, validate against the TypeScript types in
 `src/types/` before committing. Nothing else in the app needs to change:
 pages and services already read through `contentLoader.ts`.
+
+## Conjugation / reference tables (`conjugation/`, added in Phase 5)
+
+`conjugation/contentLoader.ts` defines the same kind of typed,
+bundled-JSON-shaped accessor pattern as the grammar/questions loader above
+(`ConjugationTable`/`ConjugationRow`, see `src/types/conjugation.ts`), but
+its `CONJUGATION_TABLES` array is **deliberately empty** — no verb, noun,
+adjective, or plain/polite conjugation data was fabricated for this app.
+The file itself documents this in a comment. The Resources → Reference
+Tables UI (`/#/resources/conjugation`) is fully built against this loader
+and shows an honest "not yet available" state per category rather than a
+broken page. To populate it, provide real reference tables and add them to
+`CONJUGATION_TABLES` following the `ConjugationTable` shape — no other code
+needs to change.
+
+## Imported grammar is not in this directory
+
+Phase 5 added client-side XLSX import for grammar knowledge points. That
+imported content is **user data, not bundled content** — it's written to
+IndexedDB's `userGrammarEntries` store (`src/data/repositories/
+grammarImportRepository.ts`), the same way imported vocabulary is, and is
+never written into these JSON files. `src/content/importedGrammarCache.ts`
+is the one file in this directory that isn't purely-bundled content: it's
+an in-memory cache that merges the bundled `grammar/*.json` above with the
+user's IndexedDB `userGrammarEntries`, so the rest of the app (via
+`grammarLessonService`) can read "all grammar for this level" as one list
+without caring which half of it came from where. If you're looking for
+where a user's imported grammar actually lives, look in `src/data/`, not
+here.

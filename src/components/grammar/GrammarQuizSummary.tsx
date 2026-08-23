@@ -14,7 +14,8 @@ export function GrammarQuizSummary({ session, level }: { session: GrammarQuizSes
       </span>
       <h1 className="text-headline-lg">Quiz complete!</h1>
       <p style={{ color: 'var(--color-text-secondary)' }}>
-        {session.isDaily ? "Today's Daily Grammar Quiz" : `${level} practice`} — {stats.correct} / {total} correct
+        {session.isDaily ? "Today's Daily Grammar Quiz" : session.isMistakePractice ? 'Mistake Practice' : `${level} practice`} —{' '}
+        {stats.correct} / {total} correct
       </p>
       <div className="grammar-quiz__summary-stats">
         <span className="text-title-md" style={{ color: 'var(--color-primary)' }}>{`${accuracy}%`}</span>

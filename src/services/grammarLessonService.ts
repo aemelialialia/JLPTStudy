@@ -3,6 +3,7 @@ import { JLPT_LEVELS } from '../types/jlpt'
 import type { GrammarEntry, GrammarSlide } from '../types/grammar'
 import { buildGrammarSlides, grammarSlideId } from '../types/grammar'
 import { getGrammarForLevel, getGrammarEntryById } from '../content/contentLoader'
+import { getImportedGrammarSync, warmImportedGrammarCache } from '../content/importedGrammarCache'
 import { grammarProgressRepository } from '../data/repositories/grammarProgressRepository'
 
 export interface GrammarLevelProgressSummary {
@@ -22,17 +23,29 @@ export interface GrammarLevelProgressSummary {
  * layer.
  */
 export const grammarLessonService = {
+  /**
+   * Bundled (curated, read-only) points for the level plus any the user
+   * has imported via the Grammar XLSX importer (Phase 5), appended after
+   * the curated set. Imported points only show up once
+   * warmImportedGrammarCache() has resolved at least once — fires it
+   * fire-and-forget here so the cache is never left cold forever, but
+   * callers that need a guaranteed-fresh read on first render should
+   * also use useImportedGrammarReady() to force a re-render on warm.
+   */
   getGrammarPoints(level: JLPTLevel): GrammarEntry[] {
-    return getGrammarForLevel(level)
+    void warmImportedGrammarCache()
+    const imported = getImportedGrammarSync().filter((entry) => entry.level === level)
+    return [...getGrammarForLevel(level), ...imported]
   },
 
   getGrammarPoint(id: string): GrammarEntry | undefined {
-    return getGrammarEntryById(id)
+    void warmImportedGrammarCache()
+    return getGrammarEntryById(id) ?? getImportedGrammarSync().find((entry) => entry.id === id)
   },
 
-  /** All lesson slides for one grammar point, in order. Empty array if the id doesn't exist. */
+  /** All lesson slides for one grammar point (bundled or imported), in order. Empty array if the id doesn't exist. */
   getSlides(grammarPointId: string): GrammarSlide[] {
-    const entry = getGrammarEntryById(grammarPointId)
+    const entry = grammarLessonService.getGrammarPoint(grammarPointId)
     return entry ? buildGrammarSlides(entry) : []
   },
 
@@ -57,13 +70,13 @@ export const grammarLessonService = {
    * idempotent and never double-counts.
    */
   async markStudied(grammarPointId: string): Promise<void> {
-    const entry = getGrammarEntryById(grammarPointId)
+    const entry = grammarLessonService.getGrammarPoint(grammarPointId)
     if (!entry) return
     await grammarProgressRepository.markStudied(grammarPointId, entry.level)
   },
 
   async getLevelProgress(level: JLPTLevel): Promise<GrammarLevelProgressSummary> {
-    const points = getGrammarForLevel(level)
+    const points = grammarLessonService.getGrammarPoints(level)
     const progress = await grammarProgressRepository.getByLevel(level)
     const progressIds = new Set(progress.map((p) => p.grammarPointId))
     // Only count studied points that still exist in the current content

@@ -33,12 +33,14 @@ export interface GrammarQuizSession {
   isDaily: boolean
   /** ISO date (YYYY-MM-DD) this session counts as "today's" daily quiz for, when isDaily is true — lets the Dashboard know today's daily quiz is already done/in-progress without a separate lookup table. */
   dailyForDate: string | null
+  /** True for a Mistake Practice session (Phase 5 spec sections 6-7) — its questionIds are drawn from the level's Active mistakes, not the level's full question bank. Mutually exclusive with isDaily. Absent/false on sessions created before this mode existed. */
+  isMistakePractice: boolean
 }
 
 export function createGrammarQuizSessionRecord(
   level: JLPTLevel,
   questionIds: string[],
-  options: { isDaily?: boolean; dailyForDate?: string } = {},
+  options: { isDaily?: boolean; dailyForDate?: string; isMistakePractice?: boolean } = {},
 ): GrammarQuizSession {
   return {
     id: crypto.randomUUID(),
@@ -51,6 +53,7 @@ export function createGrammarQuizSessionRecord(
     status: 'active',
     isDaily: options.isDaily ?? false,
     dailyForDate: options.dailyForDate ?? null,
+    isMistakePractice: options.isMistakePractice ?? false,
   }
 }
 

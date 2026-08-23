@@ -47,6 +47,35 @@ export const grammarQuizSessionService = {
   },
 
   /**
+   * Builds and persists a Mistake Practice session (Phase 5 spec sections
+   * 6-7): every currently-Active (not yet Mastered) mistake for the
+   * level, shuffled, each question appearing at most once. Reuses this
+   * SAME session/answer/mastery machinery as every other quiz mode —
+   * `submitAnswer` below (via quizService.submitAnswer) is what actually
+   * updates the mistake records and lets a question become Mastered
+   * mid-session, exactly like it would during ordinary practice. Any
+   * existing active session for the level is abandoned first, same as
+   * startPracticeSession.
+   */
+  async startMistakePracticeSession(level: JLPTLevel): Promise<GrammarQuizSession> {
+    const existing = await grammarQuizSessionRepository.getActiveForLevel(level)
+    if (existing) await grammarQuizSessionRepository.update({ ...existing, status: 'abandoned' })
+
+    const activeMistakes = await quizRepository.getActiveMistakes(level)
+    // One entry per questionId is already guaranteed by quizRepository (a
+    // mistake record is keyed/deduped by questionId), so this is already
+    // duplicate-free — shuffled() just randomizes the session order.
+    const questionIds = shuffled(activeMistakes.map((m) => m.questionId))
+    if (questionIds.length === 0) {
+      throw new Error('No active mistakes to practice for this level — nice work!')
+    }
+
+    const session = createGrammarQuizSessionRecord(level, questionIds, { isMistakePractice: true })
+    await grammarQuizSessionRepository.create(session)
+    return session
+  },
+
+  /**
    * Returns today's Daily Grammar Quiz session for a level, creating one
    * if it doesn't exist yet today. The question set favors grammar
    * points with unmastered mistakes (spec section 9: "previously missed

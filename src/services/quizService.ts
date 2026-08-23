@@ -1,15 +1,21 @@
 import type { JLPTLevel } from '../types/jlpt'
 import type { GrammarQuestion } from '../types/question'
 import type { QuizAttempt, MistakeRecord } from '../types/quiz'
+import { MASTERY_STREAK_TARGET } from '../types/quiz'
 import { getQuestionsForLevel } from '../content/contentLoader'
 import { quizRepository } from '../data/repositories/quizRepository'
 import { shuffled } from '../utils/shuffle'
+import { nowISO } from '../utils/date'
 
 export interface AnswerResult {
   isCorrect: boolean
   correctAnswer: string
   explanation: string
   grammarPointId: string
+  /** True when this WRONG answer was just added to (or refreshed in) the Mistake Book — lets the quiz feedback screen confirm it (Phase 5 spec section 14). Always false for a correct answer. */
+  mistakeRecorded: boolean
+  /** True when this CORRECT answer just pushed a previously-Active mistake to Mastered (the 3rd consecutive correct answer). Undefined when not applicable. */
+  mistakeMastered?: boolean
 }
 
 /**
@@ -27,13 +33,29 @@ export const quizService = {
   },
 
   /**
-   * Validates a selected answer, records the attempt, and — when
-   * incorrect — creates or refreshes a Mistake Book record. Returns
-   * everything the UI needs for immediate feedback (correct answer +
-   * explanation), independent of how that feedback is displayed.
+   * Validates a selected answer, records the attempt, and updates the
+   * Mistake Book (Phase 5 spec sections 5-6) — the ONE place this
+   * happens, so it runs identically whether the question came from a
+   * level quiz, the Daily Grammar Quiz, or a Mistake Practice session.
+   *
+   * - Wrong answer: creates the mistake record on first miss, or
+   *   refreshes the SAME record (keyed by questionId — never a
+   *   duplicate) on a repeat miss. `timesWrong`/`lastWrongAt` always
+   *   advance; `consecutiveCorrect` resets to 0 and `mastered` resets to
+   *   false (Mastered -> Active), even if it was previously mastered.
+   * - Correct answer on a question with an existing, still-Active
+   *   mistake record: advances `timesCorrect`/`lastCorrectAt`/
+   *   `consecutiveCorrect`, and sets `mastered: true` once
+   *   `consecutiveCorrect` reaches MASTERY_STREAK_TARGET (3) — the whole
+   *   mastery rule, deliberately not spaced repetition. A correct answer
+   *   with no existing mistake record, or on an already-mastered one, is
+   *   just recorded as a QuizAttempt as usual.
+   *
+   * No mistake record is ever deleted here — history is permanent.
    */
   async submitAnswer(question: GrammarQuestion, selectedAnswer: string): Promise<AnswerResult> {
     const isCorrect = selectedAnswer === question.correctAnswer
+    const now = nowISO()
 
     const attempt: QuizAttempt = {
       id: crypto.randomUUID(),
@@ -42,14 +64,24 @@ export const quizService = {
       selectedAnswer,
       correctAnswer: question.correctAnswer,
       isCorrect,
-      timestamp: new Date().toISOString(),
+      timestamp: now,
     }
     await quizRepository.recordAttempt(attempt)
 
+    const existing = await quizRepository.getMistakeForQuestion(question.id)
+    let mistakeMastered: boolean | undefined
+
     if (!isCorrect) {
-      const existing = await quizRepository.getMistakeForQuestion(question.id)
       const mistake: MistakeRecord = existing
-        ? { ...existing, selectedAnswer, mastered: false }
+        ? {
+            ...existing,
+            selectedAnswer,
+            correctAnswer: question.correctAnswer,
+            timesWrong: existing.timesWrong + 1,
+            lastWrongAt: now,
+            consecutiveCorrect: 0,
+            mastered: false,
+          }
         : {
             id: crypto.randomUUID(),
             questionId: question.id,
@@ -57,11 +89,27 @@ export const quizService = {
             level: question.level,
             selectedAnswer,
             correctAnswer: question.correctAnswer,
-            createdAt: new Date().toISOString(),
-            reviewCount: 0,
+            createdAt: now,
+            timesWrong: 1,
+            lastWrongAt: now,
+            timesCorrect: 0,
+            lastCorrectAt: null,
+            consecutiveCorrect: 0,
             mastered: false,
           }
       await quizRepository.recordMistake(mistake)
+    } else if (existing && !existing.mastered) {
+      const consecutiveCorrect = existing.consecutiveCorrect + 1
+      const mastered = consecutiveCorrect >= MASTERY_STREAK_TARGET
+      const mistake: MistakeRecord = {
+        ...existing,
+        timesCorrect: existing.timesCorrect + 1,
+        lastCorrectAt: now,
+        consecutiveCorrect,
+        mastered,
+      }
+      await quizRepository.recordMistake(mistake)
+      mistakeMastered = mastered
     }
 
     return {
@@ -69,6 +117,8 @@ export const quizService = {
       correctAnswer: question.correctAnswer,
       explanation: question.explanation,
       grammarPointId: question.grammarPointId,
+      mistakeRecorded: !isCorrect,
+      mistakeMastered,
     }
   },
 
@@ -76,13 +126,8 @@ export const quizService = {
     return level ? quizRepository.getMistakesByLevel(level) : quizRepository.getMistakes()
   },
 
-  /** Call after the user re-answers a mistake correctly during Mistake Book review. */
-  async markMistakeMastered(mistakeId: string): Promise<void> {
-    await quizRepository.updateMastery(mistakeId, true)
-  },
-
-  /** Call after the user re-answers a mistake incorrectly during review — keeps it active. */
-  async markMistakeStillIncorrect(mistakeId: string): Promise<void> {
-    await quizRepository.updateMastery(mistakeId, false)
+  /** Active (not yet Mastered) mistakes for a level — the pool Mistake Practice sessions draw from. */
+  async getActiveMistakes(level: JLPTLevel): Promise<MistakeRecord[]> {
+    return quizRepository.getActiveMistakes(level)
   },
 }

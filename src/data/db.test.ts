@@ -14,6 +14,7 @@ describe('IndexedDB initialization', () => {
         'settings',
         'studySessions',
         'studyState',
+        'userGrammarEntries',
         'vocabulary',
       ].sort(),
     )

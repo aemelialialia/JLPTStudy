@@ -122,3 +122,70 @@
   flex-shrink: 0;
   color: var(--color-outline);
 }
+
+/* ---- Reference Tables / conjugation section (Phase 5) ---- */
+.conjugation-empty-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-tertiary-container);
+  color: var(--color-on-tertiary-container);
+}
+
+.conjugation-empty-banner .material-symbols-outlined {
+  flex-shrink: 0;
+}
+
+.conjugation-empty-banner p {
+  margin: 0;
+}
+
+.conjugation-category-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 480px) {
+  .conjugation-category-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.resource-card--conjugation {
+  background: var(--color-surface-container-low);
+  border: 1px solid var(--color-surface-dim);
+  color: var(--color-on-surface);
+}
+
+.resource-card--conjugation .resource-card__icon {
+  background: var(--color-tertiary-container);
+  color: var(--color-on-tertiary-container);
+}
+
+.resource-card--conjugation .resource-card__desc {
+  color: var(--color-text-secondary);
+  opacity: 1;
+}
+
+.conjugation-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-primary);
+  text-decoration: none;
+  margin-bottom: var(--space-2);
+}
+
+.conjugation-table-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.conjugation-table-card {
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-lowest);
+  box-shadow: var(--shadow-ambient);
+}

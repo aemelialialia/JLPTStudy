@@ -29,12 +29,6 @@
   }
 }
 
-.dashboard-side-stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-}
-
 /* ---- Daily Vocabulary Progress ---- */
 .dashboard-vocab-card {
   position: relative;

@@ -13,6 +13,8 @@ import { GrammarLessonPage } from './pages/GrammarLessonPage'
 import { GrammarQuizPage } from './pages/GrammarQuizPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { ResourcesPage } from './pages/ResourcesPage'
+import { ConjugationIndexPage } from './pages/ConjugationIndexPage'
+import { ConjugationCategoryPage } from './pages/ConjugationCategoryPage'
 import { LevelSelectionPage } from './pages/LevelSelectionPage'
 
 /**
@@ -40,6 +42,8 @@ export function App() {
           <Route path="/grammar/:level" element={<GrammarHubPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/resources" element={<ResourcesPage />} />
+          <Route path="/resources/conjugation" element={<ConjugationIndexPage />} />
+          <Route path="/resources/conjugation/:category" element={<ConjugationCategoryPage />} />
           <Route path="/levels" element={<LevelSelectionPage />} />
           <Route path="/mistakes" element={<MistakeBook />} />
           <Route path="/settings" element={<Settings />} />

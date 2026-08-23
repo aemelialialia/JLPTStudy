@@ -4,12 +4,15 @@ import '../components/resources/resources.css'
 /**
  * /resources — the Resources page (spec section 11, Stitch
  * `study_resources` screen). The Stitch prototype also mocks up a "Verb
- * Conjugation Table" and "Noun/Adjective Tables" card — neither exists
- * as a real feature in this app (no conjugation-table view has been
- * built), so per the no-dead-end-links principle used throughout this
- * project (e.g. Dashboard's Practice More row), they are omitted rather
- * than linking to a page that doesn't exist. Only real destinations —
- * Vocabulary, Grammar, and the official JLPT site — are shown.
+ * Conjugation Table" and "Noun/Adjective Tables" card. Phase 4 omitted
+ * these entirely (no such feature existed yet) per the no-dead-end-links
+ * principle used throughout this project (e.g. Dashboard's Practice More
+ * row). Phase 5 adds the real architecture for that section (routes,
+ * types, content loader, service — see src/types/conjugation.ts and
+ * src/content/conjugation/) but STILL has no actual table content to
+ * show, since inventing conjugation tables is explicitly out of scope —
+ * so the card below links to a real page that says so honestly, rather
+ * than either a dead link or fabricated content.
  */
 export function ResourcesPage() {
   return (
@@ -34,6 +37,14 @@ export function ResourcesPage() {
           </span>
           <h3 className="resource-card__title text-title-md">Grammar Collection</h3>
           <p className="resource-card__desc text-body-md">Detailed explanations and examples.</p>
+        </Link>
+
+        <Link to="/resources/conjugation" className="resource-card resource-card--conjugation spring-card squish-btn">
+          <span className="resource-card__icon">
+            <span className="material-symbols-outlined">sync_alt</span>
+          </span>
+          <h3 className="resource-card__title text-title-md">Reference Tables</h3>
+          <p className="resource-card__desc text-body-md">Verb, adjective, and noun conjugation references.</p>
         </Link>
 
         <a

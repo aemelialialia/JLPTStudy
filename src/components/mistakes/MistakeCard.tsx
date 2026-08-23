@@ -6,7 +6,11 @@ import { getQuestionById, getGrammarEntryById } from '../../content/contentLoade
 // same pragmatic reuse as VocabQuizPage's use of GrammarQuizOption.
 import '../grammar/grammar.css'
 
-/** One mistake: the question, what was answered vs. correct, and a link back to the grammar explanation. */
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
+/** One mistake: the question, what was answered vs. correct, wrong/correct-streak stats, mastery status, and a link back to the grammar explanation (Phase 5 spec section 19). */
 export function MistakeCard({ mistake }: { mistake: MistakeRecord }) {
   const question = getQuestionById(mistake.questionId)
   const grammarEntry = getGrammarEntryById(mistake.grammarPointId)
@@ -16,12 +20,27 @@ export function MistakeCard({ mistake }: { mistake: MistakeRecord }) {
   const reviewHref = `/grammar/lesson/${mistake.grammarPointId}?${params.toString()}`
 
   return (
-    <div className="mistake-card">
-      {grammarEntry && <p className="mistake-card__point text-label-sm">{grammarEntry.grammarPoint}</p>}
+    <div className={'mistake-card' + (mistake.mastered ? ' mistake-card--mastered' : '')}>
+      <div className="mistake-card__top">
+        {grammarEntry && <p className="mistake-card__point text-label-sm">{grammarEntry.grammarPoint}</p>}
+        <span className={'mistake-card__status' + (mistake.mastered ? ' mistake-card__status--mastered' : ' mistake-card__status--active')}>
+          <span className="material-symbols-outlined" data-fill="1" style={{ fontSize: 14 }}>
+            {mistake.mastered ? 'check_circle' : 'radio_button_unchecked'}
+          </span>
+          {mistake.mastered ? 'Mastered' : 'Active'}
+        </span>
+      </div>
       <p className="mistake-card__question text-body-md">{question?.questionText ?? 'Question no longer available'}</p>
       <div className="mistake-card__answers">
-        <span className="mistake-card__answer--wrong">{`Your answer: ${mistake.selectedAnswer}`}</span>
+        <span className="mistake-card__answer--wrong">{`Your last answer: ${mistake.selectedAnswer}`}</span>
         <span className="mistake-card__answer--correct">{`Correct answer: ${mistake.correctAnswer}`}</span>
+      </div>
+      <div className="mistake-card__stats text-label-sm">
+        <span>{`Wrong ${mistake.timesWrong}× · last ${formatDate(mistake.lastWrongAt)}`}</span>
+        {mistake.timesCorrect > 0 && <span>{`Correct ${mistake.timesCorrect}×`}</span>}
+        {!mistake.mastered && mistake.consecutiveCorrect > 0 && (
+          <span>{`${mistake.consecutiveCorrect}/3 in a row to master`}</span>
+        )}
       </div>
       <div className="mistake-card__footer">
         <Link to={reviewHref} className="grammar-quiz__review-link squish-btn">
@@ -30,14 +49,6 @@ export function MistakeCard({ mistake }: { mistake: MistakeRecord }) {
           </span>
           Review this grammar
         </Link>
-        {mistake.mastered && (
-          <span className="mistake-card__mastered">
-            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>
-              check_circle
-            </span>
-            Mastered
-          </span>
-        )}
       </div>
     </div>
   )

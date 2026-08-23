@@ -1,5 +1,6 @@
 import { getDB } from '../db'
 import type { QuizAttempt, MistakeRecord } from '../../types/quiz'
+import { normalizeMistakeRecord } from '../../types/quiz'
 import type { JLPTLevel } from '../../types/jlpt'
 
 /**
@@ -35,37 +36,26 @@ export const quizRepository = {
 
   async getMistakes(): Promise<MistakeRecord[]> {
     const db = await getDB()
-    return db.getAll('mistakes')
+    const all = await db.getAll('mistakes')
+    return all.map(normalizeMistakeRecord)
   },
 
   async getMistakesByLevel(level: JLPTLevel): Promise<MistakeRecord[]> {
     const db = await getDB()
-    return db.getAllFromIndex('mistakes', 'by-level', level)
+    const all = await db.getAllFromIndex('mistakes', 'by-level', level)
+    return all.map(normalizeMistakeRecord)
   },
 
   async getMistakeForQuestion(questionId: string): Promise<MistakeRecord | undefined> {
-    const all = await quizRepository.getMistakes()
-    return all.find((m) => m.questionId === questionId)
+    const db = await getDB()
+    const all = await db.getAll('mistakes')
+    const found = all.find((m) => m.questionId === questionId)
+    return found ? normalizeMistakeRecord(found) : undefined
   },
 
-  /**
-   * Updates (or creates) the mastery state for a mistake. Called with
-   * `mastered: true` once the user has since answered the question
-   * correctly enough times to consider it resolved.
-   */
-  async updateMastery(id: string, mastered: boolean): Promise<void> {
-    const db = await getDB()
-    const existing = await db.get('mistakes', id)
-    if (!existing) return
-    await db.put('mistakes', {
-      ...existing,
-      mastered,
-      reviewCount: existing.reviewCount + 1,
-    })
-  },
-
-  async deleteMistake(id: string): Promise<void> {
-    const db = await getDB()
-    await db.delete('mistakes', id)
+  /** Every Active (not yet Mastered) mistake, optionally scoped to a level — the pool Mistake Practice sessions draw from. */
+  async getActiveMistakes(level?: JLPTLevel): Promise<MistakeRecord[]> {
+    const all = level ? await quizRepository.getMistakesByLevel(level) : await quizRepository.getMistakes()
+    return all.filter((m) => !m.mastered)
   },
 }
