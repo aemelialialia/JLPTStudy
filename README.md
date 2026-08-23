@@ -4,10 +4,13 @@ A personal, local-first Japanese JLPT (N5–N2) study tool. Static site, no
 backend, no account — all study data lives in your browser's IndexedDB.
 Deployable for free on GitHub Pages.
 
-This is the **technical foundation** step: routing, data layer, content
-layer, and design tokens are in place, but the real Stitch-designed UI has
-not been implemented yet. Placeholder pages exist only to verify the
-foundation works end to end.
+**Phase 1** built the technical foundation (routing, data layer, content
+layer, design tokens). **Phase 2** (this step) adds a real, working
+vocabulary import and database system — XLSX import, IndexedDB storage,
+search/filter, and study-state tracking — behind a deliberately barebone
+UI. The real Stitch-designed UI has not been implemented yet; every screen
+you see is functional but disposable, built only to prove the data layer
+works end to end.
 
 ## Stack
 
@@ -23,14 +26,15 @@ No state management library, CSS framework, or backend framework was added — s
 
 ```
 src/
-  types/          Domain models (VocabularyItem, StudyState, GrammarEntry, GrammarQuestion, Quiz, Settings)
+  types/           Domain models (VocabularyItem, StudyState, vocabularyImport types, GrammarEntry, GrammarQuestion, Quiz, Settings)
   content/         Curated static content (grammar + questions), bundled JSON, per JLPT level. Read-only.
-  data/            IndexedDB layer: db.ts (schema) + repositories/ (all reads/writes)
-  services/        Framework-agnostic business logic (XLSX import, vocab learning, quiz, export/import)
-  hooks/           Thin React bindings from services/repositories to components
+  data/            IndexedDB layer: db.ts (schema) + repositories/ (all reads/writes — the only files that touch IndexedDB)
+  services/        Framework-agnostic business logic (XLSX import/validation, vocab learning, quiz, export/import)
+  hooks/           Thin React bindings from services/repositories to components (useVocabularyList, useVocabularyImport, useVocabularyDetail, ...)
   theme/           Design tokens (tokens.css + tokens.ts) — not final visual identity
-  components/      Presentational components (layout shell, nav, generic StatCard)
-  pages/           Placeholder routed pages (Dashboard, LevelPage, MistakeBook, Settings)
+  components/      Presentational components (layout shell, nav, generic StatCard, vocabulary/ — the Phase 2 barebone import/list/detail UI)
+  pages/           Routed pages (Dashboard, LevelPage — now the vocabulary manager, MistakeBook, Settings)
+  integration/     End-to-end tests that drive the real rendered UI through the full import → study-state → re-import → cross-level-isolation workflow
   App.tsx          Route table
   main.tsx         Entry point
 ```
@@ -55,6 +59,45 @@ automatically on push to `main`, via `actions/upload-pages-artifact` +
 the repo settings once this is pushed). `vite.config.ts` uses `base: './'`
 (relative), so the same build works whether Pages serves it from the repo
 root or a `/repo-name/` subpath — no repo name is hard-coded anywhere.
+
+## Vocabulary import
+
+Vocabulary is imported from `.xlsx` files with exactly four required
+columns (any column order, header matching is whitespace/case-insensitive):
+
+| Column           | Meaning                                                              |
+| ---------------- | --------------------------------------------------------------------- |
+| `Vocab`          | The word as normally written — kanji included where applicable. Single field; never split into separate kanji/kana fields. |
+| `Reading`        | The complete hiragana reading, used exactly as supplied. Never generated, inferred, or modified beyond trimming whitespace. |
+| `Meaning`        | English meaning/definition.                                          |
+| `Part of Speech` | e.g. Noun, Verb, い-adjective, な-adjective, Particle, ...             |
+
+No other columns are required or read. A missing required column fails
+fast with a clear error naming it; unrelated column names are never
+fuzzy-matched to a required one.
+
+**Flow:** pick a file → pick a JLPT level → the file is parsed and
+validated entirely in the browser (it is never uploaded anywhere) → a
+preview shows level, filename, row counts (valid/invalid/duplicate-in-file/
+new/existing), and a sample table → nothing is written to IndexedDB until
+you click Confirm.
+
+**Validation:** blank rows are silently skipped (not errors). A row
+missing a required field is reported by row number and the specific
+missing field(s) (e.g. `Row 3: Missing Reading, Missing Part of Speech`)
+and excluded from the import — one bad row never aborts the rest.
+
+**Duplicates & re-import:** a vocabulary item's identity is `level + Vocab
++ Reading` — never meaning alone, since two different words can share an
+English gloss. Re-importing a word that already exists updates its content
+fields (if changed) but always preserves its database id, study state, and
+full review history; memorization progress is never reset by a re-import.
+
+**Atomicity:** each import commits through a single IndexedDB
+read-write transaction across the vocabulary and study-state stores. A
+failure partway through aborts and rolls back the whole transaction rather
+than leaving a partial write — verified with dedicated tests that force a
+mid-import failure and assert the database is unchanged afterward.
 
 ## Data & content
 

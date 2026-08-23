@@ -13,13 +13,13 @@ describe('IndexedDB initialization', () => {
     const db = await getDB()
     await db.put('vocabulary', {
       id: 'v1',
-      japanese: 'ねこ',
-      kanji: '猫',
-      kana: 'ねこ',
+      level: 'N5',
+      vocab: '猫',
+      reading: 'ねこ',
       meaning: 'cat',
       partOfSpeech: 'noun',
-      level: 'N5',
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     })
 
     // Force a brand new connection, as if the app were reloaded.

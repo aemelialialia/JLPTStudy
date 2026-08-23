@@ -5,15 +5,16 @@ import { studyStateRepository } from '../data/repositories/studyStateRepository'
 import type { VocabularyItem } from '../types/vocabulary'
 
 function makeWord(id: string): VocabularyItem {
+  const now = new Date().toISOString()
   return {
     id,
-    japanese: id,
-    kanji: '',
-    kana: id,
-    meaning: `meaning-${id}`,
-    partOfSpeech: 'noun',
     level: 'N5',
-    createdAt: new Date().toISOString(),
+    vocab: id,
+    reading: id,
+    meaning: `meaning-${id}`,
+    partOfSpeech: 'Noun',
+    createdAt: now,
+    updatedAt: now,
   }
 }
 

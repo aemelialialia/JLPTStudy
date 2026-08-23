@@ -1,0 +1,193 @@
+/*
+ * Deliberately barebone styling shared by every Phase 2 vocabulary
+ * component. This exists only to make the temporary UI usable for
+ * testing on iPhone/iPad/desktop — clear labels, basic spacing, readable
+ * type, touch-sized controls. It is NOT the Stitch visual design and is
+ * expected to be thrown away wholesale when that arrives; nothing here
+ * is referenced by any business logic.
+ */
+
+.vocab-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+
+.vocab-field label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.vocab-field select,
+.vocab-field input[type='text'],
+.vocab-field input[type='search'] {
+  min-height: var(--touch-target-min);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+}
+
+.vocab-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: flex-end;
+  margin-bottom: var(--space-4);
+}
+
+.vocab-toolbar .vocab-field {
+  margin-bottom: 0;
+  min-width: 140px;
+  flex: 1 1 140px;
+}
+
+.vocab-button {
+  min-height: var(--touch-target-min);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+}
+
+.vocab-button--primary {
+  background: var(--color-accent-500);
+  border-color: var(--color-accent-500);
+  color: var(--color-text-inverse);
+}
+
+.vocab-button--danger {
+  border-color: var(--color-danger-500);
+  color: var(--color-danger-500);
+}
+
+.vocab-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.vocab-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.vocab-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.vocab-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+  font-size: var(--font-size-sm);
+}
+
+.vocab-table th,
+.vocab-table td {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  white-space: normal;
+  word-break: break-word;
+}
+
+.vocab-table th {
+  background: var(--color-bg);
+  position: sticky;
+  top: 0;
+}
+
+.vocab-table tbody tr {
+  cursor: pointer;
+  min-height: var(--touch-target-min);
+}
+
+.vocab-table tbody tr:active,
+.vocab-table tbody tr:focus-visible {
+  background: var(--color-accent-50);
+}
+
+.vocab-status-badge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  background: var(--color-neutral-100);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.vocab-status-badge--memorized {
+  background: var(--color-success-100);
+  color: var(--color-success-500);
+}
+
+.vocab-status-badge--learning {
+  background: var(--color-warning-100);
+  color: var(--color-warning-500);
+}
+
+.vocab-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  background: var(--color-surface);
+}
+
+.vocab-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+
+.vocab-error-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--color-danger-500);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-danger-100);
+  font-size: var(--font-size-sm);
+  margin: var(--space-3) 0;
+}
+
+.vocab-error-list li {
+  list-style: none;
+  margin-bottom: var(--space-1);
+}
+
+.vocab-detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.vocab-detail-row dt {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.vocab-detail-row dd {
+  margin: 0;
+  text-align: right;
+}
+
+.vocab-empty {
+  padding: var(--space-6) var(--space-3);
+  text-align: center;
+  color: var(--color-text-secondary);
+}

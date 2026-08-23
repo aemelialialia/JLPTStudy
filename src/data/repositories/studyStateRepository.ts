@@ -85,6 +85,19 @@ export const studyStateRepository = {
     return updated
   },
 
+  /**
+   * Explicitly sets status to "learning" without touching counters/dates —
+   * a direct status-only transition (unlike `recordCorrect`, which only
+   * *promotes* new -> learning as a side effect of an answer). Exposed as
+   * a Phase 2 test control ("Mark Learning") and reusable by Phase 3.
+   */
+  async markLearning(vocabularyId: string): Promise<VocabularyStudyState> {
+    const state = await studyStateRepository.getOrCreate(vocabularyId)
+    const updated: VocabularyStudyState = { ...state, status: 'learning' }
+    await studyStateRepository.upsert(updated)
+    return updated
+  },
+
   /** Resets a word back to "learning" with fresh counters — starts a new review cycle for it. */
   async resetForReview(vocabularyId: string): Promise<VocabularyStudyState> {
     const updated: VocabularyStudyState = {
@@ -96,6 +109,13 @@ export const studyStateRepository = {
       lastReviewed: null,
       dateMemorized: null,
     }
+    await studyStateRepository.upsert(updated)
+    return updated
+  },
+
+  /** Full reset back to "new" with fresh counters — the Phase 2 "Reset Status" test control. */
+  async resetToNew(vocabularyId: string): Promise<VocabularyStudyState> {
+    const updated = createInitialStudyState(vocabularyId)
     await studyStateRepository.upsert(updated)
     return updated
   },

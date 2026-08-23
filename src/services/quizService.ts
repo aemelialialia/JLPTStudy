@@ -3,15 +3,7 @@ import type { GrammarQuestion } from '../types/question'
 import type { QuizAttempt, MistakeRecord } from '../types/quiz'
 import { getQuestionsForLevel } from '../content/contentLoader'
 import { quizRepository } from '../data/repositories/quizRepository'
-
-function shuffled<T>(items: readonly T[]): T[] {
-  const result = [...items]
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[result[i], result[j]] = [result[j], result[i]]
-  }
-  return result
-}
+import { shuffled } from '../utils/shuffle'
 
 export interface AnswerResult {
   isCorrect: boolean

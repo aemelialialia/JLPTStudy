@@ -13,16 +13,6 @@ export interface LevelProgressSummary {
   memorized: number
 }
 
-/** Fisher-Yates shuffle. Never mutates the input array. */
-function shuffled<T>(items: readonly T[]): T[] {
-  const result = [...items]
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[result[i], result[j]] = [result[j], result[i]]
-  }
-  return result
-}
-
 /**
  * Framework-agnostic vocabulary study logic: which words go into a
  * session, how progress is recorded, and when a level counts as "done".
@@ -34,24 +24,18 @@ export const vocabularyLearningService = {
   /**
    * Builds a study session: `count` words from `level`, chosen at random,
    * excluding already-memorized words by default. If fewer than `count`
-   * eligible words exist, returns as many as are available.
+   * eligible words exist, returns as many as are available. This is
+   * exactly the "get N random level vocabulary where status != memorized"
+   * operation Phase 3's flashcard session builder needs — the random
+   * selection itself lives in vocabularyRepository.getRandomCandidates,
+   * this just forwards to it with session-appropriate defaults.
    */
   async selectStudySession(
     level: JLPTLevel,
     count: SessionSize,
     options: { excludeMemorized?: boolean } = {},
   ): Promise<VocabularyItem[]> {
-    const excludeMemorized = options.excludeMemorized ?? true
-    const words = await vocabularyRepository.getByLevel(level)
-
-    let pool = words
-    if (excludeMemorized) {
-      const states = await studyStateRepository.getAll()
-      const statusById = new Map(states.map((s) => [s.vocabularyId, s.status]))
-      pool = words.filter((word) => statusById.get(word.id) !== 'memorized')
-    }
-
-    return shuffled(pool).slice(0, count)
+    return vocabularyRepository.getRandomCandidates(level, count, options)
   },
 
   /** Records the outcome of showing one word once during a session. */

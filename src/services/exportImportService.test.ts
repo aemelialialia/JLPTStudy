@@ -7,13 +7,13 @@ import type { VocabularyItem } from '../types/vocabulary'
 
 const word: VocabularyItem = {
   id: 'w1',
-  japanese: 'ねこ',
-  kanji: '猫',
-  kana: 'ねこ',
-  meaning: 'cat',
-  partOfSpeech: 'noun',
   level: 'N5',
+  vocab: '猫',
+  reading: 'ねこ',
+  meaning: 'cat',
+  partOfSpeech: 'Noun',
   createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 }
 
 describe('exportImportService', () => {
