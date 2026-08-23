@@ -61,6 +61,15 @@ root or a `/repo-name/` subpath — no repo name is hard-coded anywhere.
 - **IndexedDB** (`src/data/`) holds everything the user generates: imported vocabulary, memorization/study state, quiz attempts, mistakes, settings.
 - **`src/content/`** holds curated, bundled JSON (grammar notes + grammar questions), organized per level. It ships empty in this step — see `src/content/README.md` for the schema and how to add real content later.
 
+## Requirements
+
+Node **>= 22** (see `engines` in `package.json`). `jsdom`'s Cache Storage
+API (pulled in transitively via `undici`, used by the test environment)
+calls `worker_threads.markAsUncloneable`, which doesn't exist before Node
+21 — on Node 20 this fails with `webidl.util.markAsUncloneable is not a
+function` when the test suite starts. The GitHub Actions workflow is
+pinned to Node 22 for this reason; run the same version locally to match CI.
+
 ## Known accepted risk
 
 `xlsx` (SheetJS) is pulled from the public npm registry rather than
