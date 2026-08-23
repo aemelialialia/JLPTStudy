@@ -45,21 +45,38 @@ export const studyStateRepository = {
     return db.getAllFromIndex('studyState', 'by-status', status)
   },
 
-  /** Records a correct answer: increments counters and may promote status. */
+  /**
+   * Records a correct answer and advances status per the Phase 3
+   * two-stage memorization rule (spec sections 9/10):
+   *   new -> learning (a single correct answer is never permanent mastery)
+   *   learning -> memorized (a *second* stage of correct answers is required)
+   *   memorized -> memorized (already there; no change)
+   */
   async recordCorrect(vocabularyId: string): Promise<VocabularyStudyState> {
     const state = await studyStateRepository.getOrCreate(vocabularyId)
+    const nextStatus: MemorizationStatus = state.status === 'new' ? 'learning' : 'memorized'
     const updated: VocabularyStudyState = {
       ...state,
       timesSeen: state.timesSeen + 1,
       timesCorrect: state.timesCorrect + 1,
       lastReviewed: nowISO(),
-      status: state.status === 'new' ? 'learning' : state.status,
+      status: nextStatus,
+      dateMemorized: nextStatus === 'memorized' && state.status !== 'memorized' ? nowISO() : state.dateMemorized,
     }
     await studyStateRepository.upsert(updated)
     return updated
   },
 
-  /** Records an incorrect answer: increments counters, demotes out of "memorized" if needed. */
+  /**
+   * Records an incorrect answer per the same rule set — every status lands
+   * on "learning" after a miss:
+   *   new -> learning (a miss still means "now being actively learned")
+   *   learning -> learning (stays in the pool, no further demotion possible)
+   *   memorized -> learning (recovers a word the user thought they knew —
+   *   spec section 9's explicit "memorized -> learning" recovery path)
+   * History (timesSeen/timesCorrect/timesIncorrect/lastReviewed) is never
+   * reset by this — only dateMemorized clears when demoted out of memorized.
+   */
   async recordIncorrect(vocabularyId: string): Promise<VocabularyStudyState> {
     const state = await studyStateRepository.getOrCreate(vocabularyId)
     const updated: VocabularyStudyState = {
@@ -67,7 +84,7 @@ export const studyStateRepository = {
       timesSeen: state.timesSeen + 1,
       timesIncorrect: state.timesIncorrect + 1,
       lastReviewed: nowISO(),
-      status: state.status === 'memorized' ? 'learning' : state.status,
+      status: 'learning',
       dateMemorized: state.status === 'memorized' ? null : state.dateMemorized,
     }
     await studyStateRepository.upsert(updated)
@@ -98,15 +115,20 @@ export const studyStateRepository = {
     return updated
   },
 
-  /** Resets a word back to "learning" with fresh counters — starts a new review cycle for it. */
+  /**
+   * Moves a memorized word back into "learning" to start a review cycle
+   * (Phase 3 spec section 16). Unlike a full reset, this deliberately
+   * preserves timesSeen/timesCorrect/timesIncorrect/lastReviewed — the
+   * spec is explicit that a review cycle must not erase historical
+   * statistics, only re-open the word for further practice. Only
+   * dateMemorized clears, since the word is no longer (currently)
+   * memorized — consistent with how recordIncorrect demotes a word.
+   */
   async resetForReview(vocabularyId: string): Promise<VocabularyStudyState> {
+    const state = await studyStateRepository.getOrCreate(vocabularyId)
     const updated: VocabularyStudyState = {
-      vocabularyId,
+      ...state,
       status: 'learning',
-      timesSeen: 0,
-      timesCorrect: 0,
-      timesIncorrect: 0,
-      lastReviewed: null,
       dateMemorized: null,
     }
     await studyStateRepository.upsert(updated)

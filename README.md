@@ -5,12 +5,16 @@ backend, no account — all study data lives in your browser's IndexedDB.
 Deployable for free on GitHub Pages.
 
 **Phase 1** built the technical foundation (routing, data layer, content
-layer, design tokens). **Phase 2** (this step) adds a real, working
-vocabulary import and database system — XLSX import, IndexedDB storage,
-search/filter, and study-state tracking — behind a deliberately barebone
-UI. The real Stitch-designed UI has not been implemented yet; every screen
-you see is functional but disposable, built only to prove the data layer
-works end to end.
+layer, design tokens). **Phase 2** added a real, working vocabulary import
+and database system — XLSX import, IndexedDB storage, search/filter, and
+study-state tracking. **Phase 3** (this step) adds the vocabulary study /
+flashcard system on top of that same data: daily session setup, flip
+flashcards, correct/incorrect grading, new → learning → memorized
+progression, session persistence/resume, level completion, and review
+cycles. Every screen across all three phases is deliberately barebone —
+functional, not final. The real Stitch-designed UI has not been
+implemented yet; these screens exist only to prove the underlying data
+layer and study engine work end to end.
 
 ## Stack
 
@@ -26,15 +30,15 @@ No state management library, CSS framework, or backend framework was added — s
 
 ```
 src/
-  types/           Domain models (VocabularyItem, StudyState, vocabularyImport types, GrammarEntry, GrammarQuestion, Quiz, Settings)
+  types/           Domain models (VocabularyItem, StudyState, StudySession, vocabularyImport types, GrammarEntry, GrammarQuestion, Quiz, Settings)
   content/         Curated static content (grammar + questions), bundled JSON, per JLPT level. Read-only.
-  data/            IndexedDB layer: db.ts (schema) + repositories/ (all reads/writes — the only files that touch IndexedDB)
-  services/        Framework-agnostic business logic (XLSX import/validation, vocab learning, quiz, export/import)
-  hooks/           Thin React bindings from services/repositories to components (useVocabularyList, useVocabularyImport, useVocabularyDetail, ...)
+  data/            IndexedDB layer: db.ts (schema) + repositories/ (all reads/writes — the only files that touch IndexedDB, including studySessionRepository)
+  services/        Framework-agnostic business logic (XLSX import/validation, vocab learning, studySessionService — the flashcard engine, quiz, export/import)
+  hooks/           Thin React bindings from services/repositories to components (useVocabularyList, useVocabularyImport, useVocabularyDetail, useVocabularyStudy, ...)
   theme/           Design tokens (tokens.css + tokens.ts) — not final visual identity
-  components/      Presentational components (layout shell, nav, generic StatCard, vocabulary/ — the Phase 2 barebone import/list/detail UI)
-  pages/           Routed pages (Dashboard, LevelPage — now the vocabulary manager, MistakeBook, Settings)
-  integration/     End-to-end tests that drive the real rendered UI through the full import → study-state → re-import → cross-level-isolation workflow
+  components/      Presentational components (layout shell, nav, generic StatCard, vocabulary/ — Phase 2's import/list/detail UI, study/ — Phase 3's flashcard/session UI)
+  pages/           Routed pages (Dashboard, LevelPage — vocabulary manager, StudyIndexPage/StudyPage — the flashcard flow, MistakeBook, Settings)
+  integration/     End-to-end tests that drive the real rendered UI through the full import/study workflows (vocabularyWorkflow.test.tsx, studyWorkflow.test.tsx)
   App.tsx          Route table
   main.tsx         Entry point
 ```
@@ -98,6 +102,73 @@ read-write transaction across the vocabulary and study-state stores. A
 failure partway through aborts and rolls back the whole transaction rather
 than leaving a partial write — verified with dedicated tests that force a
 mid-import failure and assert the database is unchanged afterward.
+
+## Vocabulary study (flashcards)
+
+The Study screens (`/#/study`, `/#/study/:level`) turn the Phase 2
+vocabulary database into a daily flashcard workflow. All of the logic below
+lives in `studySessionService` + the repositories underneath it — the
+components in `src/components/study/` only render whatever phase the
+`useVocabularyStudy` hook reports; none of them talk to IndexedDB directly.
+
+**Setup:** picking a level shows real, live stats for that level (Total /
+Memorized / Learning / New — never hard-coded). A level with no imported
+vocabulary shows an empty-state message with a link back to import, never a
+broken flashcard screen. You then pick a daily amount (10 / 15 / 20); if
+fewer eligible words exist than that, the session simply uses all of them —
+words are never duplicated to pad the count.
+
+**Selection & rotation:** eligible words are anything not currently marked
+`memorized`. Candidates are shuffled first (for genuine randomness), then
+stable-sorted so words seen fewer times, and words reviewed longest ago (or
+never), are preferred — a simple exposure/recency heuristic, not spaced
+repetition. This is what keeps the daily set rotating through the whole
+level instead of always surfacing the same handful of words. A session's
+word list is fixed the moment it's created; refreshing or navigating away
+never silently swaps it out.
+
+**Flashcard & grading:** the front shows the Vocab only; flipping (via the
+Flip button or by tapping/clicking the card itself) reveals the Reading
+(used exactly as imported), Meaning, and Part of Speech. Correct/Incorrect
+controls only appear after the flip, so a word can never be graded unseen.
+Every answer immediately records `Times Seen +1`, plus `Times Correct +1` or
+`Times Incorrect +1`, sets `Last Reviewed = now`, and updates status —
+without ever resetting a word's history.
+
+**Memorization progression** is a deliberate two-stage state machine (no
+spaced-repetition scheduling in this phase):
+
+| Current status | Correct       | Incorrect  |
+| --------------- | ------------- | ---------- |
+| New              | → Learning    | → Learning |
+| Learning         | → Memorized   | → Learning |
+| Memorized        | stays Memorized | → Learning (recovery) |
+
+A single correct answer on a never-studied word is never treated as
+mastery — it takes New → correct → Learning → correct → Memorized.
+
+**Session progress & completion:** the on-screen "N / total" count and bar
+only advance once a card is answered (flipping alone doesn't count it). The
+end-of-session screen reports the actual studied/correct/incorrect counts
+for that session plus the level's real Memorized-X/Y progress, with buttons
+to review just the words missed in that session or return to the level.
+
+**Level completion & review cycles:** once every word in a level is
+Memorized, the Study screen shows a completion banner instead of an empty
+or broken setup screen. Starting a review cycle from there makes previously
+memorized words eligible again — their full history (Times Seen/Correct/
+Incorrect, Last Reviewed) is preserved, not wiped, so review-cycle stats
+build on top of the original ones rather than starting over.
+
+**Session persistence:** an in-progress session (id, level, target count,
+word list, current position, answers so far, start time, status) is written
+to a dedicated `studySessions` IndexedDB store as you go, not just at the
+end. Closing the tab, locking the phone, or refreshing mid-session never
+discards it — returning to that level's Study screen detects the
+unfinished session and offers **Continue** or **Start New Session**
+(discarding it explicitly starts a fresh one; nothing is ever silently
+restarted). The same engine and store serve N5/N4/N3/N2 identically, keyed
+only by `level` — there is no per-level code duplication.
 
 ## Data & content
 

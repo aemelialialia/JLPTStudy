@@ -108,11 +108,16 @@ export const vocabularyRepository = {
   },
 
   /**
-   * Random selection for a study session, optionally excluding already-
-   * memorized words. This is the "Get N random level vocabulary where
-   * status != memorized" operation Phase 3's flashcard session builder
-   * needs — the random-selection logic lives here, not in any UI/session
-   * component, so Phase 3 can call it directly.
+   * Selection for a study session: "N vocabulary from a level where
+   * status != memorized" (Phase 2 spec), with Phase 3's daily-rotation
+   * rule layered on top (spec section 14) — among eligible words, prefer
+   * ones with lower `timesSeen` and an older (or null/never) `lastReviewed`
+   * before falling back to plain randomness. This is a deliberately simple
+   * heuristic, not spaced repetition: the eligible pool is shuffled first
+   * (so words with equal priority — e.g. every never-studied "new" word —
+   * come back in a different order each time), then stably sorted by
+   * priority, so a session naturally surfaces less-seen/longer-untouched
+   * words first without ever being fully deterministic.
    */
   async getRandomCandidates(
     level: JLPTLevel,
@@ -121,15 +126,27 @@ export const vocabularyRepository = {
   ): Promise<VocabularyItem[]> {
     const excludeMemorized = options.excludeMemorized ?? true
     const words = await vocabularyRepository.getByLevel(level)
+    const states = await studyStateRepository.getAll()
+    const stateById = new Map(states.map((s) => [s.vocabularyId, s]))
 
-    let pool = words
-    if (excludeMemorized) {
-      const states = await studyStateRepository.getAll()
-      const statusById = new Map(states.map((s) => [s.vocabularyId, s.status]))
-      pool = words.filter((word) => statusById.get(word.id) !== 'memorized')
-    }
+    const pool = excludeMemorized
+      ? words.filter((word) => stateById.get(word.id)?.status !== 'memorized')
+      : words
 
-    return shuffled(pool).slice(0, count)
+    const prioritized = shuffled(pool)
+      .map((word) => {
+        const state = stateById.get(word.id)
+        return {
+          word,
+          timesSeen: state?.timesSeen ?? 0,
+          // Never-reviewed words sort as if reviewed at time 0 — i.e. the
+          // oldest possible — so they're preferred over ones seen recently.
+          lastReviewedAt: state?.lastReviewed ? Date.parse(state.lastReviewed) : 0,
+        }
+      })
+      .sort((a, b) => a.timesSeen - b.timesSeen || a.lastReviewedAt - b.lastReviewedAt)
+
+    return prioritized.slice(0, count).map((entry) => entry.word)
   },
 
   async add(item: VocabularyItem): Promise<void> {

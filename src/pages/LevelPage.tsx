@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { isJLPTLevel } from '../types/jlpt'
 import type { JLPTLevel } from '../types/jlpt'
 import { useLevelProgress } from '../hooks/useLevelProgress'
@@ -78,6 +78,9 @@ export function LevelPage() {
 
       <div className="vocab-toolbar">
         <LevelSelector value={level} onChange={handleLevelChange} />
+        <Link to={`/study/${level}`} className="vocab-button vocab-button--primary">
+          Study {level}
+        </Link>
       </div>
 
       {progress && (

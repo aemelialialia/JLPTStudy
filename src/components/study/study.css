@@ -1,0 +1,274 @@
+/*
+ * Deliberately barebone styling for the Phase 3 flashcard/study UI —
+ * same philosophy as src/components/vocabulary/vocabulary.css: exists
+ * only to make this testable on iPhone/iPad/desktop (large touch
+ * targets, no hover-only interactions, readable type, visible progress),
+ * NOT the Stitch visual design. Safe to delete wholesale later; nothing
+ * here is referenced by any business logic.
+ */
+
+.study-screen {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.study-back-link {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* ---- Setup / picker screens ---- */
+
+.study-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+}
+
+.study-amount-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.study-amount-button {
+  flex: 1 1 80px;
+  min-height: var(--touch-target-min);
+  min-width: 72px;
+  padding: var(--space-3);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.study-amount-button:hover,
+.study-amount-button:focus-visible {
+  border-color: var(--color-accent-500);
+}
+
+.study-level-list {
+  list-style: none;
+  margin: var(--space-3) 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.study-level-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--touch-target-min);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.study-level-row__label {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.study-level-row__detail {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: right;
+}
+
+/* ---- Resume prompt / empty / complete banners ---- */
+
+.study-banner {
+  text-align: center;
+  padding: var(--space-6) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  margin: var(--space-4) 0;
+}
+
+.study-banner--celebration {
+  border-color: var(--color-success-500);
+  background: var(--color-success-100);
+}
+
+.study-banner h2 {
+  margin-top: 0;
+}
+
+/* ---- Progress ---- */
+
+.study-progress {
+  margin-bottom: var(--space-4);
+}
+
+.study-progress__label {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+.study-progress__track {
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-neutral-100);
+  overflow: hidden;
+}
+
+.study-progress__fill {
+  height: 100%;
+  background: var(--color-accent-500);
+  border-radius: var(--radius-full);
+  transition: width 0.2s ease;
+}
+
+/* ---- Flashcard ---- */
+
+.study-flashcard {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  padding: var(--space-6) var(--space-4);
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.study-flashcard:focus-visible {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.study-flashcard__vocab {
+  font-family: var(--font-family-japanese);
+  font-size: var(--font-size-jp-xl);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.study-flashcard__hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.study-flashcard__back-fields {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.study-flashcard__field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.study-flashcard__field-label {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+
+.study-flashcard__field-value {
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+}
+
+.study-flashcard__field-value--japanese {
+  font-family: var(--font-family-japanese);
+  font-size: var(--font-size-jp-md);
+}
+
+.study-flip-button {
+  display: block;
+  width: 100%;
+  min-height: var(--touch-target-min);
+  margin: var(--space-3) 0 var(--space-4);
+  padding: var(--space-3);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+/* ---- Answer controls ---- */
+
+.study-answer-row {
+  display: flex;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.study-answer-button {
+  flex: 1;
+  min-height: 56px;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-md);
+  border: 2px solid;
+  cursor: pointer;
+}
+
+.study-answer-button--incorrect {
+  border-color: var(--color-danger-500);
+  background: var(--color-danger-100);
+  color: var(--color-danger-500);
+}
+
+.study-answer-button--correct {
+  border-color: var(--color-success-500);
+  background: var(--color-success-100);
+  color: var(--color-success-500);
+}
+
+.study-answer-hint {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin: var(--space-4) 0;
+}
+
+/* ---- Session summary ---- */
+
+.study-summary-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+}
+
+@media (min-width: 700px) {
+  .study-screen {
+    max-width: 560px;
+  }
+
+  .study-flashcard {
+    min-height: 280px;
+    padding: var(--space-6) var(--space-6);
+  }
+}

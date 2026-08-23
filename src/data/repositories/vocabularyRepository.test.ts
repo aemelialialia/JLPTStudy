@@ -138,6 +138,22 @@ describe('vocabularyRepository — search, filter, duplicate lookup', () => {
     const withMemorized = await vocabularyRepository.getRandomCandidates('N5', 10, { excludeMemorized: false })
     expect(withMemorized).toHaveLength(3)
   })
+
+  it('prefers eligible words with lower timesSeen and older lastReviewed over ones seen recently (daily rotation)', async () => {
+    const heavilySeen = makeWord({ id: 'seen', vocab: 'seen', reading: 'seen' })
+    const untouched = makeWord({ id: 'untouched', vocab: 'untouched', reading: 'untouched' })
+    await vocabularyRepository.addMany([heavilySeen, untouched])
+
+    // Simulate 'seen' having already come up in several past sessions.
+    await studyStateRepository.recordIncorrect('seen')
+    await studyStateRepository.recordIncorrect('seen')
+    await studyStateRepository.recordIncorrect('seen')
+
+    // Asking for just 1 of the 2 eligible words should surface the
+    // never-studied one, not the already-heavily-reviewed one.
+    const [top] = await vocabularyRepository.getRandomCandidates('N5', 1)
+    expect(top.id).toBe('untouched')
+  })
 })
 
 describe('vocabularyRepository — commitImportPlan', () => {

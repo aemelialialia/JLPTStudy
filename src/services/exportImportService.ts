@@ -3,6 +3,7 @@ import type { VocabularyItem } from '../types/vocabulary'
 import type { VocabularyStudyState } from '../types/studyState'
 import type { QuizAttempt, MistakeRecord } from '../types/quiz'
 import type { UserSettings, DailyStudyState } from '../types/settings'
+import type { StudySession } from '../types/studySession'
 
 /**
  * Schema for the exported JSON file. Versioned so a future release can
@@ -20,6 +21,15 @@ export interface ExportPayload {
   mistakes: MistakeRecord[]
   settings: UserSettings | null
   dailyStudyState: DailyStudyState[]
+  /**
+   * Added in Phase 3. Optional on the *type* (not just the runtime check
+   * below) so an export produced before this field existed still
+   * type-checks as a valid payload wherever this interface is used, and
+   * importPayload defaults a missing value to [] for the same reason —
+   * an older backup file should still import cleanly, just without any
+   * in-progress study session to resume.
+   */
+  studySessions?: StudySession[]
 }
 
 function isExportPayload(value: unknown): value is ExportPayload {
@@ -43,7 +53,7 @@ export const exportImportService = {
   /** Reads every store and assembles the full export payload (no browser APIs — easy to unit test). */
   async buildExportPayload(): Promise<ExportPayload> {
     const db = await getDB()
-    const [vocabulary, studyState, quizAttempts, mistakes, settingsRow, dailyStudyState] =
+    const [vocabulary, studyState, quizAttempts, mistakes, settingsRow, dailyStudyState, studySessions] =
       await Promise.all([
         db.getAll('vocabulary'),
         db.getAll('studyState'),
@@ -51,6 +61,7 @@ export const exportImportService = {
         db.getAll('mistakes'),
         db.getAll('settings'),
         db.getAll('dailyStudyState'),
+        db.getAll('studySessions'),
       ])
 
     return {
@@ -62,6 +73,7 @@ export const exportImportService = {
       mistakes,
       settings: settingsRow[0] ?? null,
       dailyStudyState,
+      studySessions,
     }
   },
 
@@ -83,6 +95,7 @@ export const exportImportService = {
       Promise.all(payload.quizAttempts.map((item) => db.put('quizAttempts', item))),
       Promise.all(payload.mistakes.map((item) => db.put('mistakes', item))),
       Promise.all(payload.dailyStudyState.map((item) => db.put('dailyStudyState', item))),
+      Promise.all((payload.studySessions ?? []).map((item) => db.put('studySessions', item))),
       payload.settings ? db.put('settings', { ...payload.settings, key: 'user-settings' }) : Promise.resolve(),
     ])
   },
@@ -100,6 +113,10 @@ export const exportImportService = {
       db.clear('quizAttempts'),
       db.clear('mistakes'),
       db.clear('dailyStudyState'),
+      // Clearing vocabulary/studyState without also clearing sessions
+      // would leave orphaned studySessions pointing at vocabulary ids
+      // that no longer exist.
+      db.clear('studySessions'),
     ])
   },
 

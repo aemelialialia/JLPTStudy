@@ -8,6 +8,7 @@ import './NavBar.css'
  */
 const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', end: true },
+  { to: '/study', label: 'Study' },
   { to: '/level/N5', label: 'N5' },
   { to: '/level/N4', label: 'N4' },
   { to: '/level/N3', label: 'N3' },

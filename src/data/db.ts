@@ -3,6 +3,7 @@ import type { VocabularyItem } from '../types/vocabulary'
 import type { VocabularyStudyState } from '../types/studyState'
 import type { QuizAttempt, MistakeRecord } from '../types/quiz'
 import type { UserSettings, DailyStudyState } from '../types/settings'
+import type { StudySession } from '../types/studySession'
 
 /**
  * Single source of truth for the IndexedDB schema. Nothing outside
@@ -44,10 +45,20 @@ export interface JLPTStudyDB extends DBSchema {
     key: string // DailyStudyState.date
     value: DailyStudyState
   }
+  studySessions: {
+    key: string // StudySession.id
+    value: StudySession
+    indexes: { 'by-level': string }
+  }
 }
 
 export const DB_NAME = 'jlpt-study-db'
-export const DB_VERSION = 1
+// Bumped 1 -> 2 in Phase 3 to add the `studySessions` store. `openDB`'s
+// upgrade callback only runs when the requested version is higher than
+// what's already stored, so this bump (not just the `if (!contains)`
+// guard below) is what makes the new store actually get created for
+// anyone who already has a version-1 database in their browser.
+export const DB_VERSION = 2
 
 let dbPromise: Promise<IDBPDatabase<JLPTStudyDB>> | null = null
 
@@ -83,6 +94,10 @@ export function getDB(): Promise<IDBPDatabase<JLPTStudyDB>> {
         }
         if (!db.objectStoreNames.contains('dailyStudyState')) {
           db.createObjectStore('dailyStudyState', { keyPath: 'date' })
+        }
+        if (!db.objectStoreNames.contains('studySessions')) {
+          const store = db.createObjectStore('studySessions', { keyPath: 'id' })
+          store.createIndex('by-level', 'level')
         }
       },
     })

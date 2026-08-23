@@ -60,8 +60,12 @@ export const vocabularyLearningService = {
 
   /**
    * Starts a new review cycle for a level: every memorized word in that
-   * level is reset back to "learning" with fresh counters, so it re-enters
-   * the active study pool. Words already in "new"/"learning" are untouched.
+   * level moves back to "learning" so it re-enters the active study pool.
+   * Historical counters (timesSeen/timesCorrect/timesIncorrect/
+   * lastReviewed) are preserved, not reset — a review cycle is meant to
+   * let the user keep practicing already-learned vocabulary, not to erase
+   * what they've done so far (Phase 3 spec section 16). Words already in
+   * "new"/"learning" are untouched.
    */
   async startReviewCycle(level: JLPTLevel): Promise<void> {
     const words = await vocabularyRepository.getByLevel(level)

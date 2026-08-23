@@ -56,6 +56,16 @@
   cursor: pointer;
 }
 
+/* .vocab-button is written with <button> in mind; an <a> (e.g. a Link
+   used as a button-styled action) is inline by default so min-height/
+   padding alone won't center its content the same way. */
+a.vocab-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
 .vocab-button--primary {
   background: var(--color-accent-500);
   border-color: var(--color-accent-500);

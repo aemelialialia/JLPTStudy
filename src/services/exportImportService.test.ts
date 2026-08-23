@@ -3,6 +3,8 @@ import { exportImportService } from './exportImportService'
 import { vocabularyRepository } from '../data/repositories/vocabularyRepository'
 import { studyStateRepository } from '../data/repositories/studyStateRepository'
 import { settingsRepository } from '../data/repositories/settingsRepository'
+import { studySessionRepository } from '../data/repositories/studySessionRepository'
+import { createStudySessionRecord } from '../types/studySession'
 import type { VocabularyItem } from '../types/vocabulary'
 
 const word: VocabularyItem = {
@@ -54,5 +56,34 @@ describe('exportImportService', () => {
 
     expect(await vocabularyRepository.getAll()).toEqual([])
     expect((await settingsRepository.get()).defaultSessionSize).toBe(20)
+  })
+
+  it('includes in-progress study sessions in the export and round-trips them', async () => {
+    const session = createStudySessionRecord('N5', 10, ['w1', 'w2'])
+    await studySessionRepository.create(session)
+
+    const payload = await exportImportService.buildExportPayload()
+    expect(payload.studySessions).toEqual([session])
+
+    await exportImportService.clearAllData()
+    expect(await studySessionRepository.get(session.id)).toBeUndefined()
+
+    await exportImportService.importPayload(payload)
+    expect(await studySessionRepository.get(session.id)).toEqual(session)
+  })
+
+  it('imports an older export missing studySessions without error', async () => {
+    const payload = await exportImportService.buildExportPayload()
+    const { studySessions: _omit, ...legacyPayload } = payload
+    await expect(exportImportService.importPayload(legacyPayload)).resolves.not.toThrow()
+  })
+
+  it('clearing all data also removes study sessions (no orphaned session data)', async () => {
+    const session = createStudySessionRecord('N5', 10, ['w1'])
+    await studySessionRepository.create(session)
+
+    await exportImportService.clearAllData()
+
+    expect(await studySessionRepository.get(session.id)).toBeUndefined()
   })
 })

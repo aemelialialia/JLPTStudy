@@ -2,6 +2,8 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
 import { Dashboard } from './pages/Dashboard'
 import { LevelPage } from './pages/LevelPage'
+import { StudyIndexPage } from './pages/StudyIndexPage'
+import { StudyPage } from './pages/StudyPage'
 import { MistakeBook } from './pages/MistakeBook'
 import { Settings } from './pages/Settings'
 
@@ -21,6 +23,8 @@ export function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/level/:level" element={<LevelPage />} />
+          <Route path="/study" element={<StudyIndexPage />} />
+          <Route path="/study/:level" element={<StudyPage />} />
           <Route path="/mistakes" element={<MistakeBook />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/" replace />} />

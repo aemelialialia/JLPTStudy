@@ -5,7 +5,15 @@ describe('IndexedDB initialization', () => {
   it('opens successfully and creates every expected object store', async () => {
     const db = await getDB()
     expect([...db.objectStoreNames].sort()).toEqual(
-      ['dailyStudyState', 'mistakes', 'quizAttempts', 'settings', 'studyState', 'vocabulary'].sort(),
+      [
+        'dailyStudyState',
+        'mistakes',
+        'quizAttempts',
+        'settings',
+        'studySessions',
+        'studyState',
+        'vocabulary',
+      ].sort(),
     )
   })
 
