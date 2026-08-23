@@ -8,24 +8,31 @@ import type {
   GrammarImportPreview,
   RowValidationError,
 } from '../types/grammarImport'
-import { GRAMMAR_COLUMN_LABELS, REQUIRED_GRAMMAR_COLUMNS, importedGrammarId } from '../types/grammarImport'
-import { getGrammarForLevel } from '../content/contentLoader'
+import { ALL_GRAMMAR_COLUMNS, GRAMMAR_COLUMN_LABELS, REQUIRED_GRAMMAR_COLUMNS, importedGrammarId } from '../types/grammarImport'
 import { grammarImportRepository } from '../data/repositories/grammarImportRepository'
 import { refreshImportedGrammarCache } from '../content/importedGrammarCache'
 
 const SAMPLE_ROW_LIMIT = 10
 
-/** Same normalize-then-exact-match approach as xlsxImportService — tolerant of whitespace/case, never guesses at an unrelated header. */
+/**
+ * Same normalize-then-exact-match approach as xlsxImportService — tolerant
+ * of whitespace/case, never guesses at an unrelated header. The keys here
+ * are the lowercased, whitespace-collapsed form of GRAMMAR_COLUMN_LABELS'
+ * exact header text; the *displayed* labels (error messages, preview
+ * table, section copy) always come from GRAMMAR_COLUMN_LABELS itself, so
+ * the app never renames these columns even though matching is lenient.
+ */
 const HEADER_ALIASES: Record<string, CanonicalGrammarColumn> = {
+  category: 'category',
   'grammar point': 'grammarPoint',
-  meaning: 'meaning',
-  formation: 'formation',
-  usage: 'usage',
-  'example sentence': 'exampleSentence',
-  'example meaning': 'exampleMeaning',
+  'formation / structure': 'formation',
+  'english meaning': 'meaning',
+  'core usage': 'usage',
+  'minna no nihongo lesson(s)': 'minnaNoNihongoLessons',
+  'new concept japanese coverage': 'newConceptJapaneseCoverage',
+  priority: 'priority',
   notes: 'notes',
-  'common mistakes': 'commonMistakes',
-  'related grammar': 'relatedGrammar',
+  mastery: 'sourceMastery',
 }
 
 function normalizeHeader(header: string): string {
@@ -49,7 +56,7 @@ interface ParsedWorkbook {
  * intentionally the same approach so the two importers behave identically
  * from the user's perspective. Only the first worksheet is read. The
  * sheet itself never carries a JLPT Level column — the level is chosen
- * once for the whole import (Phase 5 spec section 8), same as vocabulary.
+ * once for the whole import, same as vocabulary.
  */
 function parseWorkbook(buffer: ArrayBuffer): ParsedWorkbook {
   let workbook: XLSX.WorkBook
@@ -87,8 +94,9 @@ function cellAt(row: unknown[], headerMap: ParsedWorkbook['headerMap'], col: Can
   return String(row[index] ?? '').trim()
 }
 
+/** "Completely blank" (spec: "Ignore completely blank rows") means every recognized column is empty, not just the required ones — a row with only a stray Note filled in is not blank, it's an invalid row missing its required fields. */
 function isBlankRow(row: unknown[], headerMap: ParsedWorkbook['headerMap']): boolean {
-  return REQUIRED_GRAMMAR_COLUMNS.every((col) => cellAt(row, headerMap, col) === '')
+  return ALL_GRAMMAR_COLUMNS.every((col) => cellAt(row, headerMap, col) === '')
 }
 
 interface ValidatedRow {
@@ -110,27 +118,22 @@ function validateRows(parsed: ParsedWorkbook): { validRows: ValidatedRow[]; erro
     }
 
     const draft: GrammarImportDraft = {
+      category: cellAt(row, parsed.headerMap, 'category'),
       grammarPoint: cellAt(row, parsed.headerMap, 'grammarPoint'),
-      meaning: cellAt(row, parsed.headerMap, 'meaning'),
       formation: cellAt(row, parsed.headerMap, 'formation'),
+      meaning: cellAt(row, parsed.headerMap, 'meaning'),
       usage: cellAt(row, parsed.headerMap, 'usage'),
-      exampleSentence: cellAt(row, parsed.headerMap, 'exampleSentence'),
-      exampleMeaning: cellAt(row, parsed.headerMap, 'exampleMeaning'),
+      minnaNoNihongoLessons: cellAt(row, parsed.headerMap, 'minnaNoNihongoLessons'),
+      newConceptJapaneseCoverage: cellAt(row, parsed.headerMap, 'newConceptJapaneseCoverage'),
+      priority: cellAt(row, parsed.headerMap, 'priority'),
       notes: cellAt(row, parsed.headerMap, 'notes'),
-      commonMistakes: cellAt(row, parsed.headerMap, 'commonMistakes'),
-      relatedGrammarRaw: cellAt(row, parsed.headerMap, 'relatedGrammar'),
+      sourceMastery: cellAt(row, parsed.headerMap, 'sourceMastery'),
     }
 
-    // Built explicitly (not via generic `draft[col]` indexing) because
-    // REQUIRED_GRAMMAR_COLUMNS is typed over every CanonicalGrammarColumn
-    // and one of them ('relatedGrammar') maps to a differently-named
-    // draft field (relatedGrammarRaw) — REQUIRED_GRAMMAR_COLUMNS itself
-    // never actually contains it, but nothing here should rely on that.
-    const missing: CanonicalGrammarColumn[] = []
-    if (!draft.grammarPoint) missing.push('grammarPoint')
-    if (!draft.meaning) missing.push('meaning')
-    if (!draft.formation) missing.push('formation')
-    if (!draft.usage) missing.push('usage')
+    // Every CanonicalGrammarColumn key matches its GrammarImportDraft field
+    // name 1:1 in this schema (unlike the pre-revision one), so generic
+    // indexing is safe here.
+    const missing = REQUIRED_GRAMMAR_COLUMNS.filter((col) => !draft[col])
     if (missing.length > 0) {
       errors.push({ row: rowNumber, messages: missing.map((col) => `Missing ${GRAMMAR_COLUMN_LABELS[col]}`) })
       return
@@ -142,32 +145,14 @@ function validateRows(parsed: ParsedWorkbook): { validRows: ValidatedRow[]; erro
   return { validRows, errors, blankRowsSkipped }
 }
 
-/**
- * Resolves each row's comma-separated `relatedGrammarRaw` display text to
- * GrammarEntry ids, matched case-insensitively against: this same
- * import's own rows, this level's previously-imported entries, and this
- * level's bundled curated entries. A name that matches nothing is simply
- * dropped — an unresolvable related-grammar reference is not a row error,
- * since the whole field is optional free text.
- */
-function resolveRelatedGrammar(rawText: string, nameToId: Map<string, string>, ownId: string): string[] {
-  if (!rawText.trim()) return []
-  const ids = new Set<string>()
-  for (const name of rawText.split(',')) {
-    const id = nameToId.get(name.trim().toLowerCase())
-    if (id && id !== ownId) ids.add(id)
-  }
-  return Array.from(ids)
-}
-
 export const grammarXlsxImportService = {
   /**
    * Full parse -> validate -> plan pipeline, mirroring
-   * xlsxImportService.buildPreview's shape exactly (spec section 8: "must
-   * mirror the existing vocabulary import UX"). Reads the file entirely
-   * in the browser; only *reads* from IndexedDB (existing imported
-   * entries, for update-vs-create detection) — nothing is written until
-   * commitImport() is called with this exact preview's plan.
+   * xlsxImportService.buildPreview's shape exactly ("mirror the existing
+   * vocabulary import UX exactly"). Reads the file entirely in the
+   * browser; only *reads* from IndexedDB (existing imported entries, for
+   * update-vs-create detection) — nothing is written until commitImport()
+   * is called with this exact preview's plan.
    */
   async buildPreview(file: File, level: JLPTLevel): Promise<GrammarImportPreview> {
     if (!isXlsxFile(file)) {
@@ -190,26 +175,22 @@ export const grammarXlsxImportService = {
 
     const { validRows, errors, blankRowsSkipped } = validateRows(parsed)
 
-    const bundledForLevel = getGrammarForLevel(level)
+    // Duplicate/update matching is scoped to this level's previously
+    // IMPORTED points only (bundled curated content lives in a completely
+    // separate id space and is never touched by an import) — per the
+    // duplicate-handling rule, primarily keyed on (level, Grammar Point).
     const importedForLevel = await grammarImportRepository.getByLevel(level)
     const existingById = new Map(importedForLevel.map((entry) => [entry.id, entry]))
-
-    // Built up as rows are processed so a row can reference an earlier row
-    // in the SAME file, not just already-existing content.
-    const nameToId = new Map<string, string>()
-    for (const entry of bundledForLevel) nameToId.set(entry.grammarPoint.trim().toLowerCase(), entry.id)
-    for (const entry of importedForLevel) nameToId.set(entry.grammarPoint.trim().toLowerCase(), entry.id)
 
     const seenInFile = new Map<string, number>() // id -> first row number
     const plan: GrammarImportPlanEntry[] = []
 
     for (const { row, draft } of validRows) {
       const id = importedGrammarId(level, draft.grammarPoint)
-      nameToId.set(draft.grammarPoint.trim().toLowerCase(), id)
 
       const firstOccurrenceRow = seenInFile.get(id)
       if (firstOccurrenceRow !== undefined) {
-        plan.push({ row, draft, id, action: 'duplicate-in-file', relatedGrammarIds: [], firstOccurrenceRow })
+        plan.push({ row, draft, id, action: 'duplicate-in-file', firstOccurrenceRow })
         continue
       }
       seenInFile.set(id, row)
@@ -219,34 +200,32 @@ export const grammarXlsxImportService = {
       if (!existing) {
         action = 'create'
       } else {
-        // Compares every field this import can actually change (not
-        // relatedGrammar, which is resolved in a second pass below and
-        // would make this comparison order-dependent) — an exact match
-        // across all of them is a true no-op re-import.
+        // Compares every field this import can actually change. grammarPoint
+        // itself is deliberately excluded — it's baked into the identity id,
+        // so a genuine text change (beyond trim/case) would already resolve
+        // to a different id and become a 'create', not an 'update'.
         const unchanged =
-          existing.meaning === draft.meaning &&
+          (existing.category ?? '') === draft.category &&
           existing.formation === draft.formation &&
+          existing.meaning === draft.meaning &&
           existing.usage === draft.usage &&
+          (existing.minnaNoNihongoLessons ?? '') === draft.minnaNoNihongoLessons &&
+          (existing.newConceptJapaneseCoverage ?? '') === draft.newConceptJapaneseCoverage &&
+          (existing.priority ?? '') === draft.priority &&
           (existing.notes ?? '') === draft.notes &&
-          (existing.commonMistakes ?? '') === draft.commonMistakes &&
-          (existing.examples[0]?.sentence ?? '') === draft.exampleSentence &&
-          (existing.examples[0]?.meaning ?? '') === draft.exampleMeaning
+          (existing.sourceMastery ?? '') === draft.sourceMastery
         action = unchanged ? 'unchanged' : 'update'
       }
 
-      plan.push({ row, draft, id, action, relatedGrammarIds: [] })
-    }
-
-    // Second pass: now that every row in this file has a stable id, related
-    // grammar text can resolve against rows later in the same file too.
-    for (const entry of plan) {
-      if (entry.action === 'duplicate-in-file') continue
-      entry.relatedGrammarIds = resolveRelatedGrammar(entry.draft.relatedGrammarRaw, nameToId, entry.id)
+      plan.push({ row, draft, id, action })
     }
 
     const duplicateInFileCount = plan.filter((e) => e.action === 'duplicate-in-file').length
     const newCount = plan.filter((e) => e.action === 'create').length
-    const existingCount = plan.filter((e) => e.action === 'update' || e.action === 'unchanged').length
+    const updateCount = plan.filter((e) => e.action === 'update').length
+    const unchangedCount = plan.filter((e) => e.action === 'unchanged').length
+    const existingCount = updateCount + unchangedCount
+    const duplicateCount = duplicateInFileCount + existingCount
 
     return {
       level,
@@ -254,11 +233,15 @@ export const grammarXlsxImportService = {
       fileSizeBytes: file.size,
       totalRows: parsed.dataRows.length,
       blankRowsSkipped,
+      grammarPointCount: validRows.length + errors.length,
       validRowCount: validRows.length,
       invalidRowCount: errors.length,
       duplicateInFileCount,
       newCount,
+      updateCount,
+      unchangedCount,
       existingCount,
+      duplicateCount,
       errors,
       sampleRows: validRows.slice(0, SAMPLE_ROW_LIMIT).map((r) => r.draft),
       plan,

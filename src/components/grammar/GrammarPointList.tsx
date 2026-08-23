@@ -1,18 +1,24 @@
 import { Link } from 'react-router-dom'
 import type { GrammarEntry } from '../../types/grammar'
+import { GrammarPointMetaBadges } from './GrammarPointCard'
 
 /**
  * The full grammar-point browse list for a level (spec section 4:
  * "Grammar tab provides easy browsing... each point clickable, opens
  * lesson slides directly — user must NOT have to start a quiz first").
  */
-export function GrammarPointList({ points, studiedIds }: { points: GrammarEntry[]; studiedIds: Set<string> }) {
+export function GrammarPointList({
+  points,
+  studiedIds,
+  emptyMessage = 'No grammar points for this level yet.',
+}: {
+  points: GrammarEntry[]
+  studiedIds: Set<string>
+  /** Overridable so a filtered-to-nothing list ("No matches") reads differently from a genuinely empty level. */
+  emptyMessage?: string
+}) {
   if (points.length === 0) {
-    return (
-      <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
-        No grammar points for this level yet.
-      </p>
-    )
+    return <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>{emptyMessage}</p>
   }
 
   return (
@@ -26,6 +32,7 @@ export function GrammarPointList({ points, studiedIds }: { points: GrammarEntry[
               <div className="grammar-secondary-card__body">
                 <h4 className="grammar-secondary-card__title text-title-md">{entry.grammarPoint}</h4>
                 <p className="grammar-secondary-card__meaning">{entry.meaning}</p>
+                <GrammarPointMetaBadges entry={entry} />
               </div>
               {studied ? (
                 <span className="material-symbols-outlined grammar-secondary-card__studied" data-fill="1">

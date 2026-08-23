@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { MistakeRecord } from '../../types/quiz'
-import { getQuestionById, getGrammarEntryById } from '../../content/contentLoader'
+import { getQuestionById } from '../../content/contentLoader'
+import { grammarLessonService } from '../../services/grammarLessonService'
 // Reuses the grammar quiz's `.grammar-quiz__review-link` pill style
 // rather than duplicating an identical "review this grammar" link —
 // same pragmatic reuse as VocabQuizPage's use of GrammarQuizOption.
@@ -13,7 +14,7 @@ function formatDate(iso: string): string {
 /** One mistake: the question, what was answered vs. correct, wrong/correct-streak stats, mastery status, and a link back to the grammar explanation (Phase 5 spec section 19). */
 export function MistakeCard({ mistake }: { mistake: MistakeRecord }) {
   const question = getQuestionById(mistake.questionId)
-  const grammarEntry = getGrammarEntryById(mistake.grammarPointId)
+  const grammarEntry = grammarLessonService.getGrammarPoint(mistake.grammarPointId)
 
   const params = new URLSearchParams()
   if (question?.lessonSlideId) params.set('slide', question.lessonSlideId)

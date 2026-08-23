@@ -72,12 +72,17 @@ export const grammarImportRepository = {
           meaning: entry.draft.meaning,
           formation: entry.draft.formation,
           usage: entry.draft.usage,
-          examples: entry.draft.exampleSentence
-            ? [{ sentence: entry.draft.exampleSentence, meaning: entry.draft.exampleMeaning }]
-            : [],
+          // The current schema carries no Example Sentence/Related Grammar
+          // columns — both stay empty for imported entries; GrammarEntry's
+          // own docs already treat them as fine to be empty.
+          examples: [],
+          relatedGrammar: [],
           notes: entry.draft.notes,
-          commonMistakes: entry.draft.commonMistakes,
-          relatedGrammar: entry.relatedGrammarIds,
+          category: entry.draft.category,
+          priority: entry.draft.priority,
+          minnaNoNihongoLessons: entry.draft.minnaNoNihongoLessons,
+          newConceptJapaneseCoverage: entry.draft.newConceptJapaneseCoverage,
+          sourceMastery: entry.draft.sourceMastery,
         }
         await store.put(grammarEntry)
         if (entry.action === 'create') createdCount++

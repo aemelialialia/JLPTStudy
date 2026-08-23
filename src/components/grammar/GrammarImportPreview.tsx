@@ -7,6 +7,12 @@ import '../vocabulary/vocabulary.css'
  * buildPreview(); this only renders them and forwards Cancel/Confirm.
  * Nothing is written to IndexedDB until onConfirm's promise resolves.
  * Mirrors vocabulary's ImportPreview component field-for-field.
+ *
+ * The top stat row (Grammar Points / Valid / Invalid / Duplicates) is the
+ * exact summary card format the import spec calls for; the second row
+ * breaks "Duplicates" down into its two components (rows matching an
+ * already-imported point vs. rows repeated within this same file) for
+ * anyone who wants the detail.
  */
 export function GrammarImportPreview({
   preview,
@@ -21,7 +27,7 @@ export function GrammarImportPreview({
 }) {
   return (
     <div className="vocab-card">
-      <h3>Import Preview</h3>
+      <h3>Grammar Import</h3>
       <dl>
         <div className="vocab-detail-row">
           <dt>Level</dt>
@@ -34,13 +40,17 @@ export function GrammarImportPreview({
       </dl>
 
       <div className="vocab-stat-grid">
-        <StatBox label="Total rows" value={preview.totalRows} />
+        <StatBox label="Grammar Points" value={preview.grammarPointCount} />
         <StatBox label="Valid" value={preview.validRowCount} />
         <StatBox label="Invalid" value={preview.invalidRowCount} />
-        <StatBox label="Blank (skipped)" value={preview.blankRowsSkipped} />
-        <StatBox label="Duplicate in file" value={preview.duplicateInFileCount} />
+        <StatBox label="Duplicates" value={preview.duplicateCount} />
+      </div>
+      <div className="vocab-stat-grid">
         <StatBox label="New" value={preview.newCount} />
-        <StatBox label="Existing" value={preview.existingCount} />
+        <StatBox label="Updated" value={preview.updateCount} />
+        <StatBox label="Unchanged" value={preview.unchangedCount} />
+        <StatBox label="Duplicate in file" value={preview.duplicateInFileCount} />
+        <StatBox label="Blank (skipped)" value={preview.blankRowsSkipped} />
       </div>
 
       {preview.errors.length > 0 && (
@@ -63,19 +73,23 @@ export function GrammarImportPreview({
           <table className="vocab-table">
             <thead>
               <tr>
+                <th>Category</th>
                 <th>Grammar Point</th>
-                <th>Meaning</th>
-                <th>Formation</th>
-                <th>Usage</th>
+                <th>Formation / Structure</th>
+                <th>English Meaning</th>
+                <th>Core Usage</th>
+                <th>Priority</th>
               </tr>
             </thead>
             <tbody>
               {preview.sampleRows.map((row, i) => (
                 <tr key={i}>
+                  <td>{row.category}</td>
                   <td>{row.grammarPoint}</td>
-                  <td>{row.meaning}</td>
                   <td>{row.formation}</td>
+                  <td>{row.meaning}</td>
                   <td>{row.usage}</td>
+                  <td>{row.priority}</td>
                 </tr>
               ))}
             </tbody>

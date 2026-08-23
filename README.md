@@ -258,7 +258,7 @@ filter tabs and a grammar-point filter, and each card shows the
 Active/Mastered status plus the wrong/correct counts and "N/3 in a row to
 master" progress described above.
 
-## Grammar XLSX import (Phase 5)
+## Grammar XLSX import (Phase 5, schema revised)
 
 Grammar knowledge points can be imported client-side from `.xlsx` files,
 deliberately mirroring the Phase 2 vocabulary import UX step for step:
@@ -270,22 +270,68 @@ until Confirm is clicked. It's reached from a collapsible "Import
 Grammar" section at the bottom of each level's Grammar Hub
 (`GrammarHubPage`).
 
-Required columns: `Grammar Point`, `Meaning`, `Formation`, `Usage`.
-Optional: `Example Sentence` (+ `Example Meaning`), `Notes`, `Common
-Mistakes`, `Related Grammar` (comma-separated grammar-point names,
-resolved to ids against the rest of the same import — unmatched names are
-silently dropped rather than erroring). **The spreadsheet never has, or
-needs, a Level column** — the level is always the one explicitly picked
-in the UI before the file is selected, same as vocabulary import.
+The importer's column schema was revised from its original Phase 5 shape
+to match a specific real-world study-tracking spreadsheet format. The
+exact ten header strings it recognizes — shown verbatim everywhere the
+app talks about them (error messages, the preview table, the import
+section's own copy; see `GRAMMAR_COLUMN_LABELS` in
+`src/types/grammarImport.ts`) — are:
 
-**Stable ids & re-import:** each imported point gets a deterministic id,
-`import-<level>-<hash of the grammar point text>` (`importedGrammarId` in
-`src/types/grammarImport.ts`), which doubles as both its IndexedDB key and
-its identity/dedup key. Re-importing the same (level, grammar point) pair
-always resolves to the same record — updating its fields in place if
-they changed, or reporting "unchanged" if they didn't — and never creates
-a duplicate. Quiz questions reference grammar points only by
-`grammarPointId`, imported or bundled alike, never by display text.
+| Column                            | Required | Notes                                                                 |
+| ---------------------------------- | -------- | ---------------------------------------------------------------------- |
+| `Category`                         | Yes      | Free text (e.g. Particles, Verb Conjugation, Request) — never forced into a fixed list. |
+| `Grammar Point`                    | Yes      | The primary display name/identifier for the concept.                  |
+| `Formation / Structure`            | Yes      | Preserved exactly as written — never auto-rewritten.                  |
+| `English Meaning`                  | Yes      | The grammar point's core English meaning.                             |
+| `Core Usage`                       | Yes      | The main study-reference explanation of when/why it's used.           |
+| `Priority`                         | Yes      | Free text (e.g. High/Medium/Low) — whatever scale the source uses, preserved verbatim, never normalized. |
+| `Minna no Nihongo Lesson(s)`       | Optional | Free text, may reference multiple lessons (e.g. "Lessons 20-21") — never inferred if blank. |
+| `New Concept Japanese Coverage`    | Optional | Free text cross-reference — same rule: never inferred.                |
+| `Notes`                            | Optional | Additional study notes, preserved verbatim.                           |
+| `Mastery`                          | Optional | Source/content metadata only — see "Mastery is not live study state" below. |
+
+**No Level column** — the spreadsheet never has, or needs, one; the level
+is always the one explicitly picked in the UI before the file is
+selected, same as vocabulary import. A row is only skipped as
+"completely blank" when every one of the ten columns is empty; a row
+missing just a required field is reported by row number and field name
+(e.g. `Row 18: Missing Core Usage`) and excluded, without aborting the
+rest of the import.
+
+**Preview summary card:** Level, File, **Grammar Points** (valid +
+invalid rows found), **Valid**, **Invalid**, and **Duplicates** (every
+row that did *not* become a brand-new grammar point — i.e. rows matching
+an already-imported point, whether updated or unchanged, plus rows
+repeated within the same file), followed by a detail breakdown
+(New/Updated/Unchanged/Duplicate-in-file/Blank) and a sample table with
+Category/Grammar Point/Formation-Structure/English Meaning/Core
+Usage/Priority columns.
+
+**Stable ids & duplicate matching:** each imported point gets a
+deterministic id, `import-<level>-<hash of the grammar point text>`
+(`importedGrammarId` in `src/types/grammarImport.ts`), which doubles as
+both its IndexedDB key and its identity/dedup key. Matching is primarily
+`(level, Grammar Point)` — Category/Formation are never consulted for
+identity, only compared afterward (along with every other field) to
+decide whether a matching row is truly "unchanged" or an "update".
+Re-importing the same (level, grammar point) pair — even from a
+differently-named file — always resolves to the same record and never
+creates a duplicate, and never resets that point's quiz history,
+mistakes, or study progress (all of which live in separate stores keyed
+by grammar point id or question id, untouched by a content re-import).
+Quiz questions reference grammar points only by `grammarPointId`,
+imported or bundled alike, never by display text.
+
+**Mastery is not live study state:** the spreadsheet's optional `Mastery`
+column is stored as `GrammarEntry.sourceMastery` — content/source
+metadata only, shown on the grammar point's Study Reference slide. It is
+never read as, and never overwrites, the app's actual quiz-derived
+mastery, which lives entirely in `MistakeRecord` (keyed by question id,
+not grammar point) and is computed purely from the user's own quiz
+answers. Re-importing a spreadsheet that says `Mastery = Beginner` can
+never demote a point the user has genuinely mastered through real quiz
+performance — the two concepts don't share a field, a store, or a code
+path.
 
 **Merging with bundled content:** the curated N5–N2 JSON in
 `src/content/grammar/` stays completely untouched and still loads exactly
@@ -296,7 +342,27 @@ contract is unchanged. Imported grammar lives separately, in IndexedDB's
 background and read synchronously via `getImportedGrammarSync()`, is what
 lets `grammarLessonService` present bundled and imported grammar as one
 seamless list everywhere (hub, lessons, progress) without turning every
-grammar-reading component into an async one.
+grammar-reading component into an async one. Duplicate/update matching is
+scoped to a level's previously-*imported* points only — bundled content
+lives in a completely separate id space and is never a match target, so
+a spreadsheet row can never silently overwrite curated content.
+
+**Grammar Study page & Search/Filter:** every imported field is
+displayed on the point's lesson page — Grammar Point and English Meaning
+lead the first slide as before; Category, Priority, Minna no Nihongo
+Lesson(s), New Concept Japanese Coverage, and source Mastery appear
+together on a new "Study Reference" slide immediately after it (only
+shown when at least one of those fields is actually present, so older
+bundled points never grow an empty slide); Formation/Usage/Notes keep
+their own existing slides unchanged. Category and Priority also show as
+small tags on each point's browse card. The Grammar Hub's full point list
+gained a Search box (matches Grammar Point/English Meaning/Core
+Usage/Notes) and a Priority filter (options built from whatever values
+are actually present, never a fixed list) — `grammarLessonService`
+exposes the underlying `searchGrammarPoints`/`filterByPriority` helpers
+so the same data model supports filtering by Category/Mastery/lesson
+cross-reference later without a schema change, even though only Search
+and Priority have UI today.
 
 ## Grammar Resources / Reference Tables (Phase 5)
 

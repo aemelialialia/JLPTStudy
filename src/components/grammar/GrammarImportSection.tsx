@@ -32,10 +32,12 @@ export function GrammarImportSection({ level, onImported }: { level: JLPTLevel; 
       {open && (
         <div className="vocab-card">
           <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)', marginTop: 0 }}>
-            Add your own {level} grammar points from a spreadsheet — columns: Grammar Point, Meaning, Formation,
-            Usage, Example Sentence, Example Meaning, Notes, Common Mistakes, Related Grammar. The file is read
-            entirely on this device; nothing is uploaded anywhere, and nothing is saved until you confirm the
-            preview.
+            Add your own {level} grammar points from a spreadsheet — columns: Category, Grammar Point, Formation /
+            Structure, English Meaning, Core Usage, Minna no Nihongo Lesson(s), New Concept Japanese Coverage,
+            Priority, Notes, Mastery. Category, Grammar Point, Formation / Structure, English Meaning, Core Usage,
+            and Priority are required; the rest may be left blank. No Level column — the {level} you're viewing now
+            is what every imported point gets. The file is read entirely on this device; nothing is uploaded
+            anywhere, and nothing is saved until you confirm the preview.
           </p>
           {importFlow.state.phase === 'idle' && <GrammarImporter onFileSelected={importFlow.selectFile} />}
           {importFlow.state.phase === 'previewing' && <p>Reading {importFlow.state.fileName}…</p>}

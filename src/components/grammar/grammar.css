@@ -293,6 +293,25 @@
   gap: var(--space-3);
 }
 
+/* Category/Priority tags shown on browse cards when an imported point supplies them — reuses the same pill shape as .grammar-hero-card__badge/.grammar-lesson__badge rather than inventing a new tag style. */
+.grammar-point-meta-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.grammar-point-meta-badge {
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-low);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-surface-dim);
+  white-space: nowrap;
+}
+
 /* ---- Practice CTA banner ---- */
 .grammar-practice-banner {
   position: relative;
@@ -457,6 +476,39 @@
 .grammar-lesson__body p {
   margin: 0;
   color: var(--color-text-secondary);
+}
+
+/* ---- 'reference' slide: Category/Priority/Minna no Nihongo/New Concept Japanese/source Mastery ---- */
+.grammar-lesson__meta {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.grammar-lesson__meta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-container-low);
+  border: 1px solid var(--color-tertiary-fixed-dim);
+  text-align: left;
+}
+
+.grammar-lesson__meta-row dt {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.grammar-lesson__meta-row dd {
+  margin: 0;
+  color: var(--color-on-surface);
+  text-align: right;
 }
 
 .grammar-lesson__examples {

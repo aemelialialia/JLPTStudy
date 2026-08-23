@@ -28,6 +28,17 @@ export function GrammarLessonSlideView({ entry, slide }: { entry: GrammarEntry; 
         </div>
       )}
 
+      {slide.meta && slide.meta.length > 0 && (
+        <dl className="grammar-lesson__meta">
+          {slide.meta.map((item) => (
+            <div key={item.label} className="grammar-lesson__meta-row">
+              <dt className="text-label-sm">{item.label}</dt>
+              <dd className="text-body-md">{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
       {slide.examples.length > 0 && (
         <div className="grammar-lesson__examples">
           {slide.examples.map((example, i) => (

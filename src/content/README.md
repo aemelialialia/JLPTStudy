@@ -60,6 +60,18 @@ total), authored in Phase 4. The schema below is what an entry looks like.
 without a schema change. `notes`, `commonMistakes`, and `relatedGrammar` are
 optional/may be empty but should stay present as `""` / `[]` for consistency.
 
+`GrammarEntry` also carries five more optional fields —
+`category`, `priority`, `minnaNoNihongoLessons`,
+`newConceptJapaneseCoverage`, and `sourceMastery` — added for the Grammar
+XLSX importer's schema (see "Imported grammar is not in this directory"
+below). They're absent on every bundled entry above (this curated content
+predates that schema and was never re-authored to add them) and only
+ever populated on user-imported entries, where the importer's required
+columns guarantee `category`/`priority` are always present. Nothing reads
+them as required on `GrammarEntry` itself — `buildGrammarSlides` in
+`src/types/grammar.ts` only renders a "Study Reference" slide for them
+when at least one is actually set.
+
 ## Question schema (`GrammarQuestion`, see `src/types/question.ts`)
 
 ```jsonc

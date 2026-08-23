@@ -7,6 +7,17 @@ interface GrammarPointCardProps {
   slideCount: number
 }
 
+/** Category/Priority tags — only rendered when the entry actually supplies them (imported points do, bundled curated points from before this schema existed don't). Exported so GrammarPointList's own card markup can reuse it instead of duplicating the badge logic. */
+export function GrammarPointMetaBadges({ entry }: { entry: GrammarEntry }) {
+  if (!entry.category && !entry.priority) return null
+  return (
+    <div className="grammar-point-meta-badges">
+      {entry.category && <span className="grammar-point-meta-badge">{entry.category}</span>}
+      {entry.priority && <span className="grammar-point-meta-badge">{entry.priority}</span>}
+    </div>
+  )
+}
+
 /**
  * "Current Lessons" hero card (grammar_hub prototype: the large featured
  * card with the play button + progress dots). Used for the single
@@ -23,6 +34,7 @@ export function GrammarHeroCard({ entry, studied, slideCount }: GrammarPointCard
       </div>
       <p className="grammar-hero-card__point text-headline-lg">{entry.grammarPoint}</p>
       <p className="grammar-hero-card__meaning">{entry.meaning}</p>
+      <GrammarPointMetaBadges entry={entry} />
       <div className="grammar-hero-card__footer">
         <div className="grammar-hero-card__dots" aria-hidden="true">
           {Array.from({ length: dotCount }, (_, i) => (
@@ -47,6 +59,7 @@ export function GrammarSecondaryCard({ entry, studied }: GrammarPointCardProps) 
       <div className="grammar-secondary-card__body">
         <h4 className="grammar-secondary-card__title text-title-md">{entry.grammarPoint}</h4>
         <p className="grammar-secondary-card__meaning">{entry.meaning}</p>
+        <GrammarPointMetaBadges entry={entry} />
       </div>
       {studied ? (
         <span className="material-symbols-outlined grammar-secondary-card__studied" data-fill="1">

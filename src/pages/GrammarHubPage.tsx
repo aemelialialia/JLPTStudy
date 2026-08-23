@@ -8,6 +8,7 @@ import { GrammarLevelSwitcher } from '../components/grammar/GrammarLevelSwitcher
 import { QuickTips } from '../components/grammar/QuickTips'
 import { GrammarHeroCard, GrammarSecondaryCard } from '../components/grammar/GrammarPointCard'
 import { GrammarPointList } from '../components/grammar/GrammarPointList'
+import { GrammarPointFilters } from '../components/grammar/GrammarPointFilters'
 import { GrammarQuizCTA } from '../components/grammar/GrammarQuizCTA'
 import { GrammarImportSection } from '../components/grammar/GrammarImportSection'
 import '../components/grammar/grammar.css'
@@ -29,9 +30,19 @@ export function GrammarHubPage() {
   // the newly-imported entries immediately — see GrammarImportSection's
   // onImported.
   const [, setImportVersion] = useState(0)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [priorityFilter, setPriorityFilter] = useState('all')
   const points = grammarLessonService.getGrammarPoints(level)
   const { data: progress } = useGrammarLevelProgress(level)
   const studiedIds = new Set(progress?.studiedIds ?? [])
+  const priorityOptions = grammarLessonService.distinctPriorities(points)
+  // Search/priority filtering only narrows the full browse list below —
+  // the hero/"Current Lessons" picks above it stay driven by real study
+  // progress regardless of what's typed into the search box.
+  const filteredListPoints = grammarLessonService.filterByPriority(
+    grammarLessonService.searchGrammarPoints(points, searchQuery),
+    priorityFilter,
+  )
 
   if (!isValidLevel) {
     return (
@@ -111,7 +122,18 @@ export function GrammarHubPage() {
         <div className="grammar-section__header">
           <h2 className="text-title-md">{level} Grammar Points</h2>
         </div>
-        <GrammarPointList points={points} studiedIds={studiedIds} />
+        <GrammarPointFilters
+          search={searchQuery}
+          onSearchChange={setSearchQuery}
+          priority={priorityFilter}
+          onPriorityChange={setPriorityFilter}
+          priorityOptions={priorityOptions}
+        />
+        <GrammarPointList
+          points={filteredListPoints}
+          studiedIds={studiedIds}
+          emptyMessage={points.length === 0 ? 'No grammar points for this level yet.' : 'No grammar points match this search/filter.'}
+        />
       </section>
 
       <section>

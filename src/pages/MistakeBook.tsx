@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { JLPT_LEVELS } from '../types/jlpt'
 import { useMistakes } from '../hooks/useMistakes'
-import { getGrammarEntryById } from '../content/contentLoader'
+import { grammarLessonService } from '../services/grammarLessonService'
 import { MistakeCard } from '../components/mistakes/MistakeCard'
 import '../components/mistakes/mistakes.css'
 import '../components/study/study.css'
@@ -28,7 +28,7 @@ export function MistakeBook() {
   const grammarPointOptions = useMemo(() => {
     const ids = new Set((mistakes ?? []).map((m) => m.grammarPointId))
     return Array.from(ids)
-      .map((id) => ({ id, entry: getGrammarEntryById(id) }))
+      .map((id) => ({ id, entry: grammarLessonService.getGrammarPoint(id) }))
       .sort((a, b) => (a.entry?.grammarPoint ?? '').localeCompare(b.entry?.grammarPoint ?? ''))
   }, [mistakes])
 

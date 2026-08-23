@@ -88,4 +88,33 @@ export const grammarLessonService = {
   async getAllLevelsProgress(): Promise<GrammarLevelProgressSummary[]> {
     return Promise.all(JLPT_LEVELS.map((level) => grammarLessonService.getLevelProgress(level)))
   },
+
+  /**
+   * Pure, in-memory search over an already-loaded points array — matches
+   * Grammar Point, English Meaning, Core Usage, or Notes, case-insensitive
+   * substring. No IndexedDB/content-loader access here; callers already
+   * have the points list from getGrammarPoints().
+   */
+  searchGrammarPoints(points: GrammarEntry[], query: string): GrammarEntry[] {
+    const q = query.trim().toLowerCase()
+    if (!q) return points
+    return points.filter(
+      (p) =>
+        p.grammarPoint.toLowerCase().includes(q) ||
+        p.meaning.toLowerCase().includes(q) ||
+        p.usage.toLowerCase().includes(q) ||
+        (p.notes ?? '').toLowerCase().includes(q),
+    )
+  },
+
+  /** Priority values are free text from the source spreadsheet (never a fixed scale) — 'all' means no filtering, any other value is an exact match. */
+  filterByPriority(points: GrammarEntry[], priority: string): GrammarEntry[] {
+    if (priority === 'all') return points
+    return points.filter((p) => p.priority === priority)
+  },
+
+  /** Distinct Priority values actually present among a set of points, sorted — the option list for a Priority filter control. Points without a priority (pre-Phase-5 bundled content) are excluded, not shown as a blank option. */
+  distinctPriorities(points: GrammarEntry[]): string[] {
+    return Array.from(new Set(points.map((p) => p.priority).filter((p): p is string => Boolean(p)))).sort()
+  },
 }
