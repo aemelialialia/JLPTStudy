@@ -27,7 +27,7 @@ function StudyLevelRow({ level }: { level: JLPTLevel }) {
 export function StudyLevelPicker() {
   return (
     <div>
-      <h1>Vocabulary Study</h1>
+      <h1>Study Vocabulary</h1>
       <p>Choose a level to start today's flashcard session.</p>
       <ul className="study-level-list">
         {JLPT_LEVELS.map((level) => (

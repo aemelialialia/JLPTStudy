@@ -374,18 +374,37 @@
   flex-shrink: 0;
 }
 
-/* ================= Lesson slide viewer ================= */
+/* ================= Lesson slide viewer =================
+   This is the "Grammar Point Study" active-study page — Grammar Point ->
+   Meaning/Formation -> Usage/Reference -> Next. Like the grammar quiz's
+   active-answering screen, it's a focused single-task view (its own close
+   button, not meant for mid-lesson bottom-tab navigation), so it gets the
+   same "efficient spacing inside an active study interaction" treatment
+   and the same scoped negative-margin trick to reclaim part of the
+   app-shell's generic bottom-nav clearance — this does NOT apply anywhere
+   else in the app. */
 .grammar-lesson {
   display: flex;
   flex-direction: column;
-  min-height: calc(100svh - 64px - var(--space-8));
+  /* Natural content height, matching .grammar-quiz below — the previous
+     min-height: calc(100svh - 64px - var(--space-8)) forced this element
+     to stretch to nearly the full viewport regardless of how short a
+     given slide's content actually was, which pinned the Back/Next row
+     at the very bottom of that artificially stretched box and put it
+     squarely behind the fixed bottom nav on every slide (confirmed by
+     measuring .grammar-lesson__nav's bounding box against .bottom-nav's
+     — they fully overlapped even on the shortest slide). Sizing to
+     content instead means the nav row sits directly after the card, so
+     Next stays reachable without scrolling on short slides and the
+     layout still grows correctly on longer ones. */
+  margin-bottom: calc(-1 * var(--space-10));
 }
 
 .grammar-lesson__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-2);
 }
 
 .grammar-lesson__exit {
@@ -404,7 +423,7 @@
   display: flex;
   justify-content: center;
   gap: var(--space-2);
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-3);
 }
 
 .grammar-lesson__dot {
@@ -423,15 +442,14 @@
 }
 
 .grammar-lesson__card {
-  flex: 1;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--space-6);
-  padding: var(--space-8);
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
   border-radius: var(--radius-lg);
   background: var(--color-surface-container-lowest);
   border: 1px solid var(--color-surface-variant);
@@ -467,7 +485,7 @@
 .grammar-lesson__body {
   background: var(--color-surface-container-low);
   border-radius: var(--radius-md);
-  padding: var(--space-6);
+  padding: var(--space-4) var(--space-5);
   width: 100%;
   max-width: 480px;
   border: 1px solid var(--color-tertiary-fixed-dim);
@@ -516,14 +534,14 @@
   max-width: 480px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
   text-align: left;
 }
 
 .grammar-lesson__example {
   background: var(--color-surface-container-low);
   border-radius: var(--radius-md);
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-3) var(--space-4);
   border: 1px solid var(--color-surface-dim);
 }
 
@@ -561,7 +579,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: var(--space-8);
+  margin-top: var(--space-3);
 }
 
 .grammar-lesson__nav-btn {
@@ -577,6 +595,7 @@
   font-family: var(--font-family-heading);
   font-size: var(--font-size-title-md);
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .grammar-lesson__nav-btn:disabled {

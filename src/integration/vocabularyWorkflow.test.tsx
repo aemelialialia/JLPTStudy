@@ -52,7 +52,7 @@ async function goToLevelManagement(level: string) {
   // "translateVocabulary" in jsdom, which has no real icon font), so
   // match by substring rather than exact string.
   fireEvent.click(navLink(/Vocabulary/))
-  await screen.findByRole('heading', { name: 'Vocabulary Study' })
+  await screen.findByRole('heading', { name: 'Study Vocabulary' })
   fireEvent.click(screen.getByRole('link', { name: new RegExp(`^${level}`) }))
   await screen.findByRole('heading', { name: new RegExp(`^${level} Vocabulary$`) })
   fireEvent.click(screen.getByRole('link', { name: new RegExp(`Back to Vocabulary Management|Import ${level} Vocabulary`) }))

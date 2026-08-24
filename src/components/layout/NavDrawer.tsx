@@ -48,7 +48,7 @@ export function NavDrawer({ open, onClose }: { open: boolean; onClose: () => voi
         <div className="nav-drawer__header">
           <Avatar size={48} />
           <div>
-            <h2 className="text-title-md nav-drawer__name">Nihongo Learner</h2>
+            <h2 className="text-title-md nav-drawer__name">{settings?.userName}</h2>
             <p className="text-label-sm nav-drawer__level">
               {settings?.targetLevel ? `Target: Level ${settings.targetLevel}` : 'No target level set'}
             </p>

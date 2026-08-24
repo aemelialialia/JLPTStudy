@@ -17,7 +17,7 @@ export function AppLogo({ size = 128 }: { size?: number }) {
       viewBox="0 0 128 128"
       fill="none"
       role="img"
-      aria-label="Study Buddy logo"
+      aria-label="Michi logo"
     >
       <rect width="128" height="128" rx="32" fill="var(--color-secondary-container)" />
       <path

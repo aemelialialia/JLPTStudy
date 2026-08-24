@@ -51,7 +51,7 @@ export function GrammarLessonPage() {
           <span className="material-symbols-outlined">close</span>
         </button>
         <span className="text-headline-lg-mobile" style={{ color: 'var(--color-primary)' }}>
-          Study Buddy
+          Michi
         </span>
         {hasReturnTarget ? (
           <Link

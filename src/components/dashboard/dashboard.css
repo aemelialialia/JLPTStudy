@@ -176,14 +176,18 @@
   margin-top: 2px;
 }
 
-/* ---- Daily Grammar Quiz ---- */
+/* ---- Daily Grammar Quiz ----
+   Deliberately more spacious than the surrounding dashboard cards — this
+   is the one place on the Dashboard meant to feel like a calm, dedicated
+   "here's today's grammar" moment rather than a dense stat tile, so its
+   padding/gap sit a size or two above dashboard-vocab-card's. */
 .dashboard-grammar-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   flex: 1;
-  gap: var(--space-4);
-  padding: var(--space-6);
+  gap: var(--space-6);
+  padding: var(--space-8);
   border-radius: var(--radius-lg);
   background: var(--color-tertiary-container);
   box-shadow: var(--shadow-tertiary);
@@ -201,17 +205,27 @@
   margin: 0;
 }
 
+/* Flex-centered (not just text-align) so the grammar point stays visually
+   balanced in the middle of the box even when this card stretches taller
+   than its content on wider layouts (the Dashboard grid stretches this
+   card to match Daily Vocabulary's height). */
 .dashboard-grammar-card__preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 88px;
   background: color-mix(in srgb, var(--color-surface-container-lowest) 80%, transparent);
   border-radius: var(--radius-md);
-  padding: var(--space-4);
+  padding: var(--space-6);
   border: 1px solid color-mix(in srgb, var(--color-tertiary) 5%, transparent);
 }
 
 .dashboard-grammar-card__preview-point {
   text-align: center;
   color: var(--color-on-surface);
-  margin: 0 0 var(--space-2);
+  margin: 0;
   letter-spacing: 0.02em;
 }
 

@@ -14,6 +14,8 @@ export interface UserSettings {
   examDate: string | null
   /** Daily study goal in cards studied per day (vocabulary + grammar quiz questions combined), shown on Profile. */
   dailyGoal: number
+  /** The name the user gave when first asked (see WelcomeNamePrompt) — shown in the nav drawer and on Profile instead of a generic placeholder. Null until the first-visit prompt has been answered. */
+  userName: string | null
   /** Free-form bag for future preferences (theme choice, etc.) without a migration. */
   [key: string]: unknown
 }
@@ -24,6 +26,7 @@ export const DEFAULT_SETTINGS: UserSettings = {
   targetLevel: null,
   examDate: null,
   dailyGoal: 50,
+  userName: null,
 }
 
 /**

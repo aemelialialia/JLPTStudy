@@ -33,7 +33,7 @@ export function Dashboard() {
   return (
     <section className="dashboard-page">
       <div className="dashboard-welcome">
-        <p className="text-body-lg">Konnichiwa!</p>
+        <p className="text-body-lg">こんにちわ</p>
         <h1 className="text-display-lg">Ready to study?</h1>
       </div>
 

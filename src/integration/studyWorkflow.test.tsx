@@ -60,7 +60,7 @@ function studyLevelLink(level: string): HTMLElement {
  */
 async function goToLevelManagement(level: string) {
   fireEvent.click(navLink(/Vocabulary/))
-  await screen.findByRole('heading', { name: 'Vocabulary Study' })
+  await screen.findByRole('heading', { name: 'Study Vocabulary' })
   fireEvent.click(studyLevelLink(level))
   fireEvent.click(
     await screen.findByRole('link', {
@@ -110,7 +110,7 @@ describe('vocabulary study / flashcard workflow (end-to-end through the UI)', ()
 
     // --- Setup: navigate to Study, pick N5, see real (non-fabricated) progress numbers. ---
     fireEvent.click(navLink(/Vocabulary/))
-    expect(await screen.findByRole('heading', { name: 'Vocabulary Study' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Study Vocabulary' })).toBeInTheDocument()
     fireEvent.click(studyLevelLink('N5'))
 
     expect(await screen.findByRole('heading', { name: /^N5 Vocabulary$/ })).toBeInTheDocument()

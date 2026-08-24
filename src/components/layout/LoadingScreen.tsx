@@ -31,14 +31,14 @@ export function LoadingScreen() {
     <div
       className={'loading-screen' + (phase === 'exiting' ? ' loading-screen--exiting' : '')}
       role="status"
-      aria-label="Loading Study Buddy"
+      aria-label="Loading Michi"
     >
       <ShaderBackground className="loading-screen__shader" />
       <div className="loading-screen__pattern pattern-asanoha" />
       <div className="loading-screen__card">
         <AppLogo size={112} />
         <div>
-          <h1 className="text-display-lg loading-screen__title">Study Buddy</h1>
+          <h1 className="text-display-lg loading-screen__title">Michi</h1>
           <p className="text-body-md loading-screen__subtitle">Soft Productivity.</p>
         </div>
         <div className="loading-screen__dots" aria-hidden="true">

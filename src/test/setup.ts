@@ -2,6 +2,7 @@ import 'fake-indexeddb/auto'
 import '@testing-library/jest-dom/vitest'
 import { beforeEach } from 'vitest'
 import { DB_NAME, _resetDBConnectionForTests } from '../data/db'
+import { settingsRepository } from '../data/repositories/settingsRepository'
 
 /**
  * Every test in the suite gets a clean IndexedDB. fake-indexeddb polyfills
@@ -19,4 +20,11 @@ beforeEach(async () => {
     req.onerror = () => reject(req.error)
     req.onblocked = () => resolve()
   })
+
+  // Every other test in the suite exercises steady-state app behavior, not
+  // the first-visit name prompt (see WelcomeNamePrompt.test.tsx for that),
+  // so seed a name here — otherwise every test that renders <App /> would
+  // unexpectedly get the onboarding overlay mounted on top of whatever
+  // it's actually testing.
+  await settingsRepository.update({ userName: 'Test User' })
 })

@@ -58,11 +58,7 @@ export function GrammarHubPage() {
       <section className="grammar-page">
         <GrammarLevelSwitcher level={level} />
         <div className="grammar-hero">
-          <h1 className="text-display-lg">
-            Grammar
-            <br />
-            <span className="grammar-hero__accent">Bunpō</span>
-          </h1>
+          <h1 className="text-display-lg">Grammar</h1>
           <p>No {level} grammar points yet — check back after more content is added, or import your own below.</p>
         </div>
         <GrammarImportSection level={level} onImported={() => setImportVersion((v) => v + 1)} />
@@ -82,11 +78,7 @@ export function GrammarHubPage() {
       <GrammarLevelSwitcher level={level} />
 
       <div className="grammar-hero">
-        <h1 className="text-display-lg">
-          Grammar
-          <br />
-          <span className="grammar-hero__accent">Bunpō</span>
-        </h1>
+        <h1 className="text-display-lg">Grammar</h1>
         <p className="text-body-lg">Mastering the structural foundations.</p>
       </div>
 

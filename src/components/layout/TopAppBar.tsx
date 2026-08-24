@@ -18,7 +18,7 @@ export function TopAppBar({ onMenuClick }: { onMenuClick: () => void }) {
           </span>
         </button>
         <Link to="/" className="top-app-bar__title text-headline-lg-mobile">
-          Study Buddy
+          Michi
         </Link>
         <Link to="/profile" className="top-app-bar__avatar squish-btn" aria-label="Your profile">
           <Avatar size={40} />

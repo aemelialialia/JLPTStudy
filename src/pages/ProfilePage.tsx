@@ -26,7 +26,7 @@ export function ProfilePage() {
         <div className="profile-card profile-user-card">
           <Avatar size={80} />
           <div>
-            <h1 className="profile-user-card__name text-headline-lg">Nihongo Learner</h1>
+            <h1 className="profile-user-card__name text-headline-lg">{settings?.userName}</h1>
             <div className="profile-user-card__badges">
               <span className="profile-badge profile-badge--target">
                 <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>
