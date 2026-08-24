@@ -11,6 +11,7 @@ import type {
 } from '../types/vocabularyImport'
 import { VOCAB_COLUMN_LABELS } from '../types/vocabularyImport'
 import { vocabularyRepository } from '../data/repositories/vocabularyRepository'
+import { importedFilesRepository } from '../data/repositories/importedFilesRepository'
 
 const REQUIRED_COLUMNS: CanonicalVocabColumn[] = ['vocab', 'reading', 'meaning', 'partOfSpeech']
 const SAMPLE_ROW_LIMIT = 10
@@ -214,6 +215,10 @@ export const xlsxImportService = {
    */
   async commitImport(preview: ImportPreview): Promise<ImportCommitResult> {
     const result = await vocabularyRepository.commitImportPlan(preview.level, preview.plan)
+    // Records the file name for Settings' "Uploaded Files" list. Recorded
+    // after the write succeeds, so a failed commit never shows up as an
+    // uploaded file.
+    await importedFilesRepository.recordImport('vocabulary', preview.level, preview.fileName)
     return { ...result, invalidCount: preview.invalidRowCount }
   },
 }

@@ -6,6 +6,7 @@ import type { UserSettings, DailyStudyState } from '../types/settings'
 import type { StudySession } from '../types/studySession'
 import type { GrammarProgress, GrammarEntry } from '../types/grammar'
 import type { GrammarQuizSession } from '../types/grammarQuizSession'
+import type { ImportedFileRecord } from '../types/importedFile'
 
 /**
  * Single source of truth for the IndexedDB schema. Nothing outside
@@ -67,18 +68,24 @@ export interface JLPTStudyDB extends DBSchema {
     value: GrammarEntry
     indexes: { 'by-level': string }
   }
+  importedFiles: {
+    key: string // ImportedFileRecord.id (see importedFileId())
+    value: ImportedFileRecord
+  }
 }
 
 export const DB_NAME = 'jlpt-study-db'
 // Bumped 1 -> 2 in Phase 3 (added `studySessions`), 2 -> 3 in Phase 4
 // (added `grammarProgress` + `grammarQuizSessions` for the grammar
 // lesson/quiz system), 3 -> 4 in Phase 5 (added `userGrammarEntries` for
-// XLSX-imported grammar points). `openDB`'s upgrade callback only runs
-// when the requested version is higher than what's already stored, so
-// this bump (not just the `if (!contains)` guard below) is what makes
-// the new store actually get created for anyone with an older database
-// already in their browser.
-export const DB_VERSION = 4
+// XLSX-imported grammar points), 4 -> 5 in this pass (added
+// `importedFiles`, tracking every uploaded vocabulary/grammar XLSX's
+// name for Settings' "Uploaded Files" list). `openDB`'s upgrade callback
+// only runs when the requested version is higher than what's already
+// stored, so this bump (not just the `if (!contains)` guard below) is
+// what makes the new store actually get created for anyone with an
+// older database already in their browser.
+export const DB_VERSION = 5
 
 let dbPromise: Promise<IDBPDatabase<JLPTStudyDB>> | null = null
 
@@ -130,6 +137,9 @@ export function getDB(): Promise<IDBPDatabase<JLPTStudyDB>> {
         if (!db.objectStoreNames.contains('userGrammarEntries')) {
           const store = db.createObjectStore('userGrammarEntries', { keyPath: 'id' })
           store.createIndex('by-level', 'level')
+        }
+        if (!db.objectStoreNames.contains('importedFiles')) {
+          db.createObjectStore('importedFiles', { keyPath: 'id' })
         }
       },
     })

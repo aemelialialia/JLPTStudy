@@ -210,6 +210,70 @@
   border-bottom-color: var(--color-on-primary-fixed-variant);
 }
 
+/* ---- Settings: "Choose File" + Uploaded Files (this pass) ----
+   The native file input itself stays in the DOM (so existing
+   ref/onChange/reset behavior is untouched) but is visually hidden;
+   settings-file-btn is a <label htmlFor=...> wearing the exact same
+   .study-btn look as every other button on the page, so clicking it
+   opens the native file picker without any bespoke button styling. */
+.settings-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.settings-file-btn {
+  cursor: pointer;
+}
+
+.settings-file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.settings-file-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-surface-variant);
+  box-shadow: var(--shadow-sm);
+}
+
+.settings-file-list__icon {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.settings-file-list__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-on-surface);
+  font-size: var(--font-size-body-md);
+  font-weight: 600;
+}
+
+.settings-file-list__meta {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label-sm);
+}
+
 /* ---- Resume prompt / empty / complete banners ---- */
 
 .study-banner {

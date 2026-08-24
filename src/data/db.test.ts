@@ -9,6 +9,7 @@ describe('IndexedDB initialization', () => {
         'dailyStudyState',
         'grammarProgress',
         'grammarQuizSessions',
+        'importedFiles',
         'mistakes',
         'quizAttempts',
         'settings',

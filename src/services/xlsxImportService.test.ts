@@ -3,6 +3,7 @@ import * as XLSX from 'xlsx'
 import { xlsxImportService } from './xlsxImportService'
 import { vocabularyRepository } from '../data/repositories/vocabularyRepository'
 import { studyStateRepository } from '../data/repositories/studyStateRepository'
+import { importedFilesRepository } from '../data/repositories/importedFilesRepository'
 
 function buildXlsxFile(
   rows: string[][],
@@ -233,5 +234,22 @@ describe('xlsxImportService.commitImport', () => {
     const result = await xlsxImportService.commitImport(secondPreview)
 
     expect(result).toMatchObject({ createdCount: 0, updatedCount: 0, unchangedCount: 1, totalForLevel: 1 })
+  })
+
+  it('records the imported file name for Settings\' Uploaded Files list, without duplicating on re-import', async () => {
+    const file = buildXlsxFile([['学校', 'がっこう', 'school', 'Noun']], { fileName: 'n5_vocabulary.xlsx' })
+    await xlsxImportService.commitImport(await xlsxImportService.buildPreview(file, 'N5'))
+
+    let recorded = await importedFilesRepository.getAll()
+    expect(recorded).toHaveLength(1)
+    expect(recorded[0]).toMatchObject({ kind: 'vocabulary', level: 'N5', fileName: 'n5_vocabulary.xlsx' })
+
+    // Re-importing the exact same file name again must not create a second,
+    // meaningless duplicate entry in the list.
+    const second = buildXlsxFile([['学校', 'がっこう', 'school (corrected)', 'Noun']], { fileName: 'n5_vocabulary.xlsx' })
+    await xlsxImportService.commitImport(await xlsxImportService.buildPreview(second, 'N5'))
+
+    recorded = await importedFilesRepository.getAll()
+    expect(recorded).toHaveLength(1)
   })
 })

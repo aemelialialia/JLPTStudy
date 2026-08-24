@@ -10,6 +10,7 @@ import type {
 } from '../types/grammarImport'
 import { ALL_GRAMMAR_COLUMNS, GRAMMAR_COLUMN_LABELS, REQUIRED_GRAMMAR_COLUMNS, importedGrammarId } from '../types/grammarImport'
 import { grammarImportRepository } from '../data/repositories/grammarImportRepository'
+import { importedFilesRepository } from '../data/repositories/importedFilesRepository'
 import { refreshImportedGrammarCache } from '../content/importedGrammarCache'
 
 const SAMPLE_ROW_LIMIT = 10
@@ -257,6 +258,9 @@ export const grammarXlsxImportService = {
   async commitImport(preview: GrammarImportPreview): Promise<GrammarImportCommitResult> {
     const result = await grammarImportRepository.commitImportPlan(preview.level, preview.plan)
     await refreshImportedGrammarCache()
+    // Records the file name for Settings' "Uploaded Files" list, mirroring
+    // xlsxImportService's own commitImport.
+    await importedFilesRepository.recordImport('grammar', preview.level, preview.fileName)
     const totalForLevel = await grammarImportRepository.countByLevel(preview.level)
     return { level: preview.level, ...result, invalidCount: preview.invalidRowCount, totalForLevel }
   },
