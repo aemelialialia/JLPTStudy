@@ -676,7 +676,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
+  /* Horizontal padding increased beyond the vertical (space-4 -> space-6)
+     so the question, feedback, choices, and action row all get more
+     breathing room from the card's left/right edges — vertical spacing
+     is untouched, that's the existing "efficient spacing" rhythm from
+     Phase 5 and isn't part of this pass. */
+  padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-2xl);
   background: var(--color-surface-container-lowest);
   border: 1px solid var(--color-surface-container-low);
@@ -839,8 +844,12 @@
   font-weight: 600;
 }
 
-/* The "Review this grammar" reference: visually SUBORDINATE to the
-   answer choices, per spec section 10, using a smaller pill button. */
+/* The "Review this grammar" reference: visually SUBORDINATE to "Next
+   Question"/"Finish", per spec section 10 — a smaller secondary pill,
+   never the primary action. Lives in the bottom .grammar-quiz__actions
+   row (paired with Next Question) rather than inside the feedback
+   panel, so it reads as one of the two actions available once an
+   answer's been given, not an aside attached to the explanation text. */
 .grammar-quiz__review-link {
   flex-shrink: 0;
   min-height: 40px;
@@ -874,8 +883,52 @@
      trying to avoid. */
   white-space: nowrap;
   font-family: var(--font-family-heading);
-  font-size: var(--font-size-title-md);
+  /* One step down from title-md (20px) — still clearly the dominant,
+     easy-to-tap primary action (touch target/padding/fill color are
+     unchanged), just not quite as visually heavy against the rest of
+     the quiz card's content. */
+  font-size: var(--font-size-body-lg);
   font-weight: 600;
+}
+
+/* Bottom action row pairing "Review this grammar" (left, secondary)
+   with "Next Question"/"Finish" (right, primary) once an answer's been
+   given. Inherits the card's own left/right padding for free since it's
+   a direct child of .grammar-quiz__card, so it naturally lines up with
+   the question/choices above it without any separate alignment rule. */
+.grammar-quiz__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.grammar-quiz__actions .grammar-quiz__review-link,
+.grammar-quiz__actions .grammar-quiz__continue {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (min-width: 480px) {
+  /* Matches .grammar-quiz__feedback's own row/column breakpoint above —
+     side by side once there's comfortably enough width, stacked below
+     it on the smallest phones. */
+  .grammar-quiz__actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .grammar-quiz__actions .grammar-quiz__review-link,
+  .grammar-quiz__actions .grammar-quiz__continue {
+    width: auto;
+  }
+
+  .grammar-quiz__actions .grammar-quiz__continue {
+    /* Neutralize the base align-self: flex-end (needed elsewhere, where
+       this button is the sole child of a centered summary screen) — in
+       this row it's positioned by the row's own justify-content instead. */
+    align-self: center;
+  }
 }
 
 .grammar-quiz__summary {

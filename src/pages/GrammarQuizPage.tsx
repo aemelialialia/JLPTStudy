@@ -195,7 +195,6 @@ export function GrammarQuizPage() {
               <GrammarQuizFeedback
                 isCorrect={state.result.isCorrect}
                 explanation={state.result.explanation}
-                reviewHref={reviewHref}
                 mistakeRecorded={state.result.mistakeRecorded}
                 mistakeMastered={state.result.mistakeMastered}
               />
@@ -225,7 +224,13 @@ export function GrammarQuizPage() {
             </div>
 
             {state.phase === 'feedback' && (
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div className="grammar-quiz__actions">
+                <Link to={reviewHref} className="grammar-quiz__review-link squish-btn">
+                  <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
+                    menu_book
+                  </span>
+                  Review this grammar
+                </Link>
                 <button type="button" className="grammar-quiz__continue squish-btn" onClick={() => void continueToNext()}>
                   {state.session.currentIndex + 1 >= state.session.questionIds.length ? 'Finish' : 'Next Question'}
                   <span className="material-symbols-outlined">arrow_forward</span>

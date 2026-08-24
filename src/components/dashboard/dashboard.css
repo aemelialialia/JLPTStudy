@@ -220,6 +220,12 @@
   border-radius: var(--radius-md);
   padding: var(--space-6);
   border: 1px solid color-mix(in srgb, var(--color-tertiary) 5%, transparent);
+  /* On top of the card's own space-6 gap, this adds ~20px more so the
+     title row and the white container read as two clearly separated
+     sections. Scoped to just this one gap (not the card's overall
+     padding) so it doesn't also push the Start Quiz button down further
+     than the extra space itself requires. */
+  margin-top: var(--space-5);
 }
 
 .dashboard-grammar-card__preview-point {
