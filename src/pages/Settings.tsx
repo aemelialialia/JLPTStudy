@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { exportImportService } from '../services/exportImportService'
 import { useImportedFiles } from '../hooks/useImportedFiles'
+import { ContentImportSection } from '../components/settings/ContentImportSection'
 // Reuses study.css's generic .study-btn button styling rather than
 // building a parallel Settings-only button system.
 import '../components/study/study.css'
@@ -77,7 +78,7 @@ export function Settings() {
         </button>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
-          <span className="text-title-md">Import study data</span>
+          <span className="text-title-md">Import study data (full backup, .json)</span>
           <label htmlFor="settings-import-file-input" className="study-btn squish-btn settings-file-btn">
             Choose File
           </label>
@@ -101,6 +102,13 @@ export function Settings() {
           {status}
         </p>
       )}
+
+      <div>
+        <h2 className="text-title-md" style={{ margin: '0 0 var(--space-3)' }}>
+          Import Vocabulary / Grammar (.xlsx)
+        </h2>
+        <ContentImportSection onImported={refreshImportedFiles} />
+      </div>
 
       <div>
         <h2 className="text-title-md" style={{ margin: '0 0 var(--space-3)' }}>
