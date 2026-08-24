@@ -210,6 +210,12 @@
   border-bottom-color: var(--color-on-primary-fixed-variant);
 }
 
+.study-btn--danger {
+  background: var(--color-error);
+  color: var(--color-on-error);
+  border-bottom-color: var(--color-on-error-container);
+}
+
 /* ---- Settings: "Choose File" + Uploaded Files (this pass) ----
    The native file input itself stays in the DOM (so existing
    ref/onChange/reset behavior is untouched) but is visually hidden;

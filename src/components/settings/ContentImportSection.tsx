@@ -87,7 +87,7 @@ function VocabularyImportFlow({ level, onImported }: { level: JLPTLevel; onImpor
 
   return (
     <div className="vocab-card">
-      {flow.state.phase === 'idle' && <VocabularyImporter onFileSelected={flow.selectFile} />}
+      {flow.state.phase === 'idle' && <VocabularyImporter onFileSelected={flow.selectFile} variant="button" />}
       {flow.state.phase === 'previewing' && <p>Reading {flow.state.fileName}…</p>}
       {flow.state.phase === 'preview' && (
         <ImportPreview preview={flow.state.preview} onConfirm={flow.confirm} onCancel={flow.cancel} />
@@ -121,7 +121,7 @@ function GrammarImportFlow({ level, onImported }: { level: JLPTLevel; onImported
 
   return (
     <div className="vocab-card">
-      {flow.state.phase === 'idle' && <GrammarImporter onFileSelected={flow.selectFile} />}
+      {flow.state.phase === 'idle' && <GrammarImporter onFileSelected={flow.selectFile} variant="button" />}
       {flow.state.phase === 'previewing' && <p>Reading {flow.state.fileName}…</p>}
       {flow.state.phase === 'preview' && (
         <GrammarImportPreview preview={flow.state.preview} onConfirm={flow.confirm} onCancel={flow.cancel} />

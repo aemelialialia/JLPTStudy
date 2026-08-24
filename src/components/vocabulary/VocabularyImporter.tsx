@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import './vocabulary.css'
+import '../study/study.css'
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
@@ -15,13 +16,23 @@ function formatFileSize(bytes: number): string {
  * Everything after that (parsing, validation, duplicate detection) is
  * xlsxImportService's job, invoked by the parent through the
  * useVocabularyImport hook.
+ *
+ * `variant="button"` (used only by Settings' ContentImportSection) swaps
+ * the browser-default file input for the app's own `.study-btn` styling
+ * via the same hidden-input + label pattern Settings already uses for its
+ * JSON import — the plain native input stays the default everywhere else
+ * (the Vocabulary page's own import flow at /level/:level is deliberately
+ * left unstyled, see this file's original header note), so this never
+ * changes anything outside Settings.
  */
 export function VocabularyImporter({
   onFileSelected,
   disabled,
+  variant = 'plain',
 }: {
   onFileSelected: (file: File) => void
   disabled?: boolean
+  variant?: 'plain' | 'button'
 }) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [selected, setSelected] = useState<File | null>(null)
@@ -36,6 +47,11 @@ export function VocabularyImporter({
   return (
     <div className="vocab-field">
       <label htmlFor="vocab-file-input">Import XLSX</label>
+      {variant === 'button' && (
+        <label htmlFor="vocab-file-input" className="study-btn squish-btn settings-file-btn">
+          Choose File
+        </label>
+      )}
       <input
         ref={inputRef}
         id="vocab-file-input"
@@ -43,6 +59,7 @@ export function VocabularyImporter({
         accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         onChange={handleChange}
         disabled={disabled}
+        className={variant === 'button' ? 'settings-file-input' : undefined}
       />
       {selected && (
         <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>

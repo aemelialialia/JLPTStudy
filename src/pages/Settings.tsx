@@ -77,22 +77,7 @@ export function Settings() {
           Export study data
         </button>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
-          <span className="text-title-md">Import study data (full backup, .json)</span>
-          <label htmlFor="settings-import-file-input" className="study-btn squish-btn settings-file-btn">
-            Choose File
-          </label>
-          <input
-            ref={fileInputRef}
-            id="settings-import-file-input"
-            type="file"
-            accept="application/json"
-            onChange={handleImportChange}
-            className="settings-file-input"
-          />
-        </div>
-
-        <button type="button" className="study-btn squish-btn" onClick={handleClear}>
+        <button type="button" className="study-btn study-btn--danger squish-btn" onClick={handleClear}>
           Clear all study data
         </button>
       </div>
@@ -135,6 +120,28 @@ export function Settings() {
             </p>
           </div>
         )}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
+        {/* No dedicated "Choose File" button here by design — the native
+            file input stays functional and fully accessible, just
+            triggered by clicking this label instead of a separate button,
+            so this rarely-used full-backup restore doesn't visually
+            compete with the two import flows above it. */}
+        <label htmlFor="settings-import-file-input" className="text-title-md" style={{ cursor: 'pointer' }}>
+          Import study data (full backup, .json)
+        </label>
+        <p className="text-body-md" style={{ margin: 0, color: 'var(--color-text-secondary)' }}>
+          Tap the label above to choose a .json backup file to restore.
+        </p>
+        <input
+          ref={fileInputRef}
+          id="settings-import-file-input"
+          type="file"
+          accept="application/json"
+          onChange={handleImportChange}
+          className="settings-file-input"
+        />
       </div>
     </section>
   )
