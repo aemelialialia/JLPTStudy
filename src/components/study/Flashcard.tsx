@@ -6,16 +6,16 @@ import './study.css'
 function backFieldsFor(word: VocabularyItem): FlashcardField[] {
   // A plain array built from the current VocabularyItem — adding a future
   // field (e.g. an example sentence) to the model is just adding a line
-  // here; FlashcardBack itself never needs to change (spec section 7).
-  // Meaning leads as the large "answer" headline (Stitch's back-face
-  // hierarchy), part of speech is a small badge above it, and vocab/
-  // reading repeat below for reference since the user may have flipped
-  // straight here without re-reading the front.
+  // here; FlashcardBack itself never needs to change. Reading leads as
+  // the largest, primary element (mirroring the front of the card), the
+  // original vocab repeats right below it as smaller supporting context,
+  // and meaning/part of speech follow as supporting information — the
+  // same reading > vocab > meaning/part-of-speech hierarchy as the front.
   return [
+    { label: 'Reading', value: word.reading, japanese: true, variant: 'reading' },
+    { label: 'Vocab', value: word.vocab, japanese: true, hideLabel: true },
+    { label: 'Meaning', value: word.meaning, hideLabel: true },
     { label: 'Part of Speech', value: word.partOfSpeech, variant: 'badge' },
-    { label: 'Meaning', value: word.meaning, variant: 'headline' },
-    { label: 'Vocab', value: word.vocab, japanese: true },
-    { label: 'Reading', value: word.reading, japanese: true },
   ]
 }
 

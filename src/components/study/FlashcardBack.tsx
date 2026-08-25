@@ -3,8 +3,16 @@ export interface FlashcardField {
   value: string
   /** Render in the Japanese font/size (for vocab/reading-style fields). */
   japanese?: boolean
-  /** 'badge' renders as a small pill (part of speech); 'headline' renders large and prominent (the meaning — the "answer" being tested). Plain fields render as a label + value pair. */
-  variant?: 'badge' | 'headline'
+  /**
+   * 'badge' renders as a small pill (part of speech); 'headline' renders
+   * large and prominent (kept for any future large-and-prominent, non-
+   * Japanese field); 'reading' is the largest tier of all — the primary
+   * information on the card (the full hiragana reading). Plain fields
+   * render as a label + value pair unless `hideLabel` is set.
+   */
+  variant?: 'badge' | 'headline' | 'reading'
+  /** Suppress the label caption even for a plain (non-badge/headline/reading) field — used for Vocab/Meaning so the back face reads as bare, hierarchy-led text rather than a labelled data sheet. */
+  hideLabel?: boolean
 }
 
 /**
@@ -28,14 +36,16 @@ export function FlashcardBack({ fields }: { fields: FlashcardField[] }) {
             </span>
           )
         }
+        const showLabel = field.variant !== 'headline' && field.variant !== 'reading' && !field.hideLabel
         return (
           <div className="study-flashcard__field" key={field.label}>
-            {field.variant !== 'headline' && <span className="study-flashcard__field-label">{field.label}</span>}
+            {showLabel && <span className="study-flashcard__field-label">{field.label}</span>}
             <span
               className={
                 'study-flashcard__field-value' +
                 (field.japanese ? ' study-flashcard__field-value--japanese' : '') +
-                (field.variant === 'headline' ? ' study-flashcard__field-value--headline' : '')
+                (field.variant === 'headline' ? ' study-flashcard__field-value--headline' : '') +
+                (field.variant === 'reading' ? ' study-flashcard__field-value--reading' : '')
               }
               lang={field.japanese ? 'ja' : undefined}
             >

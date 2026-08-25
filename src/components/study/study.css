@@ -409,18 +409,35 @@
   transform: rotateY(180deg);
 }
 
-.study-flashcard__vocab {
-  font-family: var(--font-family-heading);
-  font-size: var(--font-size-display-lg);
-  font-weight: 800;
+/* Reading is the primary/largest element on the card (the full hiragana
+   reading is what's being drilled) — vocab below it is the smaller,
+   supporting original-word context. `word-break`/`overflow-wrap` keep a
+   long reading from overflowing horizontally, wrapping onto extra lines
+   instead of being clipped. Deliberately one fixed size across every
+   breakpoint (not stepped up at >=700px like `.study-flashcard`'s own
+   max-width) — the card's fixed `aspect-ratio` box only has so much
+   vertical room, and a longer N2/N1-style compound reading wrapping to
+   3-4 lines at a bigger size clipped against the top of the card on
+   wider viewports during testing; this size was verified to wrap
+   cleanly, with no clipping, for the longest readings tried. */
+.study-flashcard__reading {
+  font-family: var(--font-family-japanese);
+  font-size: var(--font-size-jp-lg);
+  font-weight: 700;
   line-height: var(--line-height-tight);
   color: var(--color-primary);
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
-.study-flashcard__reading {
+.study-flashcard__vocab {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-title-md);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
   color: var(--color-text-secondary);
-  font-family: var(--font-family-japanese);
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .study-flashcard__hint {
@@ -433,7 +450,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  /* space-4 (up from space-3) gives the now-larger Reading tier enough
+     room that it doesn't visually crowd Vocab directly below it. */
+  gap: var(--space-4);
 }
 
 .study-flashcard__field {
@@ -473,6 +492,20 @@
   font-size: var(--font-size-headline-lg-mobile);
   font-weight: 700;
   color: var(--color-on-surface);
+}
+
+/* The largest tier on the back face too (mirrors .study-flashcard__reading
+   on the front) — same font-family/weight/color/size and the same
+   overflow safeguards; deliberately not stepped up at wider breakpoints,
+   for the same reason documented on the front's `.study-flashcard__reading`. */
+.study-flashcard__field-value--reading {
+  font-family: var(--font-family-japanese);
+  font-size: var(--font-size-jp-lg);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  color: var(--color-primary);
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .study-flip-button {
